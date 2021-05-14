@@ -1,0 +1,410 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="win_main.cpp" />
+    <ClCompile Include="engine_application.cpp" />
+    <ClCompile Include="core\input\keyboard.cpp">
+      <Filter>core\input</Filter>
+    </ClCompile>
+    <ClCompile Include="core\input\mouse.cpp">
+      <Filter>core\input</Filter>
+    </ClCompile>
+    <ClCompile Include="core\rendering\renderer.cpp">
+      <Filter>core\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="core\window\window.cpp">
+      <Filter>core\window</Filter>
+    </ClCompile>
+    <ClCompile Include="framework\component_factory.cpp">
+      <Filter>framework</Filter>
+    </ClCompile>
+    <ClCompile Include="framework\entity.cpp">
+      <Filter>framework</Filter>
+    </ClCompile>
+    <ClCompile Include="framework\event.cpp">
+      <Filter>framework</Filter>
+    </ClCompile>
+    <ClCompile Include="thirdparty\imnodes\imnodes.cpp">
+      <Filter>thirdparty\imnodes</Filter>
+    </ClCompile>
+    <ClCompile Include="common\matrix.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="common\vector.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="core\rendering\texture.cpp">
+      <Filter>core\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="core\rendering\material.cpp">
+      <Filter>core\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="core\rendering\render_target.cpp">
+      <Filter>core\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="core\rendering\render_queue.cpp">
+      <Filter>core\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="core\rendering\mesh.cpp">
+      <Filter>core\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="framework\systems\render_system.cpp">
+      <Filter>framework\systems</Filter>
+    </ClCompile>
+    <ClCompile Include="core\rendering\depth_stencil.cpp">
+      <Filter>core\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="core\rendering\render_passes\skybox_pass.cpp">
+      <Filter>core\rendering\render_passes</Filter>
+    </ClCompile>
+    <ClCompile Include="core\rendering\render_state.cpp">
+      <Filter>core\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="core\rendering\shader.cpp">
+      <Filter>core\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="core\console.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\rendering\constant_buffer.cpp">
+      <Filter>core\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="framework\components\camera_component.cpp">
+      <Filter>framework\components</Filter>
+    </ClCompile>
+    <ClCompile Include="framework\components\transform_component.cpp">
+      <Filter>framework\components</Filter>
+    </ClCompile>
+    <ClCompile Include="framework\scene.cpp">
+      <Filter>framework</Filter>
+    </ClCompile>
+    <ClCompile Include="framework\components\render_component.cpp">
+      <Filter>framework\components</Filter>
+    </ClCompile>
+    <ClCompile Include="framework\system.cpp">
+      <Filter>framework</Filter>
+    </ClCompile>
+    <ClCompile Include="thirdparty\imgui\imgui.cpp">
+      <Filter>thirdparty\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="thirdparty\imgui\imgui_demo.cpp">
+      <Filter>thirdparty\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="thirdparty\imgui\imgui_draw.cpp">
+      <Filter>thirdparty\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="thirdparty\imgui\imgui_tables.cpp">
+      <Filter>thirdparty\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="thirdparty\imgui\imgui_widgets.cpp">
+      <Filter>thirdparty\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="thirdparty\imgui\imgui_stdlib.cpp">
+      <Filter>thirdparty\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="thirdparty\imgui\imgui_impl_dx11.cpp">
+      <Filter>thirdparty\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="thirdparty\imgui\imgui_impl_win32.cpp">
+      <Filter>thirdparty\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="gui\viewport.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="gui\entity_inspector.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="gui\scene_viewer.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="gui\system_viewer.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="gui\scene_player.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="core\rendering\render_passes\gbuffer_pass.cpp">
+      <Filter>core\rendering\render_passes</Filter>
+    </ClCompile>
+    <ClCompile Include="common\bounding_box.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="core\rendering\render_passes\lighting_pass.cpp">
+      <Filter>core\rendering\render_passes</Filter>
+    </ClCompile>
+    <ClCompile Include="framework\components\light_component.cpp">
+      <Filter>framework\components</Filter>
+    </ClCompile>
+    <ClCompile Include="core\rendering\render_passes\shadow_pass.cpp">
+      <Filter>core\rendering\render_passes</Filter>
+    </ClCompile>
+    <ClCompile Include="core\rendering\shadow_cubemap.cpp">
+      <Filter>core\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="core\timer.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="gui\toolbar.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="engine_application.h" />
+    <ClInclude Include="common\common.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\types.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="core\input\keyboard.h">
+      <Filter>core\input</Filter>
+    </ClInclude>
+    <ClInclude Include="core\input\mouse.h">
+      <Filter>core\input</Filter>
+    </ClInclude>
+    <ClInclude Include="core\rendering\renderer.h">
+      <Filter>core\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="core\window\window.h">
+      <Filter>core\window</Filter>
+    </ClInclude>
+    <ClInclude Include="framework\component.h">
+      <Filter>framework</Filter>
+    </ClInclude>
+    <ClInclude Include="framework\component_factory.h">
+      <Filter>framework</Filter>
+    </ClInclude>
+    <ClInclude Include="framework\entity.h">
+      <Filter>framework</Filter>
+    </ClInclude>
+    <ClInclude Include="framework\event.h">
+      <Filter>framework</Filter>
+    </ClInclude>
+    <ClInclude Include="framework\factory.h">
+      <Filter>framework</Filter>
+    </ClInclude>
+    <ClInclude Include="framework\node_graph.h">
+      <Filter>framework</Filter>
+    </ClInclude>
+    <ClInclude Include="framework\system.h">
+      <Filter>framework</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\imnodes\imnodes.h">
+      <Filter>thirdparty\imnodes</Filter>
+    </ClInclude>
+    <ClInclude Include="common\functions.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\vector.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\matrix.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="core\rendering\texture.h">
+      <Filter>core\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="core\resource.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\rendering\material.h">
+      <Filter>core\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="core\rendering\render_queue.h">
+      <Filter>core\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="core\rendering\render_pass.h">
+      <Filter>core\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="core\rendering\render_target.h">
+      <Filter>core\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="core\rendering\mesh.h">
+      <Filter>core\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="framework\systems\render_system.h">
+      <Filter>framework\systems</Filter>
+    </ClInclude>
+    <ClInclude Include="framework\components\render_component.h">
+      <Filter>framework\components</Filter>
+    </ClInclude>
+    <ClInclude Include="core\rendering\depth_stencil.h">
+      <Filter>core\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="core\rendering\render_passes\skybox_pass.h">
+      <Filter>core\rendering\render_passes</Filter>
+    </ClInclude>
+    <ClInclude Include="core\rendering\render_state.h">
+      <Filter>core\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="core\rendering\shader.h">
+      <Filter>core\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="core\console.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\rendering\constant_buffer.h">
+      <Filter>core\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="framework\components\camera_component.h">
+      <Filter>framework\components</Filter>
+    </ClInclude>
+    <ClInclude Include="common\constants.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="framework\components\transform_component.h">
+      <Filter>framework\components</Filter>
+    </ClInclude>
+    <ClInclude Include="framework\scene.h">
+      <Filter>framework</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\imgui\imconfig.h">
+      <Filter>thirdparty\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\imgui\imgui.h">
+      <Filter>thirdparty\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\imgui\imgui_internal.h">
+      <Filter>thirdparty\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\imgui\imstb_rectpack.h">
+      <Filter>thirdparty\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\imgui\imstb_textedit.h">
+      <Filter>thirdparty\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\imgui\imstb_truetype.h">
+      <Filter>thirdparty\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\imgui\imgui_stdlib.h">
+      <Filter>thirdparty\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\imgui\imgui_impl_dx11.h">
+      <Filter>thirdparty\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\imgui\imgui_impl_win32.h">
+      <Filter>thirdparty\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="gui\engine_gui.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="gui\viewport.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="gui\entity_inspector.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="gui\scene_viewer.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="gui\system_viewer.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="gui\scene_player.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="core\rendering\render_passes\gbuffer_pass.h">
+      <Filter>core\rendering\render_passes</Filter>
+    </ClInclude>
+    <ClInclude Include="common\bounding_box.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="core\rendering\drawable.h">
+      <Filter>core\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="core\rendering\render_passes\lighting_pass.h">
+      <Filter>core\rendering\render_passes</Filter>
+    </ClInclude>
+    <ClInclude Include="framework\components\light_component.h">
+      <Filter>framework\components</Filter>
+    </ClInclude>
+    <ClInclude Include="core\rendering\render_passes\shadow_pass.h">
+      <Filter>core\rendering\render_passes</Filter>
+    </ClInclude>
+    <ClInclude Include="core\rendering\shadow_cubemap.h">
+      <Filter>core\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="core\timer.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="gui\toolbar.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="common">
+      <UniqueIdentifier>{400c2db3-0851-43f1-9575-ca1a1391ab0d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="framework">
+      <UniqueIdentifier>{d61e4213-dea9-41b5-9d46-6a0244283bb7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core">
+      <UniqueIdentifier>{f79a4d15-6308-4789-85bf-b62c23efabd5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="thirdparty">
+      <UniqueIdentifier>{0411d55d-f880-4add-ab1a-768816c73799}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core\audio">
+      <UniqueIdentifier>{f55a694e-9b3b-49d9-937e-3bcc215d907a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core\input">
+      <UniqueIdentifier>{0dad083e-ad19-484b-9e46-7a11477f6937}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core\rendering">
+      <UniqueIdentifier>{108c0175-f279-486f-b82d-af1f21094d73}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core\window">
+      <UniqueIdentifier>{1c55d06b-3a0f-4dfc-99d8-c18d8172779b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="framework\components">
+      <UniqueIdentifier>{364690ef-a9c6-4d51-9207-01666df3fc3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="framework\nodes">
+      <UniqueIdentifier>{625a6278-caf9-4fba-a609-ad7f60901b1f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="framework\systems">
+      <UniqueIdentifier>{ff990f58-0e82-4f82-8bf8-3cdd27aae89c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="thirdparty\imgui">
+      <UniqueIdentifier>{1b50e3ec-7f5a-4b31-b31e-080a76db5ea0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="thirdparty\imnodes">
+      <UniqueIdentifier>{165ec17a-6c73-407f-b024-2bd344267ee5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core\rendering\render_passes">
+      <UniqueIdentifier>{9cc9b4fe-d4d0-408d-ba9e-d95e8f00ba64}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core\rendering\shaders">
+      <UniqueIdentifier>{ac311901-911b-4fbe-96a0-6f666a2bd84e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gui">
+      <UniqueIdentifier>{b00fe836-3247-4f4a-92b4-d523cb70deb6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="core\rendering\shaders\SkyboxPS.hlsl">
+      <Filter>core\rendering\shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="core\rendering\shaders\SkyboxVS.hlsl">
+      <Filter>core\rendering\shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="core\rendering\shaders\GBufferVS.hlsl">
+      <Filter>core\rendering\shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="core\rendering\shaders\GBufferPS.hlsl">
+      <Filter>core\rendering\shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="core\rendering\shaders\FullscreenVS.hlsl">
+      <Filter>core\rendering\shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="core\rendering\shaders\LightingPS.hlsl">
+      <Filter>core\rendering\shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="core\rendering\shaders\ShadowVS.hlsl">
+      <Filter>core\rendering\shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\asset\shaders\ShadowPS.hlsl">
+      <Filter>core\rendering\shaders</Filter>
+    </FxCompile>
+  </ItemGroup>
+</Project>
