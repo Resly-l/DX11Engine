@@ -1,17 +1,19 @@
 #include "engine_application.h"
-
 #include "rendering/renderer.h"
-#include "entity.h"
-#include "console.h"
 
-#include "scene.h"
+#include "entity.h"
+#include "node_factory.h"
+#include "scene_manager.h"
+#include "system_container.h"
+
 #include "systems/render_system.h"
+#include "systems/script_system.h"
 #include "rendering/texture.h"
 
-#include "gui/viewport.h"
+#include "gui/workspace.h"
 #include "gui/entity_inspector.h"
 #include "gui/scene_viewer.h"
-#include "gui/scene_player.h"
+#include "gui/scene_controller.h"
 #include "gui/system_viewer.h"
 #include "gui/toolbar.h"
 
@@ -20,8 +22,10 @@ EngineApplication::EngineApplication()
 	Window("Twilight Engine", "icon.ico", 1800, 900)
 {
 	ComponentFactory::Initialize();
+	NodeFactory::Initialize();
 
 	auto pRenderSystem = SystemContainer::AddSystem<RenderSystem>();
+	auto pScriptSystem = SystemContainer::AddSystem<ScriptSystem>();
 
 	pRenderSystem->SetEditorCameraUsage(true);
 	pRenderSystem->SetSkyboxTexture(std::make_shared<TextureCube>("../asset/images/ocean/"));
@@ -29,10 +33,10 @@ EngineApplication::EngineApplication()
 	SceneManager::AddScene(std::make_unique<Scene>("unnamed_scene"));
 	SceneManager::SetActiveScene("unnamed_scene");
 
-	engineGUIs.push_back(std::make_unique<Viewport>());
+	engineGUIs.push_back(std::make_unique<Workspace>());
 	engineGUIs.push_back(std::make_unique<EntityInspector>());
 	engineGUIs.push_back(std::make_unique<SceneViewer>());
-	engineGUIs.push_back(std::make_unique<ScenePlayer>());
+	engineGUIs.push_back(std::make_unique<SceneController>());
 	engineGUIs.push_back(std::make_unique<SystemViewer>());
 	engineGUIs.push_back(std::make_unique<Toolbar>());
 }
@@ -45,10 +49,7 @@ void EngineApplication::Run()
 
 		Renderer::BeginFrame();
 
-		if (auto pScene = SceneManager::GetActiveScene())
-		{
-			pScene->Play(deltaSeconds);
-		}
+		SceneManager::Play(deltaSeconds);
 
 		BindBackbuffer();
 		DrawGUI();

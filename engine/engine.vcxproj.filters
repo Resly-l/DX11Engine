@@ -78,11 +78,8 @@
     <ClCompile Include="framework\scene.cpp">
       <Filter>framework</Filter>
     </ClCompile>
-    <ClCompile Include="framework\components\render_component.cpp">
+    <ClCompile Include="framework\components\model_component.cpp">
       <Filter>framework\components</Filter>
-    </ClCompile>
-    <ClCompile Include="framework\system.cpp">
-      <Filter>framework</Filter>
     </ClCompile>
     <ClCompile Include="thirdparty\imgui\imgui.cpp">
       <Filter>thirdparty\imgui</Filter>
@@ -108,7 +105,7 @@
     <ClCompile Include="thirdparty\imgui\imgui_impl_win32.cpp">
       <Filter>thirdparty\imgui</Filter>
     </ClCompile>
-    <ClCompile Include="gui\viewport.cpp">
+    <ClCompile Include="gui\workspace.cpp">
       <Filter>gui</Filter>
     </ClCompile>
     <ClCompile Include="gui\entity_inspector.cpp">
@@ -120,7 +117,7 @@
     <ClCompile Include="gui\system_viewer.cpp">
       <Filter>gui</Filter>
     </ClCompile>
-    <ClCompile Include="gui\scene_player.cpp">
+    <ClCompile Include="gui\scene_controller.cpp">
       <Filter>gui</Filter>
     </ClCompile>
     <ClCompile Include="core\rendering\render_passes\gbuffer_pass.cpp">
@@ -146,6 +143,33 @@
     </ClCompile>
     <ClCompile Include="gui\toolbar.cpp">
       <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="framework\node.cpp">
+      <Filter>framework</Filter>
+    </ClCompile>
+    <ClCompile Include="framework\node_factory.cpp">
+      <Filter>framework</Filter>
+    </ClCompile>
+    <ClCompile Include="framework\scene_manager.cpp">
+      <Filter>framework</Filter>
+    </ClCompile>
+    <ClCompile Include="core\file_manager.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="framework\systems\script_system.cpp">
+      <Filter>framework\systems</Filter>
+    </ClCompile>
+    <ClCompile Include="framework\components\script_component.cpp">
+      <Filter>framework\components</Filter>
+    </ClCompile>
+    <ClCompile Include="framework\slot.cpp">
+      <Filter>framework</Filter>
+    </ClCompile>
+    <ClCompile Include="framework\node_graph.cpp">
+      <Filter>framework</Filter>
+    </ClCompile>
+    <ClCompile Include="framework\nodes\event_listener_node.cpp">
+      <Filter>framework\nodes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -181,9 +205,6 @@
       <Filter>framework</Filter>
     </ClInclude>
     <ClInclude Include="framework\factory.h">
-      <Filter>framework</Filter>
-    </ClInclude>
-    <ClInclude Include="framework\node_graph.h">
       <Filter>framework</Filter>
     </ClInclude>
     <ClInclude Include="framework\system.h">
@@ -225,7 +246,7 @@
     <ClInclude Include="framework\systems\render_system.h">
       <Filter>framework\systems</Filter>
     </ClInclude>
-    <ClInclude Include="framework\components\render_component.h">
+    <ClInclude Include="framework\components\model_component.h">
       <Filter>framework\components</Filter>
     </ClInclude>
     <ClInclude Include="core\rendering\depth_stencil.h">
@@ -288,7 +309,7 @@
     <ClInclude Include="gui\engine_gui.h">
       <Filter>gui</Filter>
     </ClInclude>
-    <ClInclude Include="gui\viewport.h">
+    <ClInclude Include="gui\workspace.h">
       <Filter>gui</Filter>
     </ClInclude>
     <ClInclude Include="gui\entity_inspector.h">
@@ -300,7 +321,7 @@
     <ClInclude Include="gui\system_viewer.h">
       <Filter>gui</Filter>
     </ClInclude>
-    <ClInclude Include="gui\scene_player.h">
+    <ClInclude Include="gui\scene_controller.h">
       <Filter>gui</Filter>
     </ClInclude>
     <ClInclude Include="core\rendering\render_passes\gbuffer_pass.h">
@@ -329,6 +350,39 @@
     </ClInclude>
     <ClInclude Include="gui\toolbar.h">
       <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="framework\node.h">
+      <Filter>framework</Filter>
+    </ClInclude>
+    <ClInclude Include="common\macros.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="framework\node_factory.h">
+      <Filter>framework</Filter>
+    </ClInclude>
+    <ClInclude Include="framework\scene_manager.h">
+      <Filter>framework</Filter>
+    </ClInclude>
+    <ClInclude Include="framework\system_container.h">
+      <Filter>framework</Filter>
+    </ClInclude>
+    <ClInclude Include="core\file_manager.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="framework\systems\script_system.h">
+      <Filter>framework\systems</Filter>
+    </ClInclude>
+    <ClInclude Include="framework\components\script_component.h">
+      <Filter>framework\components</Filter>
+    </ClInclude>
+    <ClInclude Include="framework\slot.h">
+      <Filter>framework</Filter>
+    </ClInclude>
+    <ClInclude Include="framework\node_graph.h">
+      <Filter>framework</Filter>
+    </ClInclude>
+    <ClInclude Include="framework\nodes\event_listener_node.h">
+      <Filter>framework\nodes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -401,9 +455,6 @@
       <Filter>core\rendering\shaders</Filter>
     </FxCompile>
     <FxCompile Include="core\rendering\shaders\ShadowVS.hlsl">
-      <Filter>core\rendering\shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="..\asset\shaders\ShadowPS.hlsl">
       <Filter>core\rendering\shaders</Filter>
     </FxCompile>
   </ItemGroup>

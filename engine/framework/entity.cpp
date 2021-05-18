@@ -28,9 +28,27 @@ const std::string& Entity::GetName() const
 	return name;
 }
 
-ComponentBase* Entity::AssignComponent(ComponentID ID, const std::string& stringID)
+ComponentBase* Entity::AssignComponent(ComponentID ID)
 {
-	if (auto it = componentPtrs.find(ID); it != componentPtrs.end())
+	if (auto pComponent = ComponentFactory::Create(ID))
+	{
+		pComponent->pOwner = this;
+		componentPtrs[ID] = pComponent;
+		return pComponent;
+	}
+
+	return nullptr;
+}
+
+ComponentBase* Entity::AssignComponent(const std::string& stringID)
+{
+	auto it = std::find_if(componentPtrs.begin(), componentPtrs.end(),
+		[&stringID](const std::pair<ComponentID, ComponentBase*>& pair)
+		{
+			return pair.second->GetStringID() == stringID;
+		});
+
+	if (it != componentPtrs.end())
 	{
 		return it->second;
 	}
@@ -38,7 +56,7 @@ ComponentBase* Entity::AssignComponent(ComponentID ID, const std::string& string
 	if (auto pComponent = ComponentFactory::Create(stringID))
 	{
 		pComponent->pOwner = this;
-		componentPtrs[ID] = pComponent;
+		componentPtrs[pComponent->GetID()] = pComponent;
 
 		return pComponent;
 	}
@@ -49,6 +67,22 @@ ComponentBase* Entity::AssignComponent(ComponentID ID, const std::string& string
 ComponentBase* Entity::GetComponent(ComponentID ID)
 {
 	if (auto it = componentPtrs.find(ID); it != componentPtrs.end())
+	{
+		return it->second;
+	}
+
+	return nullptr;
+}
+
+ComponentBase* Entity::GetComponent(const std::string stringID)
+{
+	auto it = std::find_if(componentPtrs.begin(), componentPtrs.end(),
+		[&stringID](const std::pair<ComponentID, ComponentBase*>& pair)
+		{
+			return pair.second->GetStringID() == stringID;
+		});
+
+	if (it != componentPtrs.end())
 	{
 		return it->second;
 	}
@@ -69,6 +103,15 @@ bool Entity::RemoveComponent(ComponentID ID)
 	return false;
 }
 
+bool Entity::RemoveComponent(const std::string stringID)
+{
+	return std::erase_if(componentPtrs,
+		[&stringID](const std::pair<ComponentID, ComponentBase*>& pair)
+		{
+			return pair.second->GetStringID() == stringID;
+		}) != 0;
+}
+
 void Entity::ReleaseComponents()
 {
 	for (auto& [typeID, pComponent] : componentPtrs)
@@ -77,10 +120,11 @@ void Entity::ReleaseComponents()
 	}
 }
 
-void Entity::AddChild(std::unique_ptr<Entity> pChild)
+Entity* Entity::AddChild(std::unique_ptr<Entity> pChild)
 {
 	pChild->pParent = this;
 	childPtrs.push_back(std::move(pChild));
+	return childPtrs.back().get();
 }
 
 bool Entity::RemoveChild(Entity* pTargetChild)
@@ -111,12 +155,18 @@ JSON Entity::ToJson() const
 		json["components"].push_back(componentJson);
 	}
 
+	for (auto& pChild : childPtrs)
+	{
+		json["children"].push_back(pChild->ToJson());
+	}
+
 	return json;
 }
 
 void Entity::FromJson(const JSON& json)
 {
 	ReleaseComponents();
+	childPtrs.clear();
 
 	if (json.contains("name"))
 	{
@@ -129,8 +179,18 @@ void Entity::FromJson(const JSON& json)
 		{
 			std::string stringID = componentJson["string_id"];
 			auto pComponent = ComponentFactory::Create(stringID);
+			pComponent->FromJson(componentJson);
 
 			componentPtrs[pComponent->GetID()] = pComponent;
+		}
+	}
+
+	if (json.contains("children"))
+	{
+		for (auto& childJson : json["children"])
+		{
+			auto pChild = AddChild(std::make_unique<Entity>());
+			pChild->FromJson(childJson);
 		}
 	}
 }

@@ -10,6 +10,7 @@ struct Event
 class EventManager
 {
 private:
+	// void* is ptr_id of subscriber used as key when unsubscribing
 	inline static std::unordered_map<std::string, std::vector<std::pair<std::function<void(const Event&)>, void*>>> subscribers;
 
 public:

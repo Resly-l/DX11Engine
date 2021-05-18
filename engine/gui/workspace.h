@@ -1,11 +1,8 @@
 #pragma once
 #include "engine_gui.h"
 
-class ScenePlayer : public EngineGUI
+class Workspace : public EngineGUI
 {
-private:
-
-
 public:
 	void Draw() override;
 };

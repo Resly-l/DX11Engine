@@ -7,10 +7,10 @@ class Material;
 class RenderQueue;
 class ConstantBuffer;
 
-class RenderComponent : public Component<RenderComponent>, public Drawable
+class ModelComponent : public Component<ModelComponent>, public Drawable
 {
 private:
-	static std::unique_ptr<ConstantBuffer> pTransformCB;
+	inline static std::unique_ptr<ConstantBuffer> pTransformCB;
 
 	std::string filePath;
 
@@ -24,7 +24,7 @@ private:
 	bool bAlpha = false;
 
 public:
-	RenderComponent();
+	ModelComponent();
 
 public:
 	bool LoadModel(const std::string& filePath);

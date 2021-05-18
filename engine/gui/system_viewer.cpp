@@ -1,10 +1,5 @@
 #include "system_viewer.h"
-#include "systems/render_system.h"
-
-SystemViewer::SystemViewer()
-{
-	systemNames[RenderSystem::ID] = "Render System";
-}
+#include "system_container.h"
 
 void SystemViewer::Draw() 
 {
@@ -12,12 +7,8 @@ void SystemViewer::Draw()
 	{
 		for (auto& pSystem : SystemContainer::GetSystems())
 		{
-			if (ImGui::CollapsingHeader(systemNames[pSystem->GetID()].c_str()))
+			if (ImGui::CollapsingHeader(pSystem->GetStringID().c_str()))
 			{
-				bool bActive = pSystem->IsActive();
-				ImGui::Checkbox("active", &bActive);
-				pSystem->SetActiveness(bActive);
-
 				ImGui::NewLine();
 				pSystem->DrawWidget();
 			}

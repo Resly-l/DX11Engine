@@ -61,6 +61,22 @@ using JSON = nlohmann::json;
 
 namespace nlohmann
 {
+	template<>
+	struct adl_serializer<void*>
+	{
+		static void to_json(json& j, void* ptr)
+		{
+			size_t uAddress = reinterpret_cast<std::uintptr_t>(ptr);
+			j["addr"] = uAddress;
+		}
+
+		static void from_json(const json& j, void*& ptr)
+		{
+			size_t uAddress = j.at("addr");
+			ptr = reinterpret_cast<void*>(uAddress);
+		}
+	};
+
 	template <>
 	struct adl_serializer<Vector>
 	{

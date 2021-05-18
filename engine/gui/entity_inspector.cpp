@@ -1,18 +1,5 @@
 #include "entity_inspector.h"
-#include "scene.h"
-
-#include "components/transform_component.h"
-#include "components/render_component.h"
-#include "components/camera_component.h"
-#include "components/light_component.h"
-
-EntityInspector::EntityInspector()
-{
-	componentIDs.push_back(std::make_pair("TransformComponent", std::make_tuple(TransformComponent::ID, TransformComponent::stringID)));
-	componentIDs.push_back(std::make_pair("RenderComponent", std::make_tuple(RenderComponent::ID, RenderComponent::stringID)));
-	componentIDs.push_back(std::make_pair("CameraComponent", std::make_tuple(CameraComponent::ID, CameraComponent::stringID)));
-	componentIDs.push_back(std::make_pair("LightComponent", std::make_tuple(LightComponent::ID, LightComponent::stringID)));
-}
+#include "scene_manager.h"
 
 void EntityInspector::Draw()
 {
@@ -23,7 +10,7 @@ void EntityInspector::Draw()
 			if (auto pEntity = pScene->GetSelectedEntity())
 			{
 				EditEntityName(pEntity);
-				DrawEntityInfo(pEntity);
+				ShowEntityInfo(pEntity);
 				EditEntityPedigree(pScene, pEntity);
 
 				if (pEntity == nullptr)
@@ -36,6 +23,8 @@ void EntityInspector::Draw()
 				ImGui::Separator();
 
 				EditEntityComponents(pEntity);
+				ImGui::NewLine();
+				DrawEntityComponentWidgets(pEntity);
 			}
 		}
 	}
@@ -55,7 +44,7 @@ void EntityInspector::EditEntityName(Entity* pEntity)
 	pEntity->SetName(entityName);
 }
 
-void EntityInspector::DrawEntityInfo(Entity* pEntity)
+void EntityInspector::ShowEntityInfo(Entity* pEntity)
 {
 	ImGui::NewLine();
 	ImGui::AlignTextToFramePadding();
@@ -92,11 +81,11 @@ void EntityInspector::EditEntityComponents(Entity* pEntity)
 	ImGui::Text("[Component Configuration]");
 
 	ImGui::NewLine();
-	if (ImGui::BeginCombo("components", componentIDs[uComponentIndex].first.c_str()))
+	if (ImGui::BeginCombo("components", ComponentFactory::GetRegisteredStringIDs()[uComponentIndex].c_str()))
 	{
-		for (uint32_t uID = 0; uID < componentIDs.size(); uID++)
+		for (uint32_t uID = 0; uID < ComponentFactory::GetRegisteredStringIDs().size(); uID++)
 		{
-			if (ImGui::Selectable(componentIDs[uID].first.c_str()))
+			if (ImGui::Selectable(ComponentFactory::GetRegisteredStringIDs()[uID].c_str()))
 			{
 				uComponentIndex = uID;
 			}
@@ -108,19 +97,19 @@ void EntityInspector::EditEntityComponents(Entity* pEntity)
 	ImGui::NewLine();
 	if (ImGui::Button("Assign Component"))
 	{
-		auto ID = componentIDs[uComponentIndex].second;
-
-		pEntity->AssignComponent(std::get<ComponentID>(ID), std::get<std::string>(ID));
+		pEntity->AssignComponent(ComponentFactory::GetRegisteredStringIDs()[uComponentIndex]);
 	}
+}
 
-	ImGui::NewLine();
+void EntityInspector::DrawEntityComponentWidgets(Entity* pEntity)
+{
 	if (ImGui::BeginTabBar("components", ImGuiTabBarFlags_FittingPolicyScroll))
 	{
-		for (auto& [componentName, ID] : componentIDs)
+		for (const auto& stringID : ComponentFactory::GetRegisteredStringIDs())
 		{
-			if (auto pComponent = pEntity->GetComponent(std::get<ComponentID>(ID)))
+			if (auto pComponent = pEntity->GetComponent(stringID))
 			{
-				if (ImGui::BeginTabItem(componentName.c_str()))
+				if (ImGui::BeginTabItem(stringID.c_str()))
 				{
 					ImGui::NewLine();
 					pComponent->DrawWidget();
@@ -128,7 +117,7 @@ void EntityInspector::EditEntityComponents(Entity* pEntity)
 					ImGui::NewLine();
 					if (ImGui::Button("Remove Component"))
 					{
-						pEntity->RemoveComponent(std::get<ComponentID>(ID));
+						pEntity->RemoveComponent(stringID);
 					}
 
 					ImGui::EndTabItem();

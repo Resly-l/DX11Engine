@@ -1,5 +1,7 @@
 #include "toolbar.h"
 #include "console.h"
+#include "scene.h"
+#include "entity.h"
 
 void Toolbar::Draw()
 {

@@ -1,6 +1,5 @@
 #pragma once
 #include "component_factory.h"
-#include "node_graph.h"
 
 class Entity
 {
@@ -9,11 +8,10 @@ class Entity
 private:
 	std::string name;
 
+	std::unordered_map<ComponentID, ComponentBase*> componentPtrs;
+
 	Entity* pParent = nullptr;
 	std::vector<std::unique_ptr<Entity>> childPtrs;
-
-	std::unordered_map<ComponentID, ComponentBase*> componentPtrs;
-	NodeGraph script;
 
 public:
 	Entity();
@@ -26,17 +24,22 @@ public:
 
 	template<typename ComponentType>
 	ComponentType* AssignComponent();
-	ComponentBase* AssignComponent(ComponentID ID, const std::string& stringID);
+	ComponentBase* AssignComponent(ComponentID ID);
+	ComponentBase* AssignComponent(const std::string& stringID);
+
 	template<typename ComponentType>
 	ComponentType* GetComponent();
 	ComponentBase* GetComponent(ComponentID ID);
+	ComponentBase* GetComponent(const std::string stringID);
+
 	template<typename ComponentType>
 	bool RemoveComponent();
 	bool RemoveComponent(ComponentID ID);
+	bool RemoveComponent(const std::string stringID);
 
 	void ReleaseComponents();
 
-	void AddChild(std::unique_ptr<Entity> pChild);
+	Entity* AddChild(std::unique_ptr<Entity> pChild);
 	bool RemoveChild(Entity* pChild);
 
 	Entity* GetParent() const { return pParent; }

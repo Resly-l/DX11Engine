@@ -8,9 +8,13 @@ private:
 	inline static std::unordered_map<IDTy, std::vector<std::unique_ptr<BaseTy>>> instancePtrs;
 	inline static std::unordered_map<IDTy, std::pair<std::string, std::function<std::unique_ptr<BaseTy>()>>> creators;
 
+	inline static std::vector<std::string> registeredStringIDs;
+
 public:
 	 template<typename T>
 	static void Register();
+
+	static const std::vector<std::string>& GetRegisteredStringIDs() { return registeredStringIDs; }
 
 	static BaseTy* Create(const IDTy& typeID);
 	static BaseTy* Create(const std::string& stringID);
@@ -26,7 +30,13 @@ template<typename IDTy, typename BaseTy>
 template<typename T>
 void Factory<IDTy, BaseTy>::Register()
 {
+	if (creators.find(T::ID) != creators.end())
+	{
+		return;
+	}
+
 	creators[T::ID] = std::make_pair(T::stringID, std::make_unique<T>);
+	registeredStringIDs.push_back(T::stringID);
 }
 
 template<typename IDTy, typename BaseTy>

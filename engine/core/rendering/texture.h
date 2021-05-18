@@ -13,6 +13,7 @@ namespace Internal
 
 	public:
 		void Bind() const;
+		ID3D11ShaderResourceView* GetShaderResourceView() const { return pShaderResourceView.Get(); };
 	};
 }
 
@@ -28,6 +29,7 @@ public:
 		ttSPECULAR,
 		ttSKY,
 		ttSHADOW,
+		ttUI,
 	};
 
 public:

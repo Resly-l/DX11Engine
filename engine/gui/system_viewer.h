@@ -4,12 +4,6 @@
 
 class SystemViewer : public EngineGUI
 {
-private:
-	std::unordered_map<SystemID, std::string> systemNames;
-
-public:
-	SystemViewer();
-
 public:
 	void Draw() override;
 };

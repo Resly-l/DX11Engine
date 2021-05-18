@@ -17,7 +17,7 @@ private:
 	float fFarPlaneDistance = 100.0f;
 
 	// 0.0f = swap chain aspect ratio
-	float fAspectRatio = 0.0f;
+	float fAspectRatio = 1.777777f;
 
 	ConstantBuffer viewProjectionCB;
 	

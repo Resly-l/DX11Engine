@@ -1,5 +1,5 @@
 #include "scene_viewer.h"
-#include "scene.h"
+#include "scene_manager.h"
 #include "entity.h"
 
 #include "components/transform_component.h"

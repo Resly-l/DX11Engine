@@ -5,7 +5,7 @@
 
 #include "component_factory.h"
 #include "components/transform_component.h"
-#include "components/render_component.h"
+#include "components/model_component.h"
 #include "components/camera_component.h"
 #include "components/light_component.h"
 
@@ -94,9 +94,9 @@ void RenderSystem::PassLightResource()
 
 void RenderSystem::SubmitRenderComponents()
 {
-	for (auto& pRenderComponent : ComponentFactory::GetInstances(RenderComponent::ID))
+	for (auto& pModelComponent : ComponentFactory::GetInstances(ModelComponent::ID))
 	{
-		static_cast<RenderComponent*>(pRenderComponent.get())->Submit(renderQueue);
+		static_cast<ModelComponent*>(pModelComponent.get())->Submit(renderQueue);
 	}
 }
 

@@ -12,6 +12,7 @@
 #pragma warning (disable : 26495)
 #pragma warning (disable : 26812)
 
+#include <algorithm>
 #include "imnodes.h"
 
 #include <imgui/imgui.h>
@@ -2389,8 +2390,8 @@ namespace imnodes
 	void BeginNode(int id, const char* label, const ::ImVec4& color)
 	{
 		imnodes::PushColorStyle(imnodes::ColorStyle_TitleBar, IM_COL32(color.x, color.y, color.z, color.w));
-		imnodes::PushColorStyle(imnodes::ColorStyle_TitleBarHovered, IM_COL32(color.x + 20.0f, color.y + 20.0f, color.z + 20.0f, color.w));
-		imnodes::PushColorStyle(imnodes::ColorStyle_TitleBarSelected, IM_COL32(color.x + 20.0f, color.y + 20.0f, color.z + 20.0f, color.w));
+		imnodes::PushColorStyle(imnodes::ColorStyle_TitleBarHovered, IM_COL32(std::min(color.x + 20.0f, 255.0f), std::min(color.y + 20.0f, 255.0f), std::min(color.z + 20.0f, 255.0f), std::min(color.w, 255.0f)));
+		imnodes::PushColorStyle(imnodes::ColorStyle_TitleBarSelected, IM_COL32(std::min(color.x + 20.0f, 255.0f), std::min(color.y + 20.0f, 255.0f), std::min(color.z + 20.0f, 255.0f), std::min(color.w, 255.0f)));
 		imnodes::BeginNode(id);
 		imnodes::BeginNodeTitleBar();
 		ImGui::Text(label);
@@ -2457,12 +2458,27 @@ namespace imnodes
 
 	void EndInputAttribute() { end_pin_attribute(); }
 
+	void InputAttribute(int id, const char* str)
+	{
+		BeginInputAttribute(id);
+		ImGui::Text(str);
+		EndInputAttribute();
+	}
+
 	void BeginOutputAttribute(const int id, const PinShape shape)
 	{
 		begin_pin_attribute(id, AttributeType_Output, shape, g->current_node_idx);
 	}
 
 	void EndOutputAttribute() { end_pin_attribute(); }
+
+	void OutputAttribute(int id, const char* str, float fWindowWidth)
+	{
+		BeginOutputAttribute(id);
+		ImGui::Indent(fWindowWidth - ImGui::CalcTextSize(str).x);
+		ImGui::Text(str);
+		EndOutputAttribute();
+	}
 
 	void BeginStaticAttribute(const int id)
 	{

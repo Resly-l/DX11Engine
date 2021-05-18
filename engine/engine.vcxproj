@@ -171,6 +171,7 @@
     <ClCompile Include="common\matrix.cpp" />
     <ClCompile Include="common\vector.cpp" />
     <ClCompile Include="core\console.cpp" />
+    <ClCompile Include="core\file_manager.cpp" />
     <ClCompile Include="core\input\keyboard.cpp" />
     <ClCompile Include="core\input\mouse.cpp" />
     <ClCompile Include="core\rendering\constant_buffer.cpp" />
@@ -193,20 +194,27 @@
     <ClCompile Include="engine_application.cpp" />
     <ClCompile Include="framework\components\camera_component.cpp" />
     <ClCompile Include="framework\components\light_component.cpp" />
-    <ClCompile Include="framework\components\render_component.cpp" />
+    <ClCompile Include="framework\components\model_component.cpp" />
+    <ClCompile Include="framework\components\script_component.cpp" />
     <ClCompile Include="framework\components\transform_component.cpp" />
     <ClCompile Include="framework\component_factory.cpp" />
     <ClCompile Include="framework\entity.cpp" />
     <ClCompile Include="framework\event.cpp" />
+    <ClCompile Include="framework\node.cpp" />
+    <ClCompile Include="framework\nodes\event_listener_node.cpp" />
+    <ClCompile Include="framework\node_factory.cpp" />
+    <ClCompile Include="framework\node_graph.cpp" />
     <ClCompile Include="framework\scene.cpp" />
-    <ClCompile Include="framework\system.cpp" />
+    <ClCompile Include="framework\scene_manager.cpp" />
+    <ClCompile Include="framework\slot.cpp" />
     <ClCompile Include="framework\systems\render_system.cpp" />
+    <ClCompile Include="framework\systems\script_system.cpp" />
     <ClCompile Include="gui\entity_inspector.cpp" />
-    <ClCompile Include="gui\scene_player.cpp" />
+    <ClCompile Include="gui\scene_controller.cpp" />
     <ClCompile Include="gui\scene_viewer.cpp" />
     <ClCompile Include="gui\system_viewer.cpp" />
     <ClCompile Include="gui\toolbar.cpp" />
-    <ClCompile Include="gui\viewport.cpp" />
+    <ClCompile Include="gui\workspace.cpp" />
     <ClCompile Include="thirdparty\imgui\imgui.cpp" />
     <ClCompile Include="thirdparty\imgui\imgui_demo.cpp" />
     <ClCompile Include="thirdparty\imgui\imgui_draw.cpp" />
@@ -223,10 +231,12 @@
     <ClInclude Include="common\common.h" />
     <ClInclude Include="common\constants.h" />
     <ClInclude Include="common\functions.h" />
+    <ClInclude Include="common\macros.h" />
     <ClInclude Include="common\matrix.h" />
     <ClInclude Include="common\types.h" />
     <ClInclude Include="common\vector.h" />
     <ClInclude Include="core\console.h" />
+    <ClInclude Include="core\file_manager.h" />
     <ClInclude Include="core\input\keyboard.h" />
     <ClInclude Include="core\input\mouse.h" />
     <ClInclude Include="core\rendering\constant_buffer.h" />
@@ -253,23 +263,31 @@
     <ClInclude Include="framework\component.h" />
     <ClInclude Include="framework\components\camera_component.h" />
     <ClInclude Include="framework\components\light_component.h" />
-    <ClInclude Include="framework\components\render_component.h" />
+    <ClInclude Include="framework\components\model_component.h" />
+    <ClInclude Include="framework\components\script_component.h" />
     <ClInclude Include="framework\components\transform_component.h" />
     <ClInclude Include="framework\component_factory.h" />
     <ClInclude Include="framework\entity.h" />
     <ClInclude Include="framework\event.h" />
     <ClInclude Include="framework\factory.h" />
-    <ClInclude Include="framework\scene.h" />
+    <ClInclude Include="framework\node.h" />
+    <ClInclude Include="framework\nodes\event_listener_node.h" />
+    <ClInclude Include="framework\node_factory.h" />
     <ClInclude Include="framework\node_graph.h" />
+    <ClInclude Include="framework\scene.h" />
+    <ClInclude Include="framework\scene_manager.h" />
+    <ClInclude Include="framework\slot.h" />
     <ClInclude Include="framework\system.h" />
     <ClInclude Include="framework\systems\render_system.h" />
+    <ClInclude Include="framework\systems\script_system.h" />
+    <ClInclude Include="framework\system_container.h" />
     <ClInclude Include="gui\engine_gui.h" />
     <ClInclude Include="gui\entity_inspector.h" />
-    <ClInclude Include="gui\scene_player.h" />
+    <ClInclude Include="gui\scene_controller.h" />
     <ClInclude Include="gui\scene_viewer.h" />
     <ClInclude Include="gui\system_viewer.h" />
     <ClInclude Include="gui\toolbar.h" />
-    <ClInclude Include="gui\viewport.h" />
+    <ClInclude Include="gui\workspace.h" />
     <ClInclude Include="thirdparty\imgui\imconfig.h" />
     <ClInclude Include="thirdparty\imgui\imgui.h" />
     <ClInclude Include="thirdparty\imgui\imgui_impl_dx11.h" />
@@ -282,16 +300,6 @@
     <ClInclude Include="thirdparty\imnodes\imnodes.h" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="..\asset\shaders\ShadowPS.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
-      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">../asset/shaders/%(Filename).cso</ObjectFileOutput>
-      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">../asset/shaders/%(Filename).cso</ObjectFileOutput>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
-    </FxCompile>
     <FxCompile Include="core\rendering\shaders\FullscreenVS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>

@@ -29,17 +29,4 @@ public:
 	virtual void DrawWidget() {};
 };
 
-template<typename T>
-class Component : public ComponentBase
-{
-public:
-	inline static const ComponentID ID = GID++;
-	static const std::string stringID;
-
-public:
-	ComponentID GetID() const override { return ID; };
-	std::string GetStringID() const override { return stringID; };
-};
-
-template<typename T>
-const std::string Component<T>::stringID = typeid(T).name();
+DECLARE_CRTP(Component, ComponentID)

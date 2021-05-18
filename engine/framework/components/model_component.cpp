@@ -1,16 +1,16 @@
-#include "render_component.h"
+#include "model_component.h"
+#include "console.h"
+#include "file_manager.h"
+
 #include "rendering/mesh.h"
 #include "rendering/material.h"
 #include "rendering/render_queue.h"
-#include "console.h"
 #include "rendering/constant_buffer.h"
 
 #include "entity.h"
 #include "components/transform_component.h"
 
-std::unique_ptr<ConstantBuffer> RenderComponent::pTransformCB;
-
-RenderComponent::RenderComponent()
+ModelComponent::ModelComponent()
 {
 	if (pTransformCB == nullptr)
 	{
@@ -18,8 +18,13 @@ RenderComponent::RenderComponent()
 	}
 }
 
-bool RenderComponent::LoadModel(const std::string& filePath)
+bool ModelComponent::LoadModel(const std::string& filePath)
 {
+	materialPtrs.clear();
+	meshPtrs.clear();
+
+	boundingBox = {};
+
 	static Assimp::Importer importer;
 
 	auto pScene = importer.ReadFile(filePath,
@@ -63,7 +68,7 @@ bool RenderComponent::LoadModel(const std::string& filePath)
 	return true;
 }
 
-void RenderComponent::Submit(RenderQueue& renderQueue)
+void ModelComponent::Submit(RenderQueue& renderQueue)
 {
 	renderQueue.QueueDrawable(bAlpha ? RenderPass::Tag::ptALPHA : RenderPass::Tag::ptGBUFFER, this);
 
@@ -73,7 +78,7 @@ void RenderComponent::Submit(RenderQueue& renderQueue)
 	}
 }
 
-void RenderComponent::Draw()
+void ModelComponent::Draw()
 {
 	if (meshPtrs.empty())
 	{
@@ -96,7 +101,7 @@ void RenderComponent::Draw()
 	}
 }
 
-JSON RenderComponent::ToJson() const
+JSON ModelComponent::ToJson() const
 {
 	JSON json;
 
@@ -107,7 +112,7 @@ JSON RenderComponent::ToJson() const
 	return json;
 }
 
-void RenderComponent::FromJson(const JSON& json)
+void ModelComponent::FromJson(const JSON& json)
 {
 	filePath = json["filePath"];
 	bCastShadow = json["bCastShadow"];
@@ -119,35 +124,22 @@ void RenderComponent::FromJson(const JSON& json)
 	}
 }
 
-void RenderComponent::DrawWidget()
+void ModelComponent::DrawWidget()
 {
-	if (ImGui::Button("Load Model"))
+	if (ImGui::Button("Load Model From File"))
 	{
-		OPENFILENAMEA ofn;
-		char szFile[260] = { 0 };
-
-		ZeroMemory(&ofn, sizeof(ofn));
-		ofn.lStructSize = sizeof(ofn);
-		ofn.hwndOwner = GetActiveWindow();
-		ofn.lpstrFile = szFile;
-		ofn.nMaxFile = sizeof(szFile);
-		ofn.lpstrFilter = "Model(*.fbx; *.obj)\0*.obj;*.fbx;\0";
-		ofn.nFilterIndex = 1;
-		ofn.lpstrFileTitle = nullptr;
-		ofn.nMaxFileTitle = 0;
-		ofn.lpstrInitialDir = "..\\asset\\models";
-		ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
-
-		if (GetOpenFileNameA(&ofn) == TRUE)
+		auto modelPath = FileManager::SelectFileToLoad("..\\asset\\models", "Model(*.fbx; *.obj)\0*.obj;*.fbx;\0");
+		if (modelPath.empty() == false)
 		{
-			LoadModel(std::filesystem::relative(ofn.lpstrFile).string());
+			LoadModel(modelPath);
 		}
 	}
 
-
+	ImGui::NewLine();
 	ImGui::AlignTextToFramePadding();
 	ImGui::Text(("file path : " + filePath).c_str());
 
+	ImGui::NewLine();
 	ImGui::Checkbox("cast shadow", &bCastShadow);
 	ImGui::Checkbox("alpha", &bAlpha);
 }

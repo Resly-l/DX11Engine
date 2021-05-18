@@ -1,0 +1,14 @@
+{
+    "node_positions": [
+        {
+            "x": 815.0,
+            "y": 438.0
+        }
+    ],
+    "nodes": [
+        {
+            "event_name": "YEEEET",
+            "string_id": "EventListenerNode"
+        }
+    ]
+}
