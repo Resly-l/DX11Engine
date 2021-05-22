@@ -15,7 +15,7 @@ Material::Material(const aiMaterial& ai_material, const std::string& filePath)
 		{
 			std::string filePath = basePath + texturePath.C_Str();
 			pAlbedoMap = ResourceCodex::Resolve<Texture>("tex#" + filePath, Texture::Type::ttALBEDO, filePath);
-			property.bUseAlbedoMap = TRUE;
+			property.useAlbedoMap = TRUE;
 		}
 		else
 		{
@@ -31,7 +31,7 @@ Material::Material(const aiMaterial& ai_material, const std::string& filePath)
 		{
 			std::string filePath = basePath + texturePath.C_Str();
 			pNormalMap = ResourceCodex::Resolve<Texture>("tex#" + filePath, Texture::Type::ttNORMAL, filePath);
-			property.bUseNormalMap = TRUE;
+			property.useNormalMap = TRUE;
 		}
 	}
 
@@ -41,7 +41,7 @@ Material::Material(const aiMaterial& ai_material, const std::string& filePath)
 		{
 			std::string filePath = basePath + texturePath.C_Str();
 			pSpecularMap = ResourceCodex::Resolve<Texture>("tex#" + filePath, Texture::Type::ttSPECULAR, filePath);
-			property.bUseSpecularMap = TRUE;
+			property.useSpecularMap = TRUE;
 		}
 		else
 		{
@@ -51,10 +51,10 @@ Material::Material(const aiMaterial& ai_material, const std::string& filePath)
 				property.specular = { specularColor.r, specularColor.g, specularColor.b, 0.0f };
 			}
 
-			float fShininess = 0.0f;
-			if (ai_material.Get(AI_MATKEY_SHININESS, fShininess) == aiReturn_SUCCESS)
+			float shininess = 0.0f;
+			if (ai_material.Get(AI_MATKEY_SHININESS, shininess) == aiReturn_SUCCESS)
 			{
-				property.fShininess = fShininess;
+				property.shininess = shininess;
 			}
 		}
 	}

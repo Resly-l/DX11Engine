@@ -1,14 +1,28 @@
 {
+    "links": [
+        [
+            0,
+            1
+        ]
+    ],
     "node_positions": [
         {
-            "x": 815.0,
-            "y": 438.0
+            "x": 315.0,
+            "y": 97.0
+        },
+        {
+            "x": 349.0,
+            "y": 338.0
         }
     ],
     "nodes": [
         {
-            "event_name": "YEEEET",
+            "event_name": "YEEE",
             "string_id": "EventListenerNode"
+        },
+        {
+            "event_name": "EEET",
+            "string_id": "EventEmitterNode"
         }
     ]
 }

@@ -32,20 +32,20 @@ protected:
 public:
 	virtual ~NodeBase() = default;
 
-	virtual NodeID GetID() const abstract;
-	virtual std::string GetStringID() const abstract;
+	virtual NodeID GetID() const = 0;
+	virtual std::string GetStringID() const = 0;
 
 public:
 	int GetUID() const { return uid; }
 
-	virtual void InitializeSlots() abstract;
-	virtual void Update(double deltaSeconds) abstract;
+	virtual void InitializeSlots() = 0;
+	virtual void Update(double deltaSeconds) = 0;
 	void SupplyDependents();
 
-	virtual JSON ToJson() const abstract;
-	virtual void FromJson(const JSON& json) abstract;
+	virtual JSON ToJson() const = 0;
+	virtual void FromJson(const JSON& json) = 0;
 
-	virtual void DrawWidget() abstract;
+	virtual void DrawWidget() = 0;
 };
 
 DECLARE_CRTP(Node, NodeID)

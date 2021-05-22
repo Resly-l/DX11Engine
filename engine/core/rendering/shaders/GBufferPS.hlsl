@@ -44,7 +44,7 @@ PSOut main(PSIn input)
 		output.normal = float4(normalize(mul(sampledNormal, mWorldToTangent)), 0.0f);
 	}
 
-	output.albedo = bUseAlbedoMap ? albedoMap.Sample(textureSampler, input.texcoord) : float4(0.0f, 0.0f, 0.0f, 1.0f);
+	output.albedo = bUseAlbedoMap ? albedoMap.Sample(textureSampler, input.texcoord) : float4(albedo.rgb, 1.0f);
 	if (output.albedo.a <= 0.1f) // alpha testing
 	{
 		discard;

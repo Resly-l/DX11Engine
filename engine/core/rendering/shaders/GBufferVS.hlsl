@@ -1,7 +1,7 @@
 cbuffer ViewProjection : register(b0)
 {
-	matrix mView;
-	matrix mProjection;
+	matrix view;
+	matrix projection;
 };
 
 cbuffer Transform : register(b1)
@@ -30,8 +30,8 @@ struct VSOut
 
 VSOut main(VSIn input)
 {
-	const matrix mWorldView = mul(mView, mWorld);
-	const matrix mWorldViewProjection = mul(mProjection, mWorldView);
+	const matrix mWorldView = mul(view, mWorld);
+	const matrix mWorldViewProjection = mul(projection, mWorldView);
 
 	VSOut output;
 

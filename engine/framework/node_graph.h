@@ -5,8 +5,8 @@ class NodeGraph
 {
 private:
 	// global unique ids for imnodes
-	int iNodeGUID = 0;
-	int iSlotGUID = 0;
+	int nodeGUID = 0;
+	int slotGUID = 0;
 
 	std::vector<NodeBase*> nodePtrs;
 	// bool is for checking sync every frame, ImVec2 for gui draw position
@@ -27,4 +27,6 @@ public:
 
 private:
 	void SyncNode(NodeBase* pNode, double deltaSeconds);
+	Slot* FindSlot(int iSlotUID);
+	void LinkNodes();
 };

@@ -4,5 +4,5 @@
 class ScriptSystem : public System<ScriptSystem>
 {
 public:
-	void Update(double deltaSeconds) override;
+	void Update(double deltaSeconds, bool simulate) override;
 };

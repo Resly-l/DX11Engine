@@ -1,34 +1,15 @@
 #include "console.h"
 
-Log::Log(Type type, const std::string& message)
-	:
-	type(type),
-	message(message)
-{
-	switch (type)
-	{
-	case Type::ltNOTIFICATION:
-		tag = "notification";
-		break;
-	case Type::ltWARNING:
-		tag = "warning";
-		break;
-	case Type::ltERROR:
-		tag = "error";
-		break;
-	}
-}
-
-Console Console::singleton;
+Console Console::instance;
 
 void Console::AddLog(Log log)
 {
-	singleton.logs.push_back(std::move(log));
+	instance.logs.push_back(std::move(log));
 }
 
 void Console::Clear()
 {
-	singleton.logs.clear();
+	instance.logs.clear();
 }
 
 void Console::DrawWidget()
@@ -48,7 +29,7 @@ void Console::DrawWidget()
 			}
 		};
 
-		for (auto& log : singleton.logs)
+		for (auto& log : instance.logs)
 		{
 			ImGui::AlignTextToFramePadding();
 			ImGui::TextColored(MapLogColor(log.type), ("[" + log.tag + "] ").c_str());

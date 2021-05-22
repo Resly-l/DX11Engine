@@ -4,11 +4,12 @@
 
 #include "rendering/mesh.h"
 #include "rendering/material.h"
-#include "rendering/render_queue.h"
 #include "rendering/constant_buffer.h"
 
 #include "entity.h"
 #include "components/transform_component.h"
+
+std::unique_ptr<ConstantBuffer> ModelComponent::pTransformCB;
 
 ModelComponent::ModelComponent()
 {
@@ -48,16 +49,16 @@ bool ModelComponent::LoadModel(const std::string& filePath)
 
 	this->filePath = filePath;
 
-	for (uint32_t uMaterial = 0; uMaterial < pScene->mNumMaterials; uMaterial++)
+	for (uint32_t i = 0; i < pScene->mNumMaterials; i++)
 	{
-		auto& ai_material = *pScene->mMaterials[uMaterial];
+		auto& ai_material = *pScene->mMaterials[i];
 
 		materialPtrs.push_back(ResourceCodex::Resolve<Material>(filePath + ai_material.GetName().C_Str(), ai_material, filePath));
 	}
 
-	for (uint32_t uMesh = 0; uMesh < pScene->mNumMeshes; uMesh++)
+	for (uint32_t i = 0; i < pScene->mNumMeshes; i++)
 	{
-		auto& ai_mesh = *pScene->mMeshes[uMesh];
+		auto& ai_mesh = *pScene->mMeshes[i];
 
 		meshPtrs.push_back(ResourceCodex::Resolve<Mesh>(filePath + "#mesh#" + ai_mesh.mName.C_Str(), ai_mesh));
 		meshPtrs.back()->SetMaterial(materialPtrs[ai_mesh.mMaterialIndex]);
@@ -68,16 +69,6 @@ bool ModelComponent::LoadModel(const std::string& filePath)
 	return true;
 }
 
-void ModelComponent::Submit(RenderQueue& renderQueue)
-{
-	renderQueue.QueueDrawable(bAlpha ? RenderPass::Tag::ptALPHA : RenderPass::Tag::ptGBUFFER, this);
-
-	if (bCastShadow)
-	{
-		renderQueue.QueueDrawable(RenderPass::Tag::ptSHADOW, this);
-	}
-}
-
 void ModelComponent::Draw()
 {
 	if (meshPtrs.empty())
@@ -85,14 +76,14 @@ void ModelComponent::Draw()
 		return;
 	}
 
-	Matrix mTransform;
+	Matrix transform;
 	
-	if (auto pTransformComponent = pOwner->GetComponent<TransformComponent>())
+	if (auto pTransformComponent = GetOwner()->GetComponent<TransformComponent>())
 	{
-		mTransform = pTransformComponent->GetTransformMatrix();
+		transform = pTransformComponent->GetTransformMatrix();
 	}
 
-	pTransformCB->Update(mTransform);
+	pTransformCB->Update(transform);
 	pTransformCB->Bind();
 
 	for (const auto& pMesh : meshPtrs)
@@ -106,17 +97,17 @@ JSON ModelComponent::ToJson() const
 	JSON json;
 
 	json["file_path"] = filePath;
-	json["bCastShadow"] = bCastShadow;
-	json["bAlpha"] = bAlpha;
+	json["cast_shadow"] = castShadow;
+	json["transparent"] = transparent;
 
 	return json;
 }
 
 void ModelComponent::FromJson(const JSON& json)
 {
-	filePath = json["filePath"];
-	bCastShadow = json["bCastShadow"];
-	bAlpha = json["bAlpha"];
+	filePath = json["file_path"];
+	castShadow = json["cast_shadow"];
+	transparent = json["transparent"];
 
 	if (filePath.empty() == false)
 	{
@@ -140,6 +131,9 @@ void ModelComponent::DrawWidget()
 	ImGui::Text(("file path : " + filePath).c_str());
 
 	ImGui::NewLine();
-	ImGui::Checkbox("cast shadow", &bCastShadow);
-	ImGui::Checkbox("alpha", &bAlpha);
+	ImGui::Checkbox("visible", &visible);
+
+	ImGui::NewLine();
+	ImGui::Checkbox("cast shadow", &castShadow);
+	ImGui::Checkbox("alpha", &transparent);
 }

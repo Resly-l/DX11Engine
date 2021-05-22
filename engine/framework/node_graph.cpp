@@ -6,7 +6,7 @@ NodeBase* NodeGraph::AddNode(const std::string& stringID)
 	if (auto pNode = NodeFactory::Create(stringID))
 	{
 		pNode->pNodeGraph = this;
-		pNode->uid = iNodeGUID++;
+		pNode->uid = nodeGUID++;
 
 		pNode->InitializeSlots();
 
@@ -21,16 +21,32 @@ NodeBase* NodeGraph::AddNode(const std::string& stringID)
 
 void NodeGraph::AddSlot(NodeBase* pNode, Slot slot)
 {
-	slot.uid = iSlotGUID++;
+	slot.uid = slotGUID++;
 	slot.pOwner = pNode;
 
 	if (slot.type == Slot::Type::stINPUT)
 	{
 		pNode->inputs.push_back(slot);
 	}
-	else if (slot.type == Slot::Type::stOUTPUT)
+	else
 	{
 		pNode->outputs.push_back(slot);
+	}
+
+	switch (slot.valueType)
+	{
+	case Slot::ValueType::svBOOL:
+		pNode->data[slot.valueKey] = false;
+		break;
+	case Slot::ValueType::svFLOAT:
+		pNode->data[slot.valueKey] = 0.0f;
+		break;
+	case Slot::ValueType::svVECTOR:
+		pNode->data[slot.valueKey] = Vector();
+		break;
+	case Slot::ValueType::svADDRESS:
+		pNode->data[slot.valueKey] = (void*)nullptr;
+		break;
 	}
 }
 
@@ -86,7 +102,7 @@ void NodeGraph::FromJson(const JSON& json)
 			pNode->FromJson(nodeJson);
 
 			pNode->pNodeGraph = this;
-			pNode->uid = iNodeGUID++;
+			pNode->uid = nodeGUID++;
 
 			pNode->InitializeSlots();
 
@@ -138,6 +154,23 @@ void NodeGraph::SyncNode(NodeBase* pNode, double deltaSeconds)
 	std::get<bool>(nodeStates[pNode]) = true;
 }
 
+Slot* NodeGraph::FindSlot(int iSlotUID)
+{
+	for (auto& pNode : nodePtrs)
+	{
+		for (auto& input : pNode->inputs)
+		{
+			if (input.uid == iSlotUID) return &input;
+		}
+		for (auto& output : pNode->outputs)
+		{
+			if (output.uid == iSlotUID) return &output;
+		}
+	}
+
+	return nullptr;
+}
+
 void NodeGraph::DrawEditor()
 {
 	ImGui::BeginChildFrame(ImGui::GetID("node_editor"), {});
@@ -147,12 +180,12 @@ void NodeGraph::DrawEditor()
 		{
 			for (int iNode = 0; iNode < nodePtrs.size(); iNode++)
 			{
-				const ImVec2& prevPosition = imnodes::GetNodeEditorSpacePos(iNode);
+				const ImVec2& preposition = imnodes::GetNodeEditorSpacePos(iNode);
 				ImVec2& nodePosition = std::get<ImVec2>(nodeStates[nodePtrs[iNode]]);
 
 				if (!ImGui::IsMouseDragging(ImGuiMouseButton_Left))
 				{
-					if (prevPosition.x != nodePosition.x || prevPosition.y != nodePosition.y)
+					if (preposition.x != nodePosition.x || preposition.y != nodePosition.y)
 					{
 						imnodes::SetNodeGridSpacePos(iNode, nodePosition);
 					}
@@ -195,4 +228,22 @@ void NodeGraph::DrawEditor()
 	}
 	imnodes::EndNodeEditor();
 	ImGui::EndChildFrame();
+
+	LinkNodes();
+}
+
+void NodeGraph::LinkNodes()
+{
+	int iStartID, iEndID;
+	if (imnodes::IsLinkCreated(&iStartID, &iEndID))
+	{
+		auto pStartSlot = FindSlot(iStartID);
+		auto pEndSlot = FindSlot(iEndID);
+
+		if (pStartSlot && pEndSlot)
+		{
+			pStartSlot->ConnectTo(pEndSlot);
+			links.push_back({ iStartID, iEndID });
+		}
+	}
 }

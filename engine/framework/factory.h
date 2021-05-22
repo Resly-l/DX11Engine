@@ -1,34 +1,34 @@
 #pragma once
 #include "common.h"
 
-template<typename IDTy, typename BaseTy>
+template<typename IDType, typename BaseType>
 class Factory
 {
 private:
-	inline static std::unordered_map<IDTy, std::vector<std::unique_ptr<BaseTy>>> instancePtrs;
-	inline static std::unordered_map<IDTy, std::pair<std::string, std::function<std::unique_ptr<BaseTy>()>>> creators;
+	inline static std::unordered_map<IDType, std::vector<std::unique_ptr<BaseType>>> instancePtrs;
+	inline static std::unordered_map<IDType, std::pair<std::string, std::function<std::unique_ptr<BaseType>()>>> creators;
 
 	inline static std::vector<std::string> registeredStringIDs;
 
 public:
-	 template<typename T>
+	template<typename T>
 	static void Register();
 
 	static const std::vector<std::string>& GetRegisteredStringIDs() { return registeredStringIDs; }
 
-	static BaseTy* Create(const IDTy& typeID);
-	static BaseTy* Create(const std::string& stringID);
+	static BaseType* Create(const IDType& typeID);
+	static BaseType* Create(const std::string& stringID);
 
-	static bool Remove(BaseTy* pTarget);
+	static bool Remove(BaseType* pTarget);
 
-	static std::vector<std::unique_ptr<BaseTy>>& GetInstances(const IDTy& typeID);
+	static std::vector<std::unique_ptr<BaseType>>& GetInstances(const IDType& typeID);
 };
 
 
 
-template<typename IDTy, typename BaseTy>
+template<typename IDType, typename BaseType>
 template<typename T>
-void Factory<IDTy, BaseTy>::Register()
+void Factory<IDType, BaseType>::Register()
 {
 	if (creators.find(T::ID) != creators.end())
 	{
@@ -39,8 +39,8 @@ void Factory<IDTy, BaseTy>::Register()
 	registeredStringIDs.push_back(T::stringID);
 }
 
-template<typename IDTy, typename BaseTy>
-BaseTy* Factory<IDTy, BaseTy>::Create(const IDTy& typeID)
+template<typename IDType, typename BaseType>
+BaseType* Factory<IDType, BaseType>::Create(const IDType& typeID)
 {
 	if (auto it = creators.find(typeID); it != creators.end())
 	{
@@ -51,11 +51,11 @@ BaseTy* Factory<IDTy, BaseTy>::Create(const IDTy& typeID)
 	return nullptr;
 }
 
-template<typename IDTy, typename BaseTy>
-BaseTy* Factory<IDTy, BaseTy>::Create(const std::string& stringID)
+template<typename IDType, typename BaseType>
+BaseType* Factory<IDType, BaseType>::Create(const std::string& stringID)
 {
 	auto it = std::find_if(creators.begin(), creators.end(),
-		[&stringID](const std::pair<IDTy, std::pair<std::string, std::function<std::unique_ptr<BaseTy>()>>>& pair)
+		[&stringID](const std::pair<IDType, std::pair<std::string, std::function<std::unique_ptr<BaseType>()>>>& pair)
 		{
 			return pair.second.first == stringID;
 		});
@@ -69,18 +69,18 @@ BaseTy* Factory<IDTy, BaseTy>::Create(const std::string& stringID)
 	return nullptr;
 }
 
-template<typename IDTy, typename BaseTy>
-bool Factory<IDTy, BaseTy>::Remove(BaseTy* pTarget)
+template<typename IDType, typename BaseType>
+bool Factory<IDType, BaseType>::Remove(BaseType* pTarget)
 {
 	return std::erase_if(instancePtrs[pTarget->GetID()],
-		[&pTarget](const std::unique_ptr<BaseTy>& pInstance)
+		[&pTarget](const std::unique_ptr<BaseType>& pInstance)
 		{
 			return pInstance.get() == pTarget;
 		}) != 0;
 }
 
-template<typename IDTy, typename BaseTy>
-std::vector<std::unique_ptr<BaseTy>>& Factory<IDTy, BaseTy>::GetInstances(const IDTy& typeID)
+template<typename IDType, typename BaseType>
+std::vector<std::unique_ptr<BaseType>>& Factory<IDType, BaseType>::GetInstances(const IDType& typeID)
 {
 	return instancePtrs[typeID];
 }

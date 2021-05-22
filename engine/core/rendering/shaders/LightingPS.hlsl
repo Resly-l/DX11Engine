@@ -2,8 +2,8 @@
 
 cbuffer ViewProjection : register(b0)
 {
-	matrix mView;
-	matrix mProjection;
+	matrix view;
+	matrix projection;
 };
 
 struct LightProperty
@@ -11,12 +11,12 @@ struct LightProperty
 	float3 position;
 	float3 direction;
 	float3 color;
-	float fIntensity;
-	float fLinearAttenuation;
-	float fQuadraticAttenuation;
-	float fConstantAttenuation;
-	float fAmbientStrength;
-	bool bCastShadow;
+	float intensity;
+	float linearAttenuation;
+	float quadraticAttenuation;
+	float constantAttenuation;
+	float ambientStrength;
+	bool castShadow;
 };
 
 cbuffer Light : register(b3)
@@ -40,7 +40,7 @@ SamplerComparisonState shadowSampler : register(s1);
 float4 main(float2 texcoord : TEXCOORD) : SV_TARGET
 {
 	const float3 worldPosition = positionMap.Sample(textureSampler, texcoord).rgb;
-	const float3 viewPosition = mul(mView, float4(worldPosition, 1.0f)).rgb;
+	const float3 viewPosition = mul(view, float4(worldPosition, 1.0f)).rgb;
 	const float3 normal = normalMap.Sample(textureSampler, texcoord).rgb;
 	const float3 albedo = albedoMap.Sample(textureSampler, texcoord).rgb;
 	// rgb = specular color, a = specular shininess
@@ -51,7 +51,7 @@ float4 main(float2 texcoord : TEXCOORD) : SV_TARGET
 	[unroll]
 	for (uint uLight = 0u; uLight < uNumLights; uLight++)
 	{
-		const float3 lightViewPosition = mul(mView, float4(lights[uLight].position, 1.0f)).xyz;
+		const float3 lightViewPosition = mul(view, float4(lights[uLight].position, 1.0f)).xyz;
 		const float3 vToLight = lightViewPosition - viewPosition;
 		const float fLenToLight = length(vToLight);
 
@@ -60,14 +60,14 @@ float4 main(float2 texcoord : TEXCOORD) : SV_TARGET
 		// b : linear attenuation
 		// c : quadratic attenuation
 		// d : distance
-		const float fAttenuation = 1.0f / (lights[uLight].fConstantAttenuation + lights[uLight].fLinearAttenuation * fLenToLight + lights[uLight].fQuadraticAttenuation * (fLenToLight * fLenToLight));
+		const float fAttenuation = 1.0f / (lights[uLight].constantAttenuation + lights[uLight].linearAttenuation * fLenToLight + lights[uLight].quadraticAttenuation * (fLenToLight * fLenToLight));
 
-		const float3 diffuseReflection = albedo * lights[uLight].color * lights[uLight].fIntensity * fAttenuation * max(0.0f, dot(normal, vToLight / fLenToLight));
-		const float3 specularReflection = specular.rgb * lights[uLight].fIntensity * fAttenuation * pow(max(0.0f, dot(normalize(-viewPosition), normalize(reflect(-vToLight, normal)))), specular.a);
-		const float3 ambient = lights[uLight].color * lights[uLight].fAmbientStrength;
+		const float3 diffuseReflection = albedo * lights[uLight].color * lights[uLight].intensity * fAttenuation * max(0.0f, dot(normal, vToLight / fLenToLight));
+		const float3 specularReflection = specular.rgb * lights[uLight].intensity * fAttenuation * pow(max(0.0f, dot(normalize(-viewPosition), normalize(reflect(-vToLight, normal)))), specular.a);
+		const float3 ambient = lights[uLight].color * lights[uLight].ambientStrength;
 
 		float fShadowLevel = 1.0f;
-		if (lights[uLight].bCastShadow)
+		if (lights[uLight].castShadow)
 		{
 			static const float zn = 0.5f;
 			static const float zf = 100.0f;

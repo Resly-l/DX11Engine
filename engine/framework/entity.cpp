@@ -1,6 +1,5 @@
 #include "entity.h"
 
-// global entity count
 static size_t uEntityCount = 0;
 
 Entity::Entity()
@@ -74,7 +73,7 @@ ComponentBase* Entity::GetComponent(ComponentID ID)
 	return nullptr;
 }
 
-ComponentBase* Entity::GetComponent(const std::string stringID)
+ComponentBase* Entity::GetComponent(const std::string& stringID)
 {
 	auto it = std::find_if(componentPtrs.begin(), componentPtrs.end(),
 		[&stringID](const std::pair<ComponentID, ComponentBase*>& pair)
@@ -103,13 +102,22 @@ bool Entity::RemoveComponent(ComponentID ID)
 	return false;
 }
 
-bool Entity::RemoveComponent(const std::string stringID)
+bool Entity::RemoveComponent(const std::string& stringID)
 {
-	return std::erase_if(componentPtrs,
+	auto it = std::find_if(componentPtrs.begin(), componentPtrs.end(),
 		[&stringID](const std::pair<ComponentID, ComponentBase*>& pair)
 		{
 			return pair.second->GetStringID() == stringID;
-		}) != 0;
+		});
+
+	if (it != componentPtrs.end())
+	{
+		ComponentFactory::Remove(it->second);
+		componentPtrs.erase(it);
+		return true;
+	}
+
+	return false;
 }
 
 void Entity::ReleaseComponents()
@@ -180,6 +188,7 @@ void Entity::FromJson(const JSON& json)
 			std::string stringID = componentJson["string_id"];
 			auto pComponent = ComponentFactory::Create(stringID);
 			pComponent->FromJson(componentJson);
+			pComponent->pOwner = this;
 
 			componentPtrs[pComponent->GetID()] = pComponent;
 		}

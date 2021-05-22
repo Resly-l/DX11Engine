@@ -4,6 +4,7 @@
 #include "components/model_component.h"
 #include "components/camera_component.h"
 #include "components/light_component.h"
+#include "components/physics_component.h"
 #include "components/script_component.h"
 
 void ComponentFactory::Initialize()
@@ -12,5 +13,6 @@ void ComponentFactory::Initialize()
 	Register<ModelComponent>();
 	Register<CameraComponent>();
 	Register<LightComponent>();
+	Register<PhysicsComponent>();
 	Register<ScriptComponent>();
 }

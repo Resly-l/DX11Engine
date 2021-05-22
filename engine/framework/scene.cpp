@@ -2,8 +2,11 @@
 #include "entity.h"
 #include "system.h"
 
+static size_t uSceneCount = 0;
+
 Scene::Scene()
 	:
+	name("unnamed_scene_#" + std::to_string(uSceneCount++)),
 	pRootEntity(std::make_unique<Entity>())
 {
 	pRootEntity->SetName("Root_Entity");

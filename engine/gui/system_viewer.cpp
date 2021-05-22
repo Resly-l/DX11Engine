@@ -11,6 +11,7 @@ void SystemViewer::Draw()
 			{
 				ImGui::NewLine();
 				pSystem->DrawWidget();
+				ImGui::NewLine();
 			}
 		}
 	}

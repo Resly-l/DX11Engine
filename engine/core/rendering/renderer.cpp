@@ -3,30 +3,30 @@
 #include "imgui/imgui_impl_win32.h"
 #include "imgui/imgui_impl_dx11.h"
 
-Renderer Renderer::singleton;
+Renderer Renderer::instance;
 
 Renderer::~Renderer()
 {
 	ReleaseImGui();
 }
 
-void Renderer::Initialize(HWND hWnd, uint32_t uWidth, uint32_t uHeight)
+void Renderer::Initialize(HWND hwnd, uint32_t width, uint32_t height)
 {
-	singleton.uSwapChainWidth = uWidth;
-	singleton.uSwapChainHeight = uHeight;
+	instance.swapChainWidth = width;
+	instance.swapChainHeight = height;
 
 	CreateDeviceAndContext();
-	CreateSwapChain(hWnd);
+	CreateSwapChain(hwnd);
 	CreateBackbuffer();
 
 	SetViewport();
 
-	InitializeImGui(hWnd);
+	InitializeImGui(hwnd);
 }
 
 void Renderer::BeginFrame(const Vector& clearColor)
 {
-	singleton.pContext->ClearRenderTargetView(singleton.pBackbuffer.Get(), &clearColor.x);
+	instance.pContext->ClearRenderTargetView(instance.pBackbuffer.Get(), &clearColor.x);
 
 	ImGui_ImplDX11_NewFrame();
 	ImGui_ImplWin32_NewFrame();
@@ -38,29 +38,29 @@ void Renderer::EndFrame()
 	ImGui::Render();
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
-	singleton.pSwapChain->Present(singleton.bVSync, 0);
+	instance.pSwapChain->Present(instance.useVSync, 0);
 }
 
-void Renderer::ResizeSwapChain(uint32_t uWidth, uint32_t uHeight)
+void Renderer::ResizeSwapChain(uint32_t width, uint32_t height)
 {
-	singleton.uSwapChainWidth = uWidth;
-	singleton.uSwapChainHeight = uHeight;
+	instance.swapChainWidth = width;
+	instance.swapChainHeight = height;
 
-	singleton.pContext->ClearState();
+	instance.pContext->ClearState();
 
 	// manual releasing
-	singleton.pBackbuffer = nullptr;
+	instance.pBackbuffer = nullptr;
 
 	DXGI_MODE_DESC md = {};
-	md.Width = uWidth;
-	md.Height = uHeight;
+	md.Width = width;
+	md.Height = height;
 	md.RefreshRate = { 0, 1 };
 	md.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 	md.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
 	md.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
 
-	singleton.pSwapChain->ResizeTarget(&md);
-	singleton.pSwapChain->ResizeBuffers(1, uWidth, uHeight, DXGI_FORMAT_UNKNOWN, 0);
+	instance.pSwapChain->ResizeTarget(&md);
+	instance.pSwapChain->ResizeBuffers(1, width, height, DXGI_FORMAT_UNKNOWN, 0);
 
 	CreateBackbuffer();
 	SetViewport();
@@ -68,14 +68,14 @@ void Renderer::ResizeSwapChain(uint32_t uWidth, uint32_t uHeight)
 
 void Renderer::SetFullscreenState(bool bFullscreen)
 {
-	singleton.pSwapChain->SetFullscreenState(bFullscreen, nullptr);
+	instance.pSwapChain->SetFullscreenState(bFullscreen, nullptr);
 }
 
-void Renderer::CreateSwapChain(HWND hWnd)
+void Renderer::CreateSwapChain(HWND hwnd)
 {
 	DXGI_SWAP_CHAIN_DESC sd = {};
-	sd.BufferDesc.Width = singleton.uSwapChainWidth;
-	sd.BufferDesc.Height = singleton.uSwapChainHeight;
+	sd.BufferDesc.Width = instance.swapChainWidth;
+	sd.BufferDesc.Height = instance.swapChainHeight;
 	sd.BufferDesc.RefreshRate.Numerator = 0;
 	sd.BufferDesc.RefreshRate.Denominator = 1;
 	sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
@@ -85,12 +85,12 @@ void Renderer::CreateSwapChain(HWND hWnd)
 	sd.SampleDesc.Quality = 0;
 	sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT | DXGI_USAGE_SHADER_INPUT;
 	sd.BufferCount = 1;
-	sd.OutputWindow = hWnd;
+	sd.OutputWindow = hwnd;
 	sd.Windowed = true;
 	sd.SwapEffect = DXGI_SWAP_EFFECT::DXGI_SWAP_EFFECT_DISCARD;
 
 	Microsoft::WRL::ComPtr<IDXGIDevice> dxgiDevice;
-	singleton.pDevice->QueryInterface(__uuidof(IDXGIDevice), (void**)&dxgiDevice);
+	instance.pDevice->QueryInterface(__uuidof(IDXGIDevice), (void**)&dxgiDevice);
 
 	Microsoft::WRL::ComPtr<IDXGIAdapter> dxgiAdapter;
 	dxgiDevice->GetParent(__uuidof(IDXGIAdapter), (void**)&dxgiAdapter);
@@ -100,8 +100,8 @@ void Renderer::CreateSwapChain(HWND hWnd)
 
 	Microsoft::WRL::ComPtr<IDXGIFactory> dxgiFactory;
 	dxgiAdapter->GetParent(__uuidof(IDXGIFactory), (void**)&dxgiFactory);
-	dxgiFactory->CreateSwapChain(singleton.pDevice.Get(), &sd, &singleton.pSwapChain);
-	dxgiFactory->MakeWindowAssociation(hWnd, DXGI_MWA_NO_ALT_ENTER);
+	dxgiFactory->CreateSwapChain(instance.pDevice.Get(), &sd, &instance.pSwapChain);
+	dxgiFactory->MakeWindowAssociation(hwnd, DXGI_MWA_NO_ALT_ENTER);
 }
 
 void Renderer::CreateDeviceAndContext()
@@ -112,7 +112,7 @@ void Renderer::CreateDeviceAndContext()
 	flags |= D3D11_CREATE_DEVICE_DEBUG;
 #endif
 
-	if (FAILED(D3D11CreateDevice(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, flags, nullptr, 0, D3D11_SDK_VERSION, &singleton.pDevice, {}, &singleton.pContext)))
+	if (FAILED(D3D11CreateDevice(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, flags, nullptr, 0, D3D11_SDK_VERSION, &instance.pDevice, {}, &instance.pContext)))
 	{
 		MessageBoxA(nullptr, "failed to create graphics device", "FATAL ERROR", MB_ICONERROR | MB_OK);
 		PostQuitMessage(0);
@@ -122,14 +122,14 @@ void Renderer::CreateDeviceAndContext()
 void Renderer::CreateBackbuffer()
 {
 	ComPtr<ID3D11Resource> pResource;
-	singleton.pSwapChain->GetBuffer(0u, __uuidof(ID3D11Resource), &pResource);
-	if (FAILED(singleton.pDevice->CreateRenderTargetView(pResource.Get(), nullptr, &singleton.pBackbuffer)))
+	instance.pSwapChain->GetBuffer(0u, __uuidof(ID3D11Resource), &pResource);
+	if (FAILED(instance.pDevice->CreateRenderTargetView(pResource.Get(), nullptr, &instance.pBackbuffer)))
 	{
 		MessageBoxA(nullptr, "failed to create backbuffer", "FATAL ERROR", MB_ICONERROR | MB_OK);
 		PostQuitMessage(0);
 	}
 
-	singleton.pContext->OMSetRenderTargets(1u, singleton.pBackbuffer.GetAddressOf(), nullptr);
+	instance.pContext->OMSetRenderTargets(1u, instance.pBackbuffer.GetAddressOf(), nullptr);
 }
 
 void Renderer::SetViewport()
@@ -137,15 +137,15 @@ void Renderer::SetViewport()
 	D3D11_VIEWPORT viewport = {};
 	viewport.TopLeftX = 0.0f;
 	viewport.TopLeftY = 0.0f;
-	viewport.Width = (float)singleton.uSwapChainWidth;
-	viewport.Height = (float)singleton.uSwapChainHeight;
+	viewport.Width = (float)instance.swapChainWidth;
+	viewport.Height = (float)instance.swapChainHeight;
 	viewport.MinDepth = 0.0f;
 	viewport.MaxDepth = 1.0f;
 
-	singleton.pContext->RSSetViewports(1, &viewport);
+	instance.pContext->RSSetViewports(1, &viewport);
 }
 
-void Renderer::InitializeImGui(HWND hWnd)
+void Renderer::InitializeImGui(HWND hwnd)
 {
 	ImGui::CreateContext();
 	ImGui::StyleColorsDark();
@@ -153,10 +153,10 @@ void Renderer::InitializeImGui(HWND hWnd)
 	imnodes::CreateContext();
 	imnodes::StyleColorsDark();
 
-	ImGui_ImplWin32_Init(hWnd);
-	ImGui_ImplDX11_Init(singleton.pDevice.Get(), singleton.pContext.Get());
+	ImGui_ImplWin32_Init(hwnd);
+	ImGui_ImplDX11_Init(instance.pDevice.Get(), instance.pContext.Get());
 
-	ImGui::GetIO().Fonts->AddFontFromFileTTF("../asset/fonts/nnsreb.ttf", singleton.fImGuiFontSize);
+	ImGui::GetIO().Fonts->AddFontFromFileTTF("../asset/fonts/nnsreb.ttf", instance.imGuiFontSize);
 	ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 }
 

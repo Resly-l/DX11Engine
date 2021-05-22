@@ -18,5 +18,5 @@ public:
 
 private:
 	// recovers dxgi-format
-	static DXGI_FORMAT GetComponentFormat(D3D_REGISTER_COMPONENT_TYPE type, BYTE uMask);
+	static DXGI_FORMAT GetComponentFormat(D3D_REGISTER_COMPONENT_TYPE type, BYTE mask);
 };

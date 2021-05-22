@@ -12,8 +12,11 @@ class RenderSystem : public System<RenderSystem>
 private:
 	CameraComponent* pSceneCamera = nullptr;
 	Entity editorCamera;
-	bool bUseEditorCamera = false;
-	bool bEditorCameraEngaged = false;
+	bool useEditorCamera = false;
+	bool editorCameraEngaged = false;
+	
+	std::vector<std::unique_ptr<Drawable>> debugLinePtrs;
+	bool drawDebugLines = true;
 
 	std::unordered_map<std::string, std::shared_ptr<Resource>> passResources;
 	RenderQueue renderQueue;
@@ -22,21 +25,24 @@ public:
 	RenderSystem();
 
 public:
-	void Update(double deltaSeconds) override;
+	void Update(double deltaSeconds, bool simulate) override;
 
 	void SetCamera(CameraComponent* pCamera) { pSceneCamera = pCamera; }
-	void SetEditorCameraUsage(bool bUse) { bUseEditorCamera = bUse; }
-	void SetEditorCameraEngagement(bool bEngage);
+	void SetEditorCameraUsage(bool useEditorCamera) { this->useEditorCamera = useEditorCamera; }
+	void SetEditorCameraEngagement(bool engage);
 	void SetSkyboxTexture(std::shared_ptr<TextureCube> pTextureCube);
 
-	Entity& GetEditorCamera() { return editorCamera; }
 	RenderTarget& GetFramebufferRenderTarget();
 
 	void DrawWidget() override;
 
 private:
-	void BindCameraTransform();
+	void BindCamera();
 	void PassLightResource();
 	void SubmitRenderComponents();
+	void SubmitColliderOutlines();
 	void UpdateEditorCamera(double deltaSeconds);
+
+	static Mesh MakeBoxMesh(Vector minExtent, Vector maxExtent);
+	static Mesh MakeSphereMesh(Vector center, float radius);
 };

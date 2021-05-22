@@ -5,20 +5,20 @@ Matrix TransformComponent::GetTransformMatrix() const
 {
 	Matrix mParentTransform;
 
-	if (auto pParent = pOwner->GetParent())
+	if (auto pParent = GetOwner()->GetParent())
 	{
 		if (auto pParentTransform = pParent->GetComponent<TransformComponent>())
 		{
 			mParentTransform =
-				(pParentTransform->passdown.bScale ? Matrix::Scaling(pParentTransform->vScale) : Matrix::Identity()) *
-				(pParentTransform->passdown.bRotation ? Matrix::Rotation(pParentTransform->vAngle) : Matrix::Identity()) *
-				(pParentTransform->passdown.bTranslation ? Matrix::Translation(pParentTransform->vPosition) : Matrix::Identity());
+				(pParentTransform->passScale ? Matrix::Scaling(pParentTransform->scale) : Matrix::Identity()) *
+				(pParentTransform->passRotation ? Matrix::Rotation(pParentTransform->angle) : Matrix::Identity()) *
+				(pParentTransform->passTranslation ? Matrix::Translation(pParentTransform->position) : Matrix::Identity());
 		}
 	}
 
-	return Matrix::Scaling(vScale)
-		* Matrix::Rotation(vAngle)
-		* Matrix::Translation(vPosition)
+	return Matrix::Scaling(scale)
+		* Matrix::Rotation(angle)
+		* Matrix::Translation(position)
 		* mParentTransform;
 }
 
@@ -26,31 +26,30 @@ JSON TransformComponent::ToJson() const
 {
 	JSON json;
 
-	json["vPosition"] = vPosition;
-	json["vAngle"] = vAngle;
-	json["vScale"] = vScale;
+	json["position"] = position;
+	json["angle"] = angle;
+	json["scale"] = scale;
 
 	return json;
 }
 
 void TransformComponent::FromJson(const JSON& json)
 {
-	vPosition = json["vPosition"];
-	vAngle = json["vAngle"];
-	vScale = json["vScale"];
+	position = json["position"];
+	angle = json["angle"];
+	scale = json["scale"];
 }
 
 void TransformComponent::DrawWidget()
 {
-	ImGui::DragFloat3("position", &vPosition[0], 0.01f);
-	ImGui::DragFloat3("angle", &vAngle[0], 0.01f);
-	ImGui::DragFloat3("scale", &vScale[0], 0.01f);
+	ImGui::DragFloat3("position", &position[0], 0.01f);
+	ImGui::DragFloat3("angle", &angle[0], 0.01f);
+	ImGui::DragFloat3("scale", &scale[0], 0.01f);
 
 	ImGui::NewLine();
 	ImGui::AlignTextToFramePadding();
 	ImGui::Text("pass down");
-
-	ImGui::Checkbox("translation", &passdown.bTranslation);
-	ImGui::Checkbox("rotation", &passdown.bRotation);
-	ImGui::Checkbox("scale", &passdown.bScale);
+	ImGui::Checkbox("translation", &passTranslation);
+	ImGui::Checkbox("rotation", &passRotation);
+	ImGui::Checkbox("scale", &passScale);
 }

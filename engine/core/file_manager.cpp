@@ -5,14 +5,13 @@ std::string FileManager::SelectFileToLoad(const std::string& initialPath, const 
 {
 	std::string filePath;
 
-	OPENFILENAMEA ofn;
-	char szFile[260] = { 0 };
+	OPENFILENAMEA ofn = {};
+	char stringBuffer[260] = { 0 };
 
-	ZeroMemory(&ofn, sizeof(ofn));
 	ofn.lStructSize = sizeof(ofn);
 	ofn.hwndOwner = GetActiveWindow();
-	ofn.lpstrFile = szFile;
-	ofn.nMaxFile = sizeof(szFile);
+	ofn.lpstrFile = stringBuffer;
+	ofn.nMaxFile = sizeof(stringBuffer);
 	ofn.lpstrFilter = extentions;
 	ofn.nFilterIndex = 1;
 	ofn.lpstrFileTitle = nullptr;
@@ -32,14 +31,13 @@ std::string FileManager::SelectFileToSave(const std::string& initialPath)
 {
 	std::string filePath;
 
-	OPENFILENAMEA ofn;
-	char szFile[260] = { 0 };
+	OPENFILENAMEA ofn = {};
+	char stringBuffer[260] = { 0 };
 
-	ZeroMemory(&ofn, sizeof(ofn));
 	ofn.lStructSize = sizeof(ofn);
 	ofn.hwndOwner = GetActiveWindow();
-	ofn.lpstrFile = szFile;
-	ofn.nMaxFile = sizeof(szFile);
+	ofn.lpstrFile = stringBuffer;
+	ofn.nMaxFile = sizeof(stringBuffer);
 	ofn.lpstrFilter = "all(*.*)\0*.*\0";
 	ofn.nFilterIndex = 1;
 	ofn.lpstrFileTitle = nullptr;
@@ -76,6 +74,7 @@ JSON FileManager::ReadFile(const std::string& filePath)
 	catch (const std::exception& e)
 	{
 		Console::AddLog({ Log::Type::ltERROR, e.what() });
+		return {};
 	}
 
 	file.close();
@@ -87,7 +86,6 @@ bool FileManager::CreateFileToPath(const std::string& filePath, const JSON& init
 {
 	std::ofstream file;
 	std::string dump = initialData.dump(4);
-	bool bException = false;
 
 	try
 	{
@@ -97,12 +95,12 @@ bool FileManager::CreateFileToPath(const std::string& filePath, const JSON& init
 	catch (const std::exception& e)
 	{
 		Console::AddLog({ Log::Type::ltERROR, ("failed to create file : " + filePath + e.what()) });
-		bException = true;
+		return false;
 	}
 
 	file.close();
 
-	return !bException;
+	return true;
 }
 
 bool FileManager::DeleteFileFromPath(const std::string& filePath)

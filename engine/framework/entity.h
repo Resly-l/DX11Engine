@@ -30,12 +30,12 @@ public:
 	template<typename ComponentType>
 	ComponentType* GetComponent();
 	ComponentBase* GetComponent(ComponentID ID);
-	ComponentBase* GetComponent(const std::string stringID);
+	ComponentBase* GetComponent(const std::string& stringID);
 
 	template<typename ComponentType>
 	bool RemoveComponent();
 	bool RemoveComponent(ComponentID ID);
-	bool RemoveComponent(const std::string stringID);
+	bool RemoveComponent(const std::string& stringID);
 
 	void ReleaseComponents();
 

@@ -10,12 +10,12 @@ public:
 		Vector position;
 		Vector direction;
 		float3 color = { 1.0f, 1.0f, 1.0f };
-		float fIntensity = 1.0f;
-		float fLinearAttenuation = 0.025f;
-		float fQuadraticAttenuation = 0.003f;
-		float fConstantAttenuation = 1.0f;
-		float fAmbientStrength = 0.005f;
-		alignas (16) BOOL bCastShadow = true;
+		float intensity = 1.0f;
+		float linearAttenuation = 0.025f;
+		float quadraticAttenuation = 0.003f;
+		float constantAttenuation = 1.0f;
+		float ambientStrength = 0.005f;
+		alignas (16) BOOL castShadow = true;
 	};
 
 private:

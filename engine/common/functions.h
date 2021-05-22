@@ -13,3 +13,9 @@ auto ToNarrowString = [](const std::wstring& wstring)
 	wcstombs_s(nullptr, narrow, wstring.c_str(), _TRUNCATE);
 	return std::string(narrow);
 };
+
+template<typename T>
+T Squared(const T& val)
+{
+	return val * val;
+}

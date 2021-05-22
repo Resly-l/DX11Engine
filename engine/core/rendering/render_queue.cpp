@@ -3,6 +3,7 @@
 #include "render_passes/gbuffer_pass.h"
 #include "render_passes/lighting_pass.h"
 #include "render_passes/skybox_pass.h"
+#include "render_passes/debug_line_pass.h"
 #include "resource.h"
 #include "drawable.h"
 
@@ -14,6 +15,7 @@ RenderQueue::RenderQueue()
 		AddPass(std::make_unique<GBufferPass>());
 		AddPass(std::make_unique<LightingPass>());
 		AddPass(std::make_unique<SkyboxPass>());
+		AddPass(std::make_unique<DebugLinePass>());
 	}
 }
 

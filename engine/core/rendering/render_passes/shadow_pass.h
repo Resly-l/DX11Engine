@@ -11,7 +11,7 @@ private:
 
 	// lhs = direction, rhs = upside
 	std::pair<Vector, Vector> faceDirections[6];
-	Matrix mProjection;
+	Matrix projection;
 
 public:
 	ShadowPass();

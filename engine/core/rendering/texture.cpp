@@ -7,18 +7,18 @@
 
 void Internal::TextureBase::Bind() const
 {
-	Renderer::GetContext()->PSSetShaderResources(uSlot, 1, pShaderResourceView.GetAddressOf());
+	Renderer::GetContext()->PSSetShaderResources(slot, 1, pShaderResourceView.GetAddressOf());
 }
 
 Texture::Texture(Type type, const std::string& filePath)
 {
 	this->filePath = filePath;
-	this->uSlot = (uint32_t)type;
+	this->slot = (uint32_t)type;
 
-	int iWidth = 0, iHeight = 0;
-	int iBitPerChannel = 0;
+	int width = 0, height = 0;
+	int bitPerChannel = 0;
 
-	byte* pData = stbi_load(filePath.c_str(), &iWidth, &iHeight, &iBitPerChannel, 4);
+	byte* pData = stbi_load(filePath.c_str(), &width, &height, &bitPerChannel, 4);
 
 	if (pData == nullptr)
 	{
@@ -29,8 +29,8 @@ Texture::Texture(Type type, const std::string& filePath)
 	ComPtr<ID3D11Texture2D> pTexture2D;
 	{
 		D3D11_TEXTURE2D_DESC textureDesc = {};
-		textureDesc.Width = iWidth;
-		textureDesc.Height = iHeight;
+		textureDesc.Width = width;
+		textureDesc.Height = height;
 		textureDesc.ArraySize = 1;
 		textureDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 		textureDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_RENDER_TARGET;
@@ -46,7 +46,7 @@ Texture::Texture(Type type, const std::string& filePath)
 			Console::AddLog({ Log::Type::ltERROR, "failed to create texture2d : " + filePath });
 			return;
 		}
-		Renderer::GetContext()->UpdateSubresource(pTexture2D.Get(), 0, nullptr, pData, iWidth * sizeof(UINT), 0);
+		Renderer::GetContext()->UpdateSubresource(pTexture2D.Get(), 0, nullptr, pData, width * sizeof(UINT), 0);
 	}
 	{
 		D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
@@ -63,36 +63,36 @@ Texture::Texture(Type type, const std::string& filePath)
 TextureCube::TextureCube(const std::string& dirPath)
 {
 	this->filePath = dirPath;
-	this->uSlot = uint32_t(Texture::Type::ttSKY);
+	this->slot = uint32_t(Texture::Type::ttSKY);
 
-	int iWidth = 0, iHeight = 0;
+	int width = 0, height = 0;
 	int iPrevWidth = 0, iPrevHeight = 0; // width & height of previously loaded image
 	int iBitPerChannel = 0;
 	bool bSizeMismatch = false;
 
 	byte* imagePtrs[6] = {};
 
-	imagePtrs[1] = stbi_load((dirPath + "nx.png").c_str(), &iWidth, &iHeight, &iBitPerChannel, 4);
-	iPrevWidth = iWidth, iPrevHeight = iHeight;
+	imagePtrs[1] = stbi_load((dirPath + "nx.png").c_str(), &width, &height, &iBitPerChannel, 4);
+	iPrevWidth = width, iPrevHeight = height;
 
-	imagePtrs[3] = stbi_load((dirPath + "ny.png").c_str(), &iWidth, &iHeight, &iBitPerChannel, 4);
-	bSizeMismatch |= (iWidth != iPrevWidth) || (iHeight != iPrevHeight);
-	iPrevWidth = iWidth, iPrevHeight = iHeight;
+	imagePtrs[3] = stbi_load((dirPath + "ny.png").c_str(), &width, &height, &iBitPerChannel, 4);
+	bSizeMismatch |= (width != iPrevWidth) || (height != iPrevHeight);
+	iPrevWidth = width, iPrevHeight = height;
 
-	imagePtrs[5] = stbi_load((dirPath + "nz.png").c_str(), &iWidth, &iHeight, &iBitPerChannel, 4);
-	bSizeMismatch |= (iWidth != iPrevWidth) || (iHeight != iPrevHeight);
-	iPrevWidth = iWidth, iPrevHeight = iHeight;
+	imagePtrs[5] = stbi_load((dirPath + "nz.png").c_str(), &width, &height, &iBitPerChannel, 4);
+	bSizeMismatch |= (width != iPrevWidth) || (height != iPrevHeight);
+	iPrevWidth = width, iPrevHeight = height;
 
-	imagePtrs[0] = stbi_load((dirPath + "px.png").c_str(), &iWidth, &iHeight, &iBitPerChannel, 4);
-	bSizeMismatch |= (iWidth != iPrevWidth) || (iHeight != iPrevHeight);
-	iPrevWidth = iWidth, iPrevHeight = iHeight;
+	imagePtrs[0] = stbi_load((dirPath + "px.png").c_str(), &width, &height, &iBitPerChannel, 4);
+	bSizeMismatch |= (width != iPrevWidth) || (height != iPrevHeight);
+	iPrevWidth = width, iPrevHeight = height;
 
-	imagePtrs[2] = stbi_load((dirPath + "py.png").c_str(), &iWidth, &iHeight, &iBitPerChannel, 4);
-	bSizeMismatch |= (iWidth != iPrevWidth) || (iHeight != iPrevHeight);
-	iPrevWidth = iWidth, iPrevHeight = iHeight;
+	imagePtrs[2] = stbi_load((dirPath + "py.png").c_str(), &width, &height, &iBitPerChannel, 4);
+	bSizeMismatch |= (width != iPrevWidth) || (height != iPrevHeight);
+	iPrevWidth = width, iPrevHeight = height;
 
-	imagePtrs[4] = stbi_load((dirPath + "pz.png").c_str(), &iWidth, &iHeight, &iBitPerChannel, 4);
-	bSizeMismatch |= (iWidth != iPrevWidth) || (iHeight != iPrevHeight);
+	imagePtrs[4] = stbi_load((dirPath + "pz.png").c_str(), &width, &height, &iBitPerChannel, 4);
+	bSizeMismatch |= (width != iPrevWidth) || (height != iPrevHeight);
 
 	if (bSizeMismatch)
 	{
@@ -103,8 +103,8 @@ TextureCube::TextureCube(const std::string& dirPath)
 	ComPtr<ID3D11Texture2D> pTexture2D;
 	{
 		D3D11_TEXTURE2D_DESC textureDesc = {};
-		textureDesc.Width = iWidth;
-		textureDesc.Height = iHeight;
+		textureDesc.Width = width;
+		textureDesc.Height = height;
 		textureDesc.ArraySize = 6;
 		textureDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 		textureDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
@@ -119,7 +119,7 @@ TextureCube::TextureCube(const std::string& dirPath)
 		for (int i = 0; i < 6; i++)
 		{
 			sd[i].pSysMem = imagePtrs[i];
-			sd[i].SysMemPitch = iWidth * 4;
+			sd[i].SysMemPitch = width * 4;
 		}
 
 		if (FAILED(Renderer::GetDevice()->CreateTexture2D(&textureDesc, sd, &pTexture2D)))

@@ -17,6 +17,7 @@ public:
 		ptLIGHTING,
 		ptSKY,
 		ptALPHA,
+		ptDEBUG_LINE,
 
 		NUM_TAGS
 	};
@@ -43,5 +44,5 @@ public:
 	const Shader& GetShader() const { return shader; }
 	const RenderState& GetRenderState() const { return renderState; }
 
-	virtual void Render(std::unordered_map<std::string, std::shared_ptr<Resource>>& passResources) abstract;
+	virtual void Render(std::unordered_map<std::string, std::shared_ptr<Resource>>& passResources) = 0;
 };

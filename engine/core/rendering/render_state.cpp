@@ -19,10 +19,10 @@ void RenderState::InitializePrimitiveTopology(const D3D11_PRIMITIVE_TOPOLOGY& to
 	this->topology = topology;
 }
 
-void RenderState::InitializeViewport(float fWidth, float fHeight)
+void RenderState::InitializeViewport(float width, float height)
 {
-	viewport.Width = fWidth;
-	viewport.Height = fHeight;
+	viewport.Width = width;
+	viewport.Height = height;
 }
 
 void RenderState::InitializeDepthStencilState(const D3D11_DEPTH_STENCIL_DESC& dsDesc)
@@ -41,7 +41,7 @@ void RenderState::InitializeRasterizerState(const D3D11_RASTERIZER_DESC& rasteri
 	}
 }
 
-void RenderState::InitializeSamplerState(const D3D11_SAMPLER_DESC& samplerDesc, uint32_t uSlot)
+void RenderState::InitializeSamplerState(const D3D11_SAMPLER_DESC& samplerDesc, uint32_t slot)
 {
 	ComPtr<ID3D11SamplerState> pSamplerState;
 	if (FAILED(Renderer::GetDevice()->CreateSamplerState(&samplerDesc, &pSamplerState)))
@@ -50,16 +50,16 @@ void RenderState::InitializeSamplerState(const D3D11_SAMPLER_DESC& samplerDesc, 
 		return;
 	}
 
-	samplerStatePtrs.push_back({ std::move(pSamplerState), uSlot });
+	samplerStatePtrs.push_back({ std::move(pSamplerState), slot });
 }
 
-void RenderState::InitializeBlendState(const D3D11_BLEND_DESC& blendDesc, const std::optional<Vector>& vBlendFactor)
+void RenderState::InitializeBlendState(const D3D11_BLEND_DESC& blendDesc, const std::optional<Vector>& blendFactor)
 {
 	if (FAILED(Renderer::GetDevice()->CreateBlendState(&blendDesc, &pBlendState)))
 	{
 		Console::AddLog({ Log::Type::ltERROR, "render state : failed to create blend state" });
 	}
-	this->vBlendFactor = vBlendFactor;
+	this->blendFactor = blendFactor;
 }
 
 void RenderState::Bind() const
@@ -70,9 +70,9 @@ void RenderState::Bind() const
 
 	if (pDepthStencilState) Renderer::GetContext()->OMSetDepthStencilState(pDepthStencilState.Get(), 0xFF);
 	if (pRasterizerState) Renderer::GetContext()->RSSetState(pRasterizerState.Get());
-	for (auto& [pSamplerState, uSlot] : samplerStatePtrs)
+	for (auto& [pSamplerState, slot] : samplerStatePtrs)
 	{
-		if (pSamplerState) Renderer::GetContext()->PSSetSamplers(uSlot, 1, pSamplerState.GetAddressOf());
+		if (pSamplerState) Renderer::GetContext()->PSSetSamplers(slot, 1, pSamplerState.GetAddressOf());
 	}
-	if (pBlendState) Renderer::GetContext()->OMSetBlendState(pBlendState.Get(), vBlendFactor ? &(*vBlendFactor)[0] : nullptr, 0xFFFFFFFF);
+	if (pBlendState) Renderer::GetContext()->OMSetBlendState(pBlendState.Get(), blendFactor ? &(*blendFactor)[0] : nullptr, 0xFFFFFFFF);
 }

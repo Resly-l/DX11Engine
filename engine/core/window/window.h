@@ -4,7 +4,7 @@
 class Window
 {
 public:
-	Window(LPCSTR title, LPCSTR iconPath, uint32_t uWidth, uint32_t uHeight);
+	Window(LPCSTR title, LPCSTR iconPath, uint32_t width, uint32_t height);
 	Window(const Window&) = delete;
 	Window& operator=(const Window&) = delete;
 	virtual ~Window();
@@ -14,15 +14,16 @@ public:
 	void Kill() const;
 
 private:
-	void RegisterWindowClass(HINSTANCE hInstance, LPCSTR iconPath) const;
-	void CreateAndDisplayWindow(HINSTANCE hInstance, LPCSTR title);
-	static LRESULT WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+	void RegisterWindowClass(HINSTANCE hinstance, LPCSTR iconPath) const;
+	void CreateAndDisplayWindow(HINSTANCE hinstance, LPCSTR title);
+	static LRESULT WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 private:
 	inline static LPCSTR className = "window class";
-	HINSTANCE hInstance;
-	HWND hWnd;
 
-	uint32_t uWidth;
-	uint32_t uHeight;
+	HINSTANCE hinstance;
+	HWND hwnd;
+
+	uint32_t width;
+	uint32_t height;
 };

@@ -7,5 +7,5 @@ protected:
 	inline static const int windowFlags = ImGuiWindowFlags_NoCollapse;
 
 public:
-	virtual void Draw() abstract;
+	virtual void Draw() = 0;
 };

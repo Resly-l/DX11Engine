@@ -9,7 +9,7 @@ namespace Internal
 		std::string filePath;
 
 		ComPtr<ID3D11ShaderResourceView> pShaderResourceView;
-		uint32_t uSlot;
+		uint32_t slot;
 
 	public:
 		void Bind() const;

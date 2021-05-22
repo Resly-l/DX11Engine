@@ -5,30 +5,30 @@
 DepthStencil::DepthStencil(Usage usage)
 	:
 	usage(usage),
-	uWidth(Renderer::GetSwapChainWidth()),
-	uHeight(Renderer::GetSwapChainHeight()),
-	bSyncResolution(true)
+	width(Renderer::GetSwapChainWidth()),
+	height(Renderer::GetSwapChainHeight()),
+	syncResolution(true)
 {
 	Initialize();
 }
 
-DepthStencil::DepthStencil(Usage usage, uint32_t uWidth, uint32_t uHeight)
+DepthStencil::DepthStencil(Usage usage, uint32_t width, uint32_t height)
 	:
 	usage(usage),
-	uWidth(uWidth),
-	uHeight(uHeight),
-	bSyncResolution(false)
+	width(width),
+	height(height),
+	syncResolution(false)
 {
 	Initialize();
 }
 
-DepthStencil::DepthStencil(ComPtr<ID3D11Texture2D> pTexture, uint32_t uFaceIndex)
+DepthStencil::DepthStencil(ComPtr<ID3D11Texture2D> pTexture, uint32_t faceIndex)
 {
 	D3D11_DEPTH_STENCIL_VIEW_DESC dsvDesc = {};
 	dsvDesc.Format = DXGI_FORMAT_D32_FLOAT;
 	dsvDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2DARRAY;
 	dsvDesc.Texture2DArray.ArraySize = 1u;
-	dsvDesc.Texture2DArray.FirstArraySlice = uFaceIndex;
+	dsvDesc.Texture2DArray.FirstArraySlice = faceIndex;
 	dsvDesc.Texture2DArray.MipSlice = 0u;
 
 	if (FAILED(Renderer::GetDevice()->CreateDepthStencilView(pTexture.Get(), &dsvDesc, &pDepthStencilView)))
@@ -39,15 +39,15 @@ DepthStencil::DepthStencil(ComPtr<ID3D11Texture2D> pTexture, uint32_t uFaceIndex
 
 ID3D11DepthStencilView* DepthStencil::GetView()
 {
-	if (bSyncResolution)
+	if (syncResolution)
 	{
-		const uint32_t uSwapChainWidth = Renderer::GetSwapChainWidth();
-		const uint32_t uSwapChainHeight = Renderer::GetSwapChainHeight();
+		const uint32_t swapChainWidth = Renderer::GetSwapChainWidth();
+		const uint32_t swapChainHeight = Renderer::GetSwapChainHeight();
 
-		if (uWidth != uSwapChainWidth || uHeight != uSwapChainHeight)
+		if (width != swapChainWidth || height != swapChainHeight)
 		{
-			uWidth = uSwapChainWidth;
-			uHeight = uSwapChainHeight;
+			width = swapChainWidth;
+			height = swapChainHeight;
 
 			Initialize();
 		}
@@ -56,9 +56,9 @@ ID3D11DepthStencilView* DepthStencil::GetView()
 	return pDepthStencilView.Get();
 }
 
-void DepthStencil::BindAsTexture(uint32_t uSlot)
+void DepthStencil::BindAsTexture(uint32_t slot)
 {
-	Renderer::GetContext()->PSSetShaderResources(uSlot, 1, pShaderResourceView.GetAddressOf());
+	Renderer::GetContext()->PSSetShaderResources(slot, 1, pShaderResourceView.GetAddressOf());
 }
 
 void DepthStencil::BindAsTarget()
@@ -76,8 +76,8 @@ void DepthStencil::Initialize()
 	ComPtr<ID3D11Texture2D> pTexture2D;
 	{
 		D3D11_TEXTURE2D_DESC textureDesc = {};
-		textureDesc.Width = uWidth;
-		textureDesc.Height = uHeight;
+		textureDesc.Width = width;
+		textureDesc.Height = height;
 		textureDesc.ArraySize = 1;
 		textureDesc.Format = MapTextureFormat(usage);
 		textureDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL | D3D11_BIND_SHADER_RESOURCE;
@@ -109,8 +109,8 @@ void DepthStencil::Initialize()
 		D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
 		srvDesc.Format = MapShaderResourceFormat(usage);
 		srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
-		srvDesc.Texture2D.MostDetailedMip = 0u;
-		srvDesc.Texture2D.MipLevels = 1u;
+		srvDesc.Texture2D.MostDetailedMip = 0;
+		srvDesc.Texture2D.MipLevels = 1;
 
 		if (FAILED(Renderer::GetDevice()->CreateShaderResourceView(pTexture2D.Get(), &srvDesc, &pShaderResourceView)))
 		{

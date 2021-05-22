@@ -1,31 +1,31 @@
 #include "keyboard.h"
 #include "imgui/imgui_impl_win32.h"
 
-Keyboard Keyboard::singleton;
+Keyboard Keyboard::instance;
 
 bool Keyboard::IsKeyFree(unsigned char key)
 {
-	return singleton.currentKeyStates[key] == KeyState::ksFREE;
+	return instance.currentKeyStates[key] == KeyState::ksFREE;
 }
 
 bool Keyboard::IsKeyDown(unsigned char key)
 {
-	return singleton.currentKeyStates[key] == KeyState::ksDOWN;
+	return instance.currentKeyStates[key] == KeyState::ksDOWN;
 }
 
 bool Keyboard::IsKeyHold(unsigned char key)
 {
-	return singleton.currentKeyStates[key] == KeyState::ksHOLD;
+	return instance.currentKeyStates[key] == KeyState::ksHOLD;
 }
 
 bool Keyboard::IsKeyUp(unsigned char key)
 {
-	return singleton.currentKeyStates[key] == KeyState::ksUP;
+	return instance.currentKeyStates[key] == KeyState::ksUP;
 }
 
 bool Keyboard::IsAutoRepeatEnabled()
 {
-	return singleton.bAutoRepeat;
+	return instance.enableAutoRepeat;
 }
 
 void Keyboard::SetAutoRepeat(bool bAutoRepeat)
@@ -33,20 +33,20 @@ void Keyboard::SetAutoRepeat(bool bAutoRepeat)
 	bAutoRepeat = bAutoRepeat;
 }
 
-bool Keyboard::HandleWM(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+bool Keyboard::HandleWM(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	switch (uMsg)
+	switch (msg)
 	{
 	case WM_SYSKEYDOWN:
 	case WM_KEYDOWN:
 		if (!ImGui::GetIO().WantCaptureKeyboard && (Keyboard::IsAutoRepeatEnabled() || !(lParam & 0x40000000)))
 		{
-			singleton.currentKeyStates[(unsigned char)wParam] = KeyState::ksDOWN;
+			instance.currentKeyStates[(unsigned char)wParam] = KeyState::ksDOWN;
 		}
 		break;
 	case WM_SYSKEYUP:
 	case WM_KEYUP:
-		singleton.currentKeyStates[(unsigned char)wParam] = KeyState::ksUP;
+		instance.currentKeyStates[(unsigned char)wParam] = KeyState::ksUP;
 		break;
 	default:
 		return false;
@@ -57,16 +57,16 @@ bool Keyboard::HandleWM(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 void Keyboard::Update()
 {
-	for (int i = 0; i < iNumKeys; i++)
+	for (int i = 0; i < numKeys; i++)
 	{
-		if (singleton.previousKeyStates[i] == KeyState::ksDOWN && singleton.currentKeyStates[i] == KeyState::ksDOWN)
+		if (instance.previousKeyStates[i] == KeyState::ksDOWN && instance.currentKeyStates[i] == KeyState::ksDOWN)
 		{
-			singleton.currentKeyStates[i] = KeyState::ksHOLD;
+			instance.currentKeyStates[i] = KeyState::ksHOLD;
 		}
-		else if (singleton.previousKeyStates[i] == KeyState::ksUP && singleton.currentKeyStates[i] == KeyState::ksUP)
+		else if (instance.previousKeyStates[i] == KeyState::ksUP && instance.currentKeyStates[i] == KeyState::ksUP)
 		{
-			singleton.currentKeyStates[i] = KeyState::ksFREE;
+			instance.currentKeyStates[i] = KeyState::ksFREE;
 		}
-		singleton.previousKeyStates[i] = singleton.currentKeyStates[i];
+		instance.previousKeyStates[i] = instance.currentKeyStates[i];
 	}
 }

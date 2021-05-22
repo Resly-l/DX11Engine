@@ -6,16 +6,16 @@ void Internal::ConstantBufferBase::Bind() const
 	{
 		if (bindFlag == ShaderBindFlag::bfBIND_VS)
 		{
-			Renderer::GetContext()->VSSetConstantBuffers(uSlot, 1, pConstantBuffer.GetAddressOf());
+			Renderer::GetContext()->VSSetConstantBuffers(slot, 1, pConstantBuffer.GetAddressOf());
 		}
 		else if (bindFlag == ShaderBindFlag::bfBIND_PS)
 		{
-			Renderer::GetContext()->PSSetConstantBuffers(uSlot, 1, pConstantBuffer.GetAddressOf());
+			Renderer::GetContext()->PSSetConstantBuffers(slot, 1, pConstantBuffer.GetAddressOf());
 		}
 		else if (bindFlag == ShaderBindFlag::btBIND_ALL)
 		{
-			Renderer::GetContext()->VSSetConstantBuffers(uSlot, 1, pConstantBuffer.GetAddressOf());
-			Renderer::GetContext()->PSSetConstantBuffers(uSlot, 1, pConstantBuffer.GetAddressOf());
+			Renderer::GetContext()->VSSetConstantBuffers(slot, 1, pConstantBuffer.GetAddressOf());
+			Renderer::GetContext()->PSSetConstantBuffers(slot, 1, pConstantBuffer.GetAddressOf());
 		}
 	}
 	else

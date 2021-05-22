@@ -5,7 +5,7 @@
 
 Mesh::Mesh(const aiMesh& mesh)
 	:
-	uNumIndices(mesh.mNumFaces * 3)
+	numIndices(mesh.mNumFaces * 3)
 {
 	const auto vertices = ExtractVertices(mesh);
 
@@ -17,7 +17,7 @@ Mesh::Mesh(const aiMesh& mesh)
 
 Mesh::Mesh(std::vector<Vertex> vertices, std::vector<uint32_t> indices)
 	:
-	uNumIndices((uint32_t)indices.size())
+	numIndices((uint32_t)indices.size())
 {
 	boundingBox = CalculateBoundingBox(vertices);
 
@@ -39,10 +39,10 @@ void Mesh::Draw() const
 {
 	if (pMaterial) pMaterial->Bind();
 
-	Renderer::GetContext()->IASetVertexBuffers(0, 1, pVertexBuffer.GetAddressOf(), &uVertexStride, &uVertexOffset);
+	Renderer::GetContext()->IASetVertexBuffers(0, 1, pVertexBuffer.GetAddressOf(), &vertexStride, &vertexOffset);
 	Renderer::GetContext()->IASetIndexBuffer(pIndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
 
-	Renderer::GetContext()->DrawIndexed(uNumIndices, 0, 0);
+	Renderer::GetContext()->DrawIndexed(numIndices, 0, 0);
 }
 
 std::vector<Vertex> Mesh::ExtractVertices(const aiMesh& mesh)
@@ -81,18 +81,16 @@ std::vector<uint32_t> Mesh::ExtractIndices(const aiMesh& mesh)
 BoundingBox Mesh::CalculateBoundingBox(const std::vector<Vertex>& vertices)
 {
 	BoundingBox boundingBox;
-	boundingBox.vMinExtent = Vector(fMax, fMax, fMax, 0.0f);
-	boundingBox.vMaxExtent = Vector(fMin, fMin, fMin, 0.0f);
 
 	for (const auto& v : vertices)
 	{
-		if (v.position.x < boundingBox.vMinExtent.x) boundingBox.vMinExtent.x = v.position.x;
-		if (v.position.y < boundingBox.vMinExtent.y) boundingBox.vMinExtent.y = v.position.y;
-		if (v.position.z < boundingBox.vMinExtent.z) boundingBox.vMinExtent.z = v.position.z;
+		if (v.position.x < boundingBox.minExtent.x) boundingBox.minExtent.x = v.position.x;
+		if (v.position.y < boundingBox.minExtent.y) boundingBox.minExtent.y = v.position.y;
+		if (v.position.z < boundingBox.minExtent.z) boundingBox.minExtent.z = v.position.z;
 
-		if (v.position.x > boundingBox.vMaxExtent.x) boundingBox.vMaxExtent.x = v.position.x;
-		if (v.position.y > boundingBox.vMaxExtent.y) boundingBox.vMaxExtent.y = v.position.y;
-		if (v.position.z > boundingBox.vMaxExtent.z) boundingBox.vMaxExtent.z = v.position.z;
+		if (v.position.x > boundingBox.maxExtent.x) boundingBox.maxExtent.x = v.position.x;
+		if (v.position.y > boundingBox.maxExtent.y) boundingBox.maxExtent.y = v.position.y;
+		if (v.position.z > boundingBox.maxExtent.z) boundingBox.maxExtent.z = v.position.z;
 	}
 
 	return boundingBox;
@@ -101,8 +99,8 @@ BoundingBox Mesh::CalculateBoundingBox(const std::vector<Vertex>& vertices)
 void Mesh::CreateVertexBuffer(const std::vector<Vertex>& vertices)
 {
 	D3D11_BUFFER_DESC bufferDesc = {};
-	bufferDesc.ByteWidth = (uint32_t)vertices.size() * uVertexStride;
-	bufferDesc.StructureByteStride = uVertexStride;
+	bufferDesc.ByteWidth = (uint32_t)vertices.size() * vertexStride;
+	bufferDesc.StructureByteStride = vertexStride;
 	bufferDesc.Usage = D3D11_USAGE_DEFAULT;
 	bufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 

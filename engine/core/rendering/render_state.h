@@ -14,7 +14,7 @@ private:
 	std::vector<std::pair<ComPtr<ID3D11SamplerState>, uint32_t>> samplerStatePtrs;
 	ComPtr<ID3D11BlendState> pBlendState;
 
-	std::optional<Vector> vBlendFactor;
+	std::optional<Vector> blendFactor;
 
 public:
 	RenderState();
@@ -22,12 +22,12 @@ public:
 public:
 	void InitializePrimitiveTopology(const D3D11_PRIMITIVE_TOPOLOGY& topology);
 
-	void InitializeViewport(float fWidth, float fHeight);
+	void InitializeViewport(float width, float height);
 
 	void InitializeDepthStencilState(const D3D11_DEPTH_STENCIL_DESC& dsDesc);
 	void InitializeRasterizerState(const D3D11_RASTERIZER_DESC& rasterizerDesc);
-	void InitializeSamplerState(const D3D11_SAMPLER_DESC& samplerDesc, uint32_t uSlot);
-	void InitializeBlendState(const D3D11_BLEND_DESC& blendDesc, const std::optional<Vector>& vBlendFactor = {});
+	void InitializeSamplerState(const D3D11_SAMPLER_DESC& samplerDesc, uint32_t slot);
+	void InitializeBlendState(const D3D11_BLEND_DESC& blendDesc, const std::optional<Vector>& blendFactor = {});
 
 	void Bind() const;
 };

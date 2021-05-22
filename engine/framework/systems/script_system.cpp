@@ -2,9 +2,9 @@
 #include "components/script_component.h"
 #include "component_factory.h"
 
-void ScriptSystem::Update(double deltaSeconds)
+void ScriptSystem::Update(double deltaSeconds, bool simulate)
 {
-	if (deltaSeconds == 0.0f)
+	if (simulate == false)
 	{
 		return;
 	}

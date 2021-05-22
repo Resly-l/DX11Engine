@@ -5,25 +5,25 @@
 #include "input/mouse.h"
 
 #include "imgui/imgui_impl_win32.h"
-extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-Window::Window(LPCSTR title, LPCSTR iconPath, uint32_t uWidth, uint32_t uHeight)
+Window::Window(LPCSTR title, LPCSTR iconPath, uint32_t width, uint32_t height)
 	:
-	hInstance(GetModuleHandleA(nullptr)),
-	uWidth(uWidth),
-	uHeight(uHeight)
+	hinstance(GetModuleHandleA(nullptr)),
+	width(width),
+	height(height)
 {
-	RegisterWindowClass(hInstance, iconPath);
-	CreateAndDisplayWindow(hInstance, title);
+	RegisterWindowClass(hinstance, iconPath);
+	CreateAndDisplayWindow(hinstance, title);
 
-	Renderer::Initialize(hWnd, uWidth, uHeight);
+	Renderer::Initialize(hwnd, width, height);
 
-	Mouse::RegisterRawInputDevice(hWnd);
+	Mouse::RegisterRawInputDevice(hwnd);
 }
 
 Window::~Window()
 {
-	DestroyWindow(hWnd);
+	DestroyWindow(hwnd);
 	UnregisterClassA(className, nullptr);
 }
 
@@ -53,14 +53,14 @@ void Window::Kill() const
 	PostQuitMessage(0);
 }
 
-void Window::RegisterWindowClass(HINSTANCE hInstance, LPCSTR iconPath) const
+void Window::RegisterWindowClass(HINSTANCE hinstance, LPCSTR iconPath) const
 {
 	WNDCLASSEXA wc = {};
 
 	wc.cbSize = sizeof(WNDCLASSEXA);
 	wc.style = CS_HREDRAW | CS_VREDRAW;
 	wc.lpfnWndProc = WindowProc;
-	wc.hInstance = hInstance;
+	wc.hInstance = hinstance;
 	wc.hIcon = (HICON)LoadImageA(0, iconPath, IMAGE_ICON, 0, 0, LR_DEFAULTSIZE | LR_LOADFROMFILE);
 	wc.hCursor = LoadCursor(nullptr, IDC_ARROW);
 	wc.lpszClassName = className;
@@ -68,39 +68,39 @@ void Window::RegisterWindowClass(HINSTANCE hInstance, LPCSTR iconPath) const
 	RegisterClassExA(&wc);
 }
 
-void Window::CreateAndDisplayWindow(HINSTANCE hInstance, LPCSTR title)
+void Window::CreateAndDisplayWindow(HINSTANCE hinstance, LPCSTR title)
 {
-	RECT rtWindow = { 0, 0, (LONG)uWidth, (LONG)uHeight };
-	AdjustWindowRect(&rtWindow, WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU, FALSE);
+	RECT windowRect = { 0, 0, (LONG)width, (LONG)height };
+	AdjustWindowRect(&windowRect, WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU, FALSE);
 
-	hWnd = CreateWindowExA(0, className, title, WS_SYSMENU | WS_MINIMIZEBOX,
-		GetSystemMetrics(SM_CXSCREEN) / 2 - (rtWindow.right - rtWindow.left) / 2,
-		GetSystemMetrics(SM_CYSCREEN) / 2 - (rtWindow.bottom - rtWindow.top) / 2,
-		rtWindow.right - rtWindow.left, rtWindow.bottom - rtWindow.top,
-		nullptr, nullptr, hInstance, nullptr
+	hwnd = CreateWindowExA(0, className, title, WS_SYSMENU | WS_MINIMIZEBOX,
+		GetSystemMetrics(SM_CXSCREEN) / 2 - (windowRect.right - windowRect.left) / 2,
+		GetSystemMetrics(SM_CYSCREEN) / 2 - (windowRect.bottom - windowRect.top) / 2,
+		windowRect.right - windowRect.left, windowRect.bottom - windowRect.top,
+		nullptr, nullptr, hinstance, nullptr
 	);
 
-	ShowWindow(hWnd, SW_SHOW);
+	ShowWindow(hwnd, SW_SHOW);
 }
 
-LRESULT Window::WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+LRESULT Window::WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	if (ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam))
+	if (ImGui_ImplWin32_WndProcHandler(hwnd, msg, wParam, lParam))
 	{
 		return S_OK;
 	}
 
-	if (Keyboard::HandleWM(hWnd, uMsg, wParam, lParam) || Mouse::HandleWM(hWnd, uMsg, wParam, lParam))
+	if (Keyboard::HandleWM(hwnd, msg, wParam, lParam) || Mouse::HandleWM(hwnd, msg, wParam, lParam))
 	{
-		return DefWindowProcA(hWnd, uMsg, wParam, lParam);
+		return DefWindowProcA(hwnd, msg, wParam, lParam);
 	}
 
-	switch (uMsg)
+	switch (msg)
 	{
 	case WM_CLOSE:
 		PostQuitMessage(S_OK);
 		return S_OK;
 	}
 
-	return DefWindowProcA(hWnd, uMsg, wParam, lParam);
+	return DefWindowProcA(hwnd, msg, wParam, lParam);
 }

@@ -22,7 +22,7 @@ ShadowPass::ShadowPass()
 	faceDirections[4] = { { 0.0f, 0.0f, 1.0f, 0.0f }, { 0.0f, 1.0f, 0.0f, 0.0f } };
 	faceDirections[5] = { { 0.0f, 0.0f, -1.0f, 0.0f }, { 0.0f, 1.0f, 0.0f, 0.0f } };
 
-	mProjection = Matrix::Perspective(1.0f, 1.0f, 0.5f, 100.0f);
+	projection = Matrix::Perspective(1.0f, 1.0f, 0.5f, 100.0f);
 }
 
 void ShadowPass::Render(std::unordered_map<std::string, std::shared_ptr<Resource>>& passResources)
@@ -35,7 +35,7 @@ void ShadowPass::Render(std::unordered_map<std::string, std::shared_ptr<Resource
 
 	for (int i = 0; i < pLightResource->lightProperties.size(); i++)
 	{
-		if (pLightResource->lightProperties[i].bCastShadow)
+		if (pLightResource->lightProperties[i].castShadow)
 		{
 			for (uint32_t uFace = 0; uFace < 6; uFace++)
 			{
@@ -43,8 +43,8 @@ void ShadowPass::Render(std::unordered_map<std::string, std::shared_ptr<Resource
 				shadowMaps[i].GetDepthBuffer(uFace).BindAsTarget();
 
 				CameraComponent::ViewProjection viewProjection;
-				viewProjection.mView = Matrix::LookTo(pLightResource->lightProperties[i].position, faceDirections[uFace].first, faceDirections[uFace].second);
-				viewProjection.mProjection = mProjection;
+				viewProjection.view = Matrix::LookTo(pLightResource->lightProperties[i].position, faceDirections[uFace].first, faceDirections[uFace].second);
+				viewProjection.projection = projection;
 
 				lightTransformCB.Update(viewProjection);
 				lightTransformCB.Bind();

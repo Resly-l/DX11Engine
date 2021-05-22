@@ -20,7 +20,7 @@ GBufferPass::GBufferPass()
 
 void GBufferPass::Render(std::unordered_map<std::string, std::shared_ptr<Resource>>& passResources)
 {
-	auto pFrameBufferDS = std::static_pointer_cast<DepthStencil>(passResources["framebuffer_ds"]);
+	auto pFrameBufferDS = static_cast<DepthStencil*>(passResources["framebuffer_ds"].get());
 
 	pFrameBufferDS->Clear();
 
@@ -30,9 +30,9 @@ void GBufferPass::Render(std::unordered_map<std::string, std::shared_ptr<Resourc
 	pSpecularGBuffer->Clear();
 
 	ID3D11ShaderResourceView* pNullSRV = nullptr;
-	for (uint32_t uSlot = 0u; uSlot <= 3; uSlot++)
+	for (uint32_t slot = 0u; slot <= 3; slot++)
 	{
-		Renderer::GetContext()->PSSetShaderResources(uSlot, 1, &pNullSRV);
+		Renderer::GetContext()->PSSetShaderResources(slot, 1, &pNullSRV);
 	}
 
 	ID3D11RenderTargetView* const renderTargetPtrs[] = {

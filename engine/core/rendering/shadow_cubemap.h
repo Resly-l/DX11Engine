@@ -8,7 +8,7 @@ private:
 	std::array<std::unique_ptr<DepthStencil>, 6> depthBufferPtrs;
 
 public:
-	ShadowCubemap(uint32_t uResulution = 1024);
+	ShadowCubemap(uint32_t resulution = 1024);
 
 public:
 	ID3D11ShaderResourceView* GetShaderResourceView() const { return pShaderResourceView.Get(); };

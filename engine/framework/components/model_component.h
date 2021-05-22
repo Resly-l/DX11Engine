@@ -4,13 +4,14 @@
 
 class Mesh;
 class Material;
-class RenderQueue;
 class ConstantBuffer;
 
 class ModelComponent : public Component<ModelComponent>, public Drawable
 {
+	friend class RenderSystem;
+
 private:
-	inline static std::unique_ptr<ConstantBuffer> pTransformCB;
+	static std::unique_ptr<ConstantBuffer> pTransformCB;
 
 	std::string filePath;
 
@@ -19,9 +20,10 @@ private:
 
 	// whole bounding box of meshes
 	BoundingBox boundingBox;
-
-	bool bCastShadow = true;
-	bool bAlpha = false;
+	
+	bool visible = true;
+	bool castShadow = true;
+	bool transparent = false;
 
 public:
 	ModelComponent();
@@ -29,7 +31,8 @@ public:
 public:
 	bool LoadModel(const std::string& filePath);
 
-	void Submit(RenderQueue& renderQueue);
+	const BoundingBox& GetBoundingBox() const { return boundingBox; }
+
 	void Draw() override;
 
 	JSON ToJson() const override;

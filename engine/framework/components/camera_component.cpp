@@ -10,32 +10,32 @@ CameraComponent::CameraComponent()
 
 Matrix CameraComponent::GetViewMatrix() const
 {
-	Vector vPosition(0.0f, 0.0f, 0.0f, 0.0f);
+	Vector position(0.0f, 0.0f, 0.0f, 0.0f);
 	Vector vDirection(0.0f, 0.0f, 1.0f, 0.0f);
 	Vector vUpside(0.0f, 1.0f, 0.0f, 0.0f);
 
-	if (auto pTransformComponent = pOwner->GetComponent<TransformComponent>())
+	if (auto pTransformComponent = GetOwner()->GetComponent<TransformComponent>())
 	{
-		vPosition = pTransformComponent->GetPosition();
+		position = pTransformComponent->GetPosition();
 
-		const auto mTransform = Matrix::Rotation(pTransformComponent->GetAngle());
+		const auto transform = Matrix::Rotation(pTransformComponent->GetAngle());
 
-		vDirection *= mTransform;
-		vUpside *= mTransform;
+		vDirection *= transform;
+		vUpside *= transform;
 	}
 
-	return Matrix::LookTo(vPosition, vDirection, vUpside);
+	return Matrix::LookTo(position, vDirection, vUpside);
 }
 
 Matrix CameraComponent::GetProjectionMatrix() const
 {
-	if (fAspectRatio == 0.0f)
+	if (aspectRatio == 0.0f)
 	{
 		const float fSwapChainAspectRatio = (float)Renderer::GetSwapChainWidth() / (float)Renderer::GetSwapChainHeight();
 
-		return Matrix::PerspectiveFov(fHorizontalFOV, fSwapChainAspectRatio, fNearPlaneDistance, fFarPlaneDistance);
+		return Matrix::PerspectiveFov(horizontalFOV, fSwapChainAspectRatio, nearPlaneDistance, farPlaneDistance);
 	}
-	return Matrix::PerspectiveFov(fHorizontalFOV, fAspectRatio, fNearPlaneDistance, fFarPlaneDistance);
+	return Matrix::PerspectiveFov(horizontalFOV, aspectRatio, nearPlaneDistance, farPlaneDistance);
 }
 
 void CameraComponent::Bind()
@@ -48,26 +48,26 @@ JSON CameraComponent::ToJson() const
 {
 	JSON json;
 
-	json["fHorizontalFOV"] = fHorizontalFOV;
-	json["fNearPlaneDistance"] = fNearPlaneDistance;
-	json["fFarPlaneDistance"] = fFarPlaneDistance;
-	json["fAspectRatio"] = fAspectRatio;
+	json["horizontalFOV"] = horizontalFOV;
+	json["nearPlaneDistance"] = nearPlaneDistance;
+	json["farPlaneDistance"] = farPlaneDistance;
+	json["aspectRatio"] = aspectRatio;
 
 	return json;
 }
 
 void CameraComponent::FromJson(const JSON& json)
 {
-	fHorizontalFOV = json["fHorizontalFOV"];
-	fNearPlaneDistance = json["fNearPlaneDistance"];
-	fFarPlaneDistance = json["fFarPlaneDistance"];
-	fAspectRatio = json["fAspectRatio"];
+	horizontalFOV = json["horizontalFOV"];
+	nearPlaneDistance = json["nearPlaneDistance"];
+	farPlaneDistance = json["farPlaneDistance"];
+	aspectRatio = json["aspectRatio"];
 }
 
 void CameraComponent::DrawWidget()
 {
-	ImGui::DragFloat("horizontal fov", &fHorizontalFOV, 0.01f);
-	ImGui::DragFloat("near plane distance", &fNearPlaneDistance, 0.01f);
-	ImGui::DragFloat("far plane distance", &fFarPlaneDistance, 0.01f);
-	ImGui::InputFloat("aspect ratio", &fAspectRatio);
+	ImGui::DragFloat("horizontal fov", &horizontalFOV, 0.01f);
+	ImGui::DragFloat("near plane distance", &nearPlaneDistance, 0.01f);
+	ImGui::DragFloat("far plane distance", &farPlaneDistance, 0.01f);
+	ImGui::InputFloat("aspect ratio", &aspectRatio);
 }

@@ -18,11 +18,11 @@ class Mesh : public Resource
 {
 private:
 	ComPtr<ID3D11Buffer> pVertexBuffer;
-	static constexpr uint32_t uVertexStride = sizeof(Vertex);
-	static constexpr uint32_t uVertexOffset = 0;
+	static constexpr uint32_t vertexStride = sizeof(Vertex);
+	static constexpr uint32_t vertexOffset = 0;
 
 	ComPtr<ID3D11Buffer> pIndexBuffer;
-	uint32_t uNumIndices;
+	uint32_t numIndices;
 	
 	BoundingBox boundingBox;
 

@@ -6,5 +6,5 @@ public:
 	virtual ~Drawable() = default;
 
 public:
-	virtual void Draw() abstract;
+	virtual void Draw() = 0;
 };

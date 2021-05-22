@@ -1,11 +1,11 @@
 #include "mouse.h"
 #include "imgui/imgui_impl_win32.h"
 
-Mouse Mouse::singleton;
+Mouse Mouse::instance;
 
-void Mouse::SetImGuiMouseUsage(bool bUseImGuiMouse)
+void Mouse::SetImGuiMouseUsage(bool useImGuiMouse)
 {
-	if (bUseImGuiMouse)
+	if (useImGuiMouse)
 	{
 		ImGui::GetIO().ConfigFlags &= ~ImGuiConfigFlags_NoMouse;
 	}
@@ -15,9 +15,9 @@ void Mouse::SetImGuiMouseUsage(bool bUseImGuiMouse)
 	}
 }
 
-void Mouse::SetCursorVisibility(bool bVisible)
+void Mouse::SetCursorVisibility(bool visible)
 {
-	if (bVisible)
+	if (visible)
 	{
 		while (::ShowCursor(TRUE) < 0) {}
 	}
@@ -27,148 +27,148 @@ void Mouse::SetCursorVisibility(bool bVisible)
 	}
 }
 
-void Mouse::SetConfinement(bool bConfine)
+void Mouse::SetConfinement(bool confine)
 {
-	singleton.bConfined = bConfine;
+	instance.confined = confine;
 }
 
-void Mouse::SetCursorMovement(bool bMove)
+void Mouse::SetCursorMovement(bool freeze)
 {
-	singleton.bFrozen = !bMove;
+	instance.frozen = !freeze;
 }
 
 bool Mouse::IsCursorConfined()
 {
-	return singleton.bConfined;
+	return instance.confined;
 }
 
-bool Mouse::IsButtonFree(int iButton)
+bool Mouse::IsButtonFree(int button)
 {
-	return singleton.currentButtonStates[iButton] == ButtonState::bsFREE;
+	return instance.currentButtonStates[button] == ButtonState::bsFREE;
 }
 
-bool Mouse::IsButtonDown(int iButton)
+bool Mouse::IsButtonDown(int button)
 {
-	return singleton.currentButtonStates[iButton] == ButtonState::bsDOWN;
+	return instance.currentButtonStates[button] == ButtonState::bsDOWN;
 }
 
-bool Mouse::IsButtonHold(int iButton)
+bool Mouse::IsButtonHold(int button)
 {
-	return singleton.currentButtonStates[iButton] == ButtonState::bsHOLD;
+	return instance.currentButtonStates[button] == ButtonState::bsHOLD;
 }
 
-bool Mouse::IsButtonUp(int iButton)
+bool Mouse::IsButtonUp(int button)
 {
-	return singleton.currentButtonStates[iButton] == ButtonState::bsUP;
+	return instance.currentButtonStates[button] == ButtonState::bsUP;
 }
 
 bool Mouse::IsWheelForward()
 {
-	return singleton.wheelState == WheelState::wsFORWARD;
+	return instance.wheelState == WheelState::wsFORWARD;
 }
 
 bool Mouse::IsWheelBackward()
 {
-	return singleton.wheelState == WheelState::wsBACKWARD;
+	return instance.wheelState == WheelState::wsBACKWARD;
 }
 
 POINT Mouse::GetPosition()
 {
-	return singleton.ptPosition;
+	return instance.position;
 }
 
 std::vector<POINT>& Mouse::GetRawDeltas()
 {
-	return singleton.rawDeltas[singleton.uActiveRawDelta == 1 ? 0 : 1];
+	return instance.rawDeltas[instance.activeRawDeltaIndex == 1 ? 0 : 1];
 }
 
-void Mouse::RegisterRawInputDevice(HWND hWnd)
+void Mouse::RegisterRawInputDevice(HWND hwnd)
 {
 	RAWINPUTDEVICE rid = {};
 	rid.usUsagePage = 0x01;
 	rid.usUsage = 0x02;
-	rid.hwndTarget = hWnd;
+	rid.hwndTarget = hwnd;
 	RegisterRawInputDevices(&rid, 1u, sizeof(rid));
 }
 
-bool Mouse::HandleWM(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+bool Mouse::HandleWM(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	switch (uMsg)
+	switch (msg)
 	{
 	case WM_LBUTTONDOWN:
 		if (!ImGui::GetIO().WantCaptureMouse)
 		{
-			singleton.currentButtonStates[VK_LBUTTON] = ButtonState::bsDOWN;
+			instance.currentButtonStates[VK_LBUTTON] = ButtonState::bsDOWN;
 		}
 		break;
 	case WM_RBUTTONDOWN:
 		if (!ImGui::GetIO().WantCaptureMouse)
 		{
-			singleton.currentButtonStates[VK_RBUTTON] = ButtonState::bsDOWN;
+			instance.currentButtonStates[VK_RBUTTON] = ButtonState::bsDOWN;
 		}
 		break;
 	case WM_MBUTTONDOWN:
 		if (!ImGui::GetIO().WantCaptureMouse)
 		{
-			singleton.currentButtonStates[VK_MBUTTON] = ButtonState::bsDOWN;
+			instance.currentButtonStates[VK_MBUTTON] = ButtonState::bsDOWN;
 		}
 		break;
 	case WM_XBUTTONDOWN:
 		if (HIWORD(wParam) == 0x0001)
 		{
-			singleton.currentButtonStates[VK_XBUTTON1] = ButtonState::bsDOWN;
+			instance.currentButtonStates[VK_XBUTTON1] = ButtonState::bsDOWN;
 		}
 		else
 		{
-			singleton.currentButtonStates[VK_XBUTTON2] = ButtonState::bsDOWN;
+			instance.currentButtonStates[VK_XBUTTON2] = ButtonState::bsDOWN;
 		}
 		break;
 	case WM_LBUTTONUP:
-		singleton.currentButtonStates[VK_LBUTTON] = ButtonState::bsUP;
+		instance.currentButtonStates[VK_LBUTTON] = ButtonState::bsUP;
 		break;
 	case WM_RBUTTONUP:
-		singleton.currentButtonStates[VK_RBUTTON] = ButtonState::bsUP;
+		instance.currentButtonStates[VK_RBUTTON] = ButtonState::bsUP;
 		break;
 	case WM_MBUTTONUP:
-		singleton.currentButtonStates[VK_MBUTTON] = ButtonState::bsUP;
+		instance.currentButtonStates[VK_MBUTTON] = ButtonState::bsUP;
 		break;
 	case WM_XBUTTONUP:
 		if (HIWORD(wParam) == 0x0001)
 		{
-			singleton.currentButtonStates[VK_XBUTTON1] = ButtonState::bsUP;
+			instance.currentButtonStates[VK_XBUTTON1] = ButtonState::bsUP;
 		}
 		else
 		{
-			singleton.currentButtonStates[VK_XBUTTON2] = ButtonState::bsUP;
+			instance.currentButtonStates[VK_XBUTTON2] = ButtonState::bsUP;
 		}
 		break;
 	case WM_MOUSEWHEEL:
 	{
-		singleton.wheelState = GET_WHEEL_DELTA_WPARAM(wParam) > 0 ? WheelState::wsFORWARD : WheelState::wsBACKWARD;
-		singleton.bWheelMoved = true;
+		instance.wheelState = GET_WHEEL_DELTA_WPARAM(wParam) > 0 ? WheelState::wsFORWARD : WheelState::wsBACKWARD;
+		instance.wheelMoved = true;
 		break;
 	}
 	case WM_MOUSEMOVE:
 	{
-		if (singleton.bConfined)
+		if (instance.confined)
 		{
-			RECT rt;
-			GetClientRect(hWnd, &rt);
-			MapWindowPoints(hWnd, nullptr, (POINT*)&rt, 2);
-			ClipCursor(&rt);
+			RECT clientRect;
+			GetClientRect(hwnd, &clientRect);
+			MapWindowPoints(hwnd, nullptr, (POINT*)&clientRect, 2);
+			ClipCursor(&clientRect);
 		}
-		if (singleton.bFrozen)
+		if (instance.frozen)
 		{
-			POINT ptScreen = singleton.ptPosition;
-			ClientToScreen(hWnd, &ptScreen);
-			SetCursorPos(ptScreen.x, ptScreen.y);
+			POINT screen = instance.position;
+			ClientToScreen(hwnd, &screen);
+			SetCursorPos(screen.x, screen.y);
 		}
 		else
 		{
 			ClipCursor(nullptr);
 			POINTS pts = MAKEPOINTS(lParam);
-			singleton.ptPosition.x = pts.x;
-			singleton.ptPosition.y = pts.y;
+			instance.position.x = pts.x;
+			instance.position.y = pts.y;
 		}
 		break;
 	}
@@ -183,7 +183,7 @@ bool Mouse::HandleWM(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		auto& ri = reinterpret_cast<const RAWINPUT&>(*(rawInputBuffer.data()));
 		if (ri.header.dwType == RIM_TYPEMOUSE && (ri.data.mouse.lLastX != 0 || ri.data.mouse.lLastY != 0))
 		{
-			singleton.rawDeltas[singleton.uActiveRawDelta].push_back({ ri.data.mouse.lLastX, ri.data.mouse.lLastY });
+			instance.rawDeltas[instance.activeRawDeltaIndex].push_back({ ri.data.mouse.lLastX, ri.data.mouse.lLastY });
 		}
 		break;
 	}
@@ -196,25 +196,25 @@ bool Mouse::HandleWM(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 void Mouse::Update()
 {
-	for (int i = 0; i < iNumButtons; i++)
+	for (int i = 0; i < numButtons; i++)
 	{
-		if (singleton.previousButtonStates[i] == ButtonState::bsDOWN && singleton.currentButtonStates[i] == ButtonState::bsDOWN)
+		if (instance.previousButtonStates[i] == ButtonState::bsDOWN && instance.currentButtonStates[i] == ButtonState::bsDOWN)
 		{
-			singleton.currentButtonStates[i] = ButtonState::bsHOLD;
+			instance.currentButtonStates[i] = ButtonState::bsHOLD;
 		}
-		else if (singleton.previousButtonStates[i] == ButtonState::bsUP && singleton.currentButtonStates[i] == ButtonState::bsUP)
+		else if (instance.previousButtonStates[i] == ButtonState::bsUP && instance.currentButtonStates[i] == ButtonState::bsUP)
 		{
-			singleton.currentButtonStates[i] = ButtonState::bsFREE;
+			instance.currentButtonStates[i] = ButtonState::bsFREE;
 		}
-		singleton.previousButtonStates[i] = singleton.currentButtonStates[i];
+		instance.previousButtonStates[i] = instance.currentButtonStates[i];
 	}
 
-	if (!singleton.bWheelMoved)
+	if (!instance.wheelMoved)
 	{
-		singleton.wheelState = WheelState::wsIDLE;
+		instance.wheelState = WheelState::wsIDLE;
 	}
-	singleton.bWheelMoved = false;
+	instance.wheelMoved = false;
 
-	singleton.uActiveRawDelta = singleton.uActiveRawDelta == 1u ? 0u : 1u;
-	singleton.rawDeltas[singleton.uActiveRawDelta].clear();
+	instance.activeRawDeltaIndex = instance.activeRawDeltaIndex == 1u ? 0u : 1u;
+	instance.rawDeltas[instance.activeRawDeltaIndex].clear();
 }

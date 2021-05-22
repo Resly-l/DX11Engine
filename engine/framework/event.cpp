@@ -15,16 +15,13 @@ void EventManager::Subscribe(const std::string& eventName, std::function<void(co
 
 void EventManager::Unsubscribe(void* pSubscriber)
 {
-	if (pSubscriber)
+	for (auto& [eventName, subscribers] : subscribers)
 	{
-		for (auto& [eventName, subscribers] : subscribers)
-		{
-			std::erase_if(subscribers,
-				[pSubscriber](const std::pair<std::function<void(const Event&)>, void*>& pair)
-				{
-					return pair.second == pSubscriber;
-				});
-		}
+		std::erase_if(subscribers,
+			[pSubscriber](const std::pair<std::function<void(const Event&)>, void*>& pair)
+			{
+				return pair.second == pSubscriber;
+			});
 	}
 }
 

@@ -15,10 +15,10 @@ bool Shader::InitializeVertexShader(const std::string& shaderPath)
 			D3DReflect(pBlob->GetBufferPointer(), pBlob->GetBufferSize(), IID_ID3D11ShaderReflection, &pShaderReflection);
 			pShaderReflection->GetDesc(&shaderDesc);
 
-			for (uint32_t uInput = 0; uInput < shaderDesc.InputParameters; uInput++)
+			for (uint32_t i = 0; i < shaderDesc.InputParameters; i++)
 			{
 				D3D11_SIGNATURE_PARAMETER_DESC spDesc = {};
-				pShaderReflection->GetInputParameterDesc(uInput, &spDesc);
+				pShaderReflection->GetInputParameterDesc(i, &spDesc);
 
 				D3D11_INPUT_ELEMENT_DESC desc = {};
 				desc.SemanticName = spDesc.SemanticName;

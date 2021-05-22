@@ -2,13 +2,13 @@
 #include "renderer.h"
 #include "console.h"
 
-ShadowCubemap::ShadowCubemap(uint32_t uResulution)
+ShadowCubemap::ShadowCubemap(uint32_t resulution)
 {
 	ComPtr<ID3D11Texture2D> pTexture2D;
 	{
 		D3D11_TEXTURE2D_DESC textureDesc = {};
-		textureDesc.Width = uResulution;
-		textureDesc.Height = uResulution;
+		textureDesc.Width = resulution;
+		textureDesc.Height = resulution;
 		textureDesc.ArraySize = 6;
 		textureDesc.Format = DXGI_FORMAT_R32_TYPELESS;
 		textureDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_DEPTH_STENCIL;
@@ -35,8 +35,8 @@ ShadowCubemap::ShadowCubemap(uint32_t uResulution)
 		Renderer::GetDevice()->CreateShaderResourceView(pTexture2D.Get(), &srvDesc, &pShaderResourceView);
 	}
 
-	for (uint32_t uFace = 0; uFace < depthBufferPtrs.size(); uFace++)
+	for (int i = 0; i < depthBufferPtrs.size(); i++)
 	{
-		depthBufferPtrs[uFace] = std::make_unique<DepthStencil>(pTexture2D, uFace);
+		depthBufferPtrs[i] = std::make_unique<DepthStencil>(pTexture2D, i);
 	}
 }

@@ -24,7 +24,7 @@ namespace Internal
 	class ConstantBufferBase
 	{
 	protected:
-		uint32_t uSlot;
+		uint32_t slot;
 		ShaderBindFlag bindFlag;
 
 		ComPtr<ID3D11Buffer> pConstantBuffer;
@@ -48,11 +48,11 @@ public:
 class ArrayConstantBuffer : public Internal::ConstantBufferBase
 {
 private:
-	size_t uMaxArraySize;
+	size_t maxArraySize;
 
 public:
 	template<typename T>
-	ArrayConstantBuffer(ConstantType type, ShaderBindFlag bindFlag, const T& constant, size_t uMaxArraySize);
+	ArrayConstantBuffer(ConstantType type, ShaderBindFlag bindFlag, const T& constant, size_t maxArraySize);
 
 public:
 	template<typename T>
@@ -64,7 +64,7 @@ public:
 template<typename T>
 ConstantBuffer::ConstantBuffer(ConstantType type, ShaderBindFlag bindFlag, const T& constant)
 {
-	this->uSlot = uint32_t(type);
+	this->slot = uint32_t(type);
 	this->bindFlag = bindFlag;
 
 	D3D11_BUFFER_DESC bufferDesc = {};
@@ -100,15 +100,15 @@ void ConstantBuffer::Update(const T& constant)
 }
 
 template<typename T>
-ArrayConstantBuffer::ArrayConstantBuffer(ConstantType type, ShaderBindFlag bindFlag, const T& constant, size_t uMaxArraySize)
+ArrayConstantBuffer::ArrayConstantBuffer(ConstantType type, ShaderBindFlag bindFlag, const T& constant, size_t maxArraySize)
 	:
-	uMaxArraySize(uMaxArraySize)
+	maxArraySize(maxArraySize)
 {
-	this->uSlot = uint32_t(type);
+	this->slot = uint32_t(type);
 	this->bindFlag = bindFlag;
 
 	D3D11_BUFFER_DESC bufferDesc = {};
-	bufferDesc.ByteWidth = sizeof(T) * (uint32_t)uMaxArraySize;
+	bufferDesc.ByteWidth = sizeof(T) * (uint32_t)maxArraySize;
 	bufferDesc.StructureByteStride = 0;
 	bufferDesc.Usage = D3D11_USAGE_DYNAMIC;
 	bufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
@@ -116,7 +116,7 @@ ArrayConstantBuffer::ArrayConstantBuffer(ConstantType type, ShaderBindFlag bindF
 	bufferDesc.MiscFlags = 0;
 
 	D3D11_SUBRESOURCE_DATA sd = {};
-	std::vector<T> constantArray(uMaxArraySize);
+	std::vector<T> constantArray(maxArraySize);
 	sd.pSysMem = constantArray.data();
 
 	if (FAILED(Renderer::GetDevice()->CreateBuffer(&bufferDesc, &sd, &pConstantBuffer)))
@@ -128,7 +128,7 @@ ArrayConstantBuffer::ArrayConstantBuffer(ConstantType type, ShaderBindFlag bindF
 template<typename T>
 void ArrayConstantBuffer::Update(const std::vector<T>& constantArray)
 {
-	if (constantArray.size() > uMaxArraySize)
+	if (constantArray.size() > maxArraySize)
 	{
 		Console::AddLog({ Log::Type::ltERROR, "failed to update array constant buffer, new constant array size is bigger than max array size" });
 		return;

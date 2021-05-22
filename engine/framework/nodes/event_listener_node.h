@@ -6,7 +6,7 @@ class EventListenerNode : public Node<EventListenerNode>
 private:
 	std::string prevEventName;
 	std::string eventName;
-	bool bResult = false;
+	bool result = false;
 
 public:
 	void InitializeSlots() override;

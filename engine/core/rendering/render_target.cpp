@@ -6,34 +6,34 @@
 RenderTarget::RenderTarget(Usage usage)
 	:
 	usage(usage),
-	uWidth(Renderer::GetSwapChainWidth()),
-	uHeight(Renderer::GetSwapChainHeight()),
-	bSyncResolution(true)
+	width(Renderer::GetSwapChainWidth()),
+	height(Renderer::GetSwapChainHeight()),
+	syncResolution(true)
 {
 	Initialize();
 }
 
-RenderTarget::RenderTarget(Usage usage, uint32_t uWidth, uint32_t uHeight)
+RenderTarget::RenderTarget(Usage usage, uint32_t width, uint32_t height)
 	:
 	usage(usage),
-	uWidth(uWidth),
-	uHeight(uHeight),
-	bSyncResolution(false)
+	width(width),
+	height(height),
+	syncResolution(false)
 {
 	Initialize();
 }
 
 void RenderTarget::BindAsTarget(DepthStencil* pDepthStencil)
 {
-	if (bSyncResolution)
+	if (syncResolution)
 	{
-		const uint32_t uSwapChainWidth = Renderer::GetSwapChainWidth();
-		const uint32_t uSwapChainHeight = Renderer::GetSwapChainHeight();
+		const uint32_t swapChainWidth = Renderer::GetSwapChainWidth();
+		const uint32_t swapChainHeight = Renderer::GetSwapChainHeight();
 
-		if (uWidth != uSwapChainWidth || uHeight != uSwapChainHeight)
+		if (width != swapChainWidth || height != swapChainHeight)
 		{
-			uWidth = uSwapChainWidth;
-			uHeight = uSwapChainHeight;
+			width = swapChainWidth;
+			height = swapChainHeight;
 
 			Initialize();
 		}
@@ -42,27 +42,27 @@ void RenderTarget::BindAsTarget(DepthStencil* pDepthStencil)
 	Renderer::GetContext()->OMSetRenderTargets(1, pRenderTargetView.GetAddressOf(), pDepthStencil ? pDepthStencil->GetView() : nullptr);
 }
 
-void RenderTarget::BindAsTexture(uint32_t uSlot)
+void RenderTarget::BindAsTexture(uint32_t slot)
 {
-	Renderer::GetContext()->PSSetShaderResources(uSlot, 1, pShaderResourceView.GetAddressOf());
+	Renderer::GetContext()->PSSetShaderResources(slot, 1, pShaderResourceView.GetAddressOf());
 }
 
-void RenderTarget::Clear(const Vector& vClearColor)
+void RenderTarget::Clear(const Vector& clearColor)
 {
-	Renderer::GetContext()->ClearRenderTargetView(pRenderTargetView.Get(), &vClearColor[0]);
+	Renderer::GetContext()->ClearRenderTargetView(pRenderTargetView.Get(), &clearColor[0]);
 }
 
 ID3D11RenderTargetView* RenderTarget::GetView()
 {
-	if (bSyncResolution)
+	if (syncResolution)
 	{
-		const uint32_t uSwapChainWidth = Renderer::GetSwapChainWidth();
-		const uint32_t uSwapChainHeight = Renderer::GetSwapChainHeight();
+		const uint32_t swapChainWidth = Renderer::GetSwapChainWidth();
+		const uint32_t swapChainHeight = Renderer::GetSwapChainHeight();
 
-		if (uWidth != uSwapChainWidth || uHeight != uSwapChainHeight)
+		if (width != swapChainWidth || height != swapChainHeight)
 		{
-			uWidth = uSwapChainWidth;
-			uHeight = uSwapChainHeight;
+			width = swapChainWidth;
+			height = swapChainHeight;
 
 			Initialize();
 		}
@@ -76,8 +76,8 @@ void RenderTarget::Initialize()
 	ComPtr<ID3D11Texture2D> pTexture2D;
 	{
 		D3D11_TEXTURE2D_DESC textureDesc = {};
-		textureDesc.Width = uWidth;
-		textureDesc.Height = uHeight;
+		textureDesc.Width = width;
+		textureDesc.Height = height;
 		textureDesc.ArraySize = 1;
 		textureDesc.Format = MapFormat(usage);
 		textureDesc.Usage = D3D11_USAGE_DEFAULT;

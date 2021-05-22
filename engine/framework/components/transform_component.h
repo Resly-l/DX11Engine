@@ -4,26 +4,21 @@
 class TransformComponent :public Component<TransformComponent>
 {
 private:
-	struct PassDown
-	{
-		bool bTranslation = true;
-		bool bRotation = true;
-		bool bScale = true;
-	};
+	Vector position;
+	Vector angle;
+	Vector scale = { 1.0f, 1.0f, 1.0f, 0.0f };
 
-private:
-	Vector vPosition;
-	Vector vAngle;
-	Vector vScale = { 1.0f, 1.0f, 1.0f, 0.0f };
-
-	PassDown passdown;
+	// hierarchy concatenation
+	bool passTranslation = true;
+	bool passRotation = true;
+	bool passScale = true;
 
 public:
-	void SetPosition(Vector vPosition) { this->vPosition = vPosition; }
-	void SetAngle(Vector vAngle) { this->vAngle = vAngle; }
+	void SetPosition(const Vector& position) { this->position = position; }
+	void SetAngle(const Vector& angle) { this->angle = angle; }
 
-	Vector GetPosition() const { return vPosition; }
-	Vector GetAngle() const { return vAngle; }
+	Vector GetPosition() const { return position; }
+	Vector GetAngle() const { return angle; }
 
 	Matrix GetTransformMatrix() const;
 

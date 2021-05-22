@@ -22,39 +22,39 @@ private:
 	};
 
 private:
-	static Mouse singleton;
+	static Mouse instance;
 
-	static constexpr int iNumButtons = 7;
+	static constexpr int numButtons = 7;
 
-	ButtonState previousButtonStates[iNumButtons] = {};
-	ButtonState currentButtonStates[iNumButtons] = {};
+	ButtonState previousButtonStates[numButtons] = {};
+	ButtonState currentButtonStates[numButtons] = {};
 
 	WheelState wheelState = WheelState::wsIDLE;
 
 	std::vector<POINT> rawDeltas[2];
-	size_t uActiveRawDelta = 0;
+	size_t activeRawDeltaIndex = 0;
 
-	POINT ptPosition = {};
+	POINT position = {};
 
-	bool bWheelMoved = false;
-	bool bConfined = false;
-	bool bFrozen = false;
+	bool wheelMoved = false;
+	bool confined = false;
+	bool frozen = false;
 
 private:
 	Mouse() = default;
 
 public:
-	static void SetImGuiMouseUsage(bool bUseImGuiMouse);
-	static void SetCursorVisibility(bool bVisible);
-	static void SetConfinement(bool bConfine);
-	static void SetCursorMovement(bool bMove);
+	static void SetImGuiMouseUsage(bool useImGuiMouse);
+	static void SetCursorVisibility(bool visible);
+	static void SetConfinement(bool confine);
+	static void SetCursorMovement(bool freeze);
 
 	static bool IsCursorConfined();
 
-	static bool IsButtonFree(int iButton);
-	static bool IsButtonDown(int iButton);
-	static bool IsButtonHold(int iButton);
-	static bool IsButtonUp(int iButton);
+	static bool IsButtonFree(int button);
+	static bool IsButtonDown(int button);
+	static bool IsButtonHold(int button);
+	static bool IsButtonUp(int button);
 
 	static bool IsWheelForward();
 	static bool IsWheelBackward();
@@ -63,7 +63,7 @@ public:
 	static std::vector<POINT>& GetRawDeltas();
 
 private:
-	static void RegisterRawInputDevice(HWND hWnd);
-	static bool HandleWM(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+	static void RegisterRawInputDevice(HWND hwnd);
+	static bool HandleWM(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 	static void Update();
 };

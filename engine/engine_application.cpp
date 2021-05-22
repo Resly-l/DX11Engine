@@ -8,8 +8,11 @@
 
 #include "systems/render_system.h"
 #include "systems/script_system.h"
+#include "systems/physics_system.h"
+
 #include "rendering/texture.h"
 
+#include "gui/main_menu.h"
 #include "gui/workspace.h"
 #include "gui/entity_inspector.h"
 #include "gui/scene_viewer.h"
@@ -26,13 +29,16 @@ EngineApplication::EngineApplication()
 
 	auto pRenderSystem = SystemContainer::AddSystem<RenderSystem>();
 	auto pScriptSystem = SystemContainer::AddSystem<ScriptSystem>();
+	auto pPhysicsSystem = SystemContainer::AddSystem<PhysicsSystem>();
 
 	pRenderSystem->SetEditorCameraUsage(true);
 	pRenderSystem->SetSkyboxTexture(std::make_shared<TextureCube>("../asset/images/ocean/"));
 
 	SceneManager::AddScene(std::make_unique<Scene>("unnamed_scene"));
 	SceneManager::SetActiveScene("unnamed_scene");
+	SceneManager::SetSceneState(Scene::State::ssIDLE);
 
+	engineGUIs.push_back(std::make_unique<MainMenu>());
 	engineGUIs.push_back(std::make_unique<Workspace>());
 	engineGUIs.push_back(std::make_unique<EntityInspector>());
 	engineGUIs.push_back(std::make_unique<SceneViewer>());

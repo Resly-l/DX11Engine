@@ -19,14 +19,14 @@ void EventListenerNode::Update(double deltaSeconds)
 		EventManager::Subscribe(eventName,
 			[this](const Event& event)
 			{
-				bResult = true;
+				result = true;
 			},
 			this);
 	}
 
-	data[outputs[0].valueKey] = bResult;
+	data[outputs[0].valueKey] = result;
 
-	bResult = false;
+	result = false;
 }
 
 JSON EventListenerNode::ToJson() const

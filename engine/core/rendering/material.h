@@ -11,10 +11,10 @@ public:
 	{
 		float4 albedo = {};
 		float4 specular = { 0.18f, 0.18f, 0.18f, 0.0f };
-		BOOL bUseAlbedoMap = FALSE;
-		BOOL bUseNormalMap = FALSE;
-		BOOL bUseSpecularMap = FALSE;
-		float fShininess = 20.0f;
+		BOOL useAlbedoMap = FALSE;
+		BOOL useNormalMap = FALSE;
+		BOOL useSpecularMap = FALSE;
+		float shininess = 20.0f;
 	};
 
 private:

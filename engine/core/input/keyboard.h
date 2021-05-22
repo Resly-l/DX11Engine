@@ -14,14 +14,14 @@ private:
 	};
 
 private:
-	static Keyboard singleton;
+	static Keyboard instance;
 
-	static constexpr int iNumKeys = 256;
+	static constexpr int numKeys = 256;
 
-	KeyState previousKeyStates[iNumKeys] = {};
-	KeyState currentKeyStates[iNumKeys] = {};
+	KeyState previousKeyStates[numKeys] = {};
+	KeyState currentKeyStates[numKeys] = {};
 
-	bool bAutoRepeat = false;
+	bool enableAutoRepeat = false;
 
 private:
 	Keyboard() = default;
@@ -36,6 +36,6 @@ public:
 	static void SetAutoRepeat(bool bAutoRepeat);
 
 private:
-	static bool HandleWM(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+	static bool HandleWM(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 	static void Update();
 };

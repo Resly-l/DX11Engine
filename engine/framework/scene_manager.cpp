@@ -5,16 +5,16 @@
 #include "systems/render_system.h"
 #include "components/camera_component.h"
 
-SceneManager SceneManager::singleton;
+SceneManager SceneManager::instance;
 
 void SceneManager::Play(double deltaSeconds)
 {
-	if (singleton.pActiveScene == nullptr)
+	if (instance.pActiveScene == nullptr)
 	{
 		return;
 	}
 
-	if (auto pEntity = singleton.pActiveScene->FindEntity(singleton.pActiveScene->GetCameraName()))
+	if (auto pEntity = instance.pActiveScene->FindEntity(instance.pActiveScene->GetCameraName()))
 	{
 		CameraComponent* pCameraComponent = pEntity->GetComponent<CameraComponent>();
 
@@ -32,13 +32,13 @@ void SceneManager::Play(double deltaSeconds)
 
 	for (auto& pSystem : SystemContainer::GetSystems())
 	{
-		pSystem->Update(deltaSeconds * singleton.fDeltatimeFactor);
+		pSystem->Update(deltaSeconds, instance.sceneState == Scene::State::ssPLAYING);
 	}
 }
 
 void SceneManager::SetSceneState(Scene::State state)
 {
-	if (singleton.pActiveScene == nullptr)
+	if (instance.pActiveScene == nullptr)
 	{
 		return;
 	}
@@ -47,81 +47,106 @@ void SceneManager::SetSceneState(Scene::State state)
 	{
 	case Scene::State::ssIDLE:
 	{
+		if (instance.sceneState == Scene::State::ssIDLE)
+		{
+			return;
+		}
+
 		if (auto json = FileManager::ReadFile(temporarySavePath); json.is_null() == false)
 		{
-			singleton.pActiveScene->FromJson(json);
+			instance.pActiveScene->FromJson(json);
 			FileManager::DeleteFileFromPath(temporarySavePath);
 			Console::AddLog({ Log::Type::ltNOTIFICATION, "scene loaded from temporary file" });
 		}
-
-		singleton.fDeltatimeFactor = 0.0f;
 
 		break;
 	}
 	case Scene::State::ssPLAYING:
 	{
 		// only save if previous state was idle to prevent saving while playing
-		if (singleton.sceneState == Scene::State::ssIDLE)
+		if (instance.sceneState == Scene::State::ssIDLE)
 		{
-			SaveSceneToFile(singleton.pActiveScene->GetName(), temporarySavePath);
+			SaveSceneToFile(instance.pActiveScene->GetName(), temporarySavePath);
 			Console::AddLog({ Log::Type::ltNOTIFICATION, "scene saved to temporary file" });
 		}
 
-		singleton.fDeltatimeFactor = 1.0f;
-		break;
-	}
-	case Scene::State::ssPAUSED:
-	{
-		singleton.fDeltatimeFactor = 0.0f;
 		break;
 	}
 	}
 
-	singleton.sceneState = state;
+	instance.pActiveScene->SelectEntity(nullptr);
+	instance.sceneState = state;
 }
 
 bool SceneManager::SetActiveScene(const std::string& sceneName)
 {
-	if (auto it = singleton.scenePtrs.find(sceneName); it != singleton.scenePtrs.end())
+	for (auto& pScene : instance.scenePtrs)
 	{
-		singleton.pActiveScene = it->second.get();
-		singleton.sceneState = Scene::State::ssIDLE;
-		return true;
+		if (pScene->GetName() == sceneName)
+		{
+			instance.pActiveScene = pScene.get();
+			instance.sceneState = Scene::State::ssIDLE;
+			return true;
+		}
 	}
 
 	return false;
 }
 
-void SceneManager::AddScene(std::unique_ptr<Scene> pScene)
+bool SceneManager::SetActiveScene(Scene* pTargetScene)
 {
-	singleton.scenePtrs[pScene->GetName()] = std::move(pScene);
+	for (auto& pScene : instance.scenePtrs)
+	{
+		if (pScene.get() == pTargetScene)
+		{
+			instance.pActiveScene = pTargetScene;
+			return true;
+		}
+	}
+
+	return false;
+}
+
+Scene* SceneManager::AddScene(std::unique_ptr<Scene> pScene)
+{
+	instance.scenePtrs.push_back(std::move(pScene));
+	return instance.scenePtrs.back().get();
 }
 
 bool SceneManager::RemoveScene(const std::string& sceneName)
 {
-	if (auto it = singleton.scenePtrs.find(sceneName); it != singleton.scenePtrs.end())
-	{
-		singleton.scenePtrs.erase(it);
-		return true;
-	}
-
-	return false;
+	return std::erase_if(instance.scenePtrs,
+		[&sceneName](const std::unique_ptr<Scene>& pScene)
+		{
+			return pScene->GetName() == sceneName;
+		}) != 0;
 }
 
 bool SceneManager::RemoveScene(Scene* pTarget)
 {
-	return std::erase_if(singleton.scenePtrs,
-		[pTarget](const std::pair<const std::string, std::unique_ptr<Scene>>& pair)
+	return std::erase_if(instance.scenePtrs,
+		[pTarget](const std::unique_ptr<Scene>& pScene)
 		{
-			return pair.second.get() == pTarget;
+			return pScene.get() == pTarget;
 		}) != 0;
+}
+
+void SceneManager::ClearScenes()
+{
+	instance.scenePtrs.clear();
 }
 
 bool SceneManager::SaveSceneToFile(const std::string& sceneName, const std::string& filePath)
 {
-	if (auto it = singleton.scenePtrs.find(sceneName); it != singleton.scenePtrs.end())
+	auto it = std::find_if(instance.scenePtrs.begin(), instance.scenePtrs.end(),
+		[&sceneName](const std::unique_ptr<Scene>& pScene)
+		{
+			return pScene->GetName() == sceneName;
+		});
+
+	if (it != instance.scenePtrs.end())
 	{
-		return FileManager::CreateFileToPath(filePath, it->second->ToJson());
+		return FileManager::CreateFileToPath(filePath, it->get()->ToJson());
 	}
 
 	return false;
@@ -140,11 +165,16 @@ bool SceneManager::LoadSceneFromFile(const std::string& filePath)
 
 bool SceneManager::SwapScene(const std::string& sceneName)
 {
-	if (auto it = singleton.scenePtrs.find(sceneName); it != singleton.scenePtrs.end())
+	auto it = std::find_if(instance.scenePtrs.begin(), instance.scenePtrs.end(),
+		[&sceneName](const std::unique_ptr<Scene>& pScene)
+		{
+			return pScene->GetName() == sceneName;
+		});
+
+	if (it != instance.scenePtrs.end())
 	{
-		singleton.pActiveScene = it->second.get();
-		singleton.fDeltatimeFactor = 1.0f;
-		singleton.sceneState = Scene::State::ssIDLE;
+		instance.pActiveScene = it->get();
+		instance.sceneState = Scene::State::ssIDLE;
 		return true;
 	}
 

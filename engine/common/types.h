@@ -5,9 +5,7 @@
 #include <windows.h>
 
 // math
-#include "vector.h"
-#include "matrix.h"
-#include "bounding_box.h"
+#include "maths.h"
 
 // standard library
 #include <list>

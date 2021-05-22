@@ -15,10 +15,10 @@ public:
 	virtual ~SystemBase() = default;
 
 public:
-	virtual SystemID GetID() const abstract;
-	virtual std::string GetStringID() const abstract;
+	virtual SystemID GetID() const = 0;
+	virtual std::string GetStringID() const = 0;
 
-	virtual void Update(double deltaSeconds) abstract;
+	virtual void Update(double deltaSeconds, bool simulate) = 0;
 	virtual void DrawWidget() {}
 };
 

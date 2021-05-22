@@ -1,5 +1,4 @@
-#include "vector.h"
-#include "matrix.h"
+#include "maths.h"
 
 Vector::Vector()
 	:
@@ -201,4 +200,137 @@ float& Vector::operator[](uint32_t uIndex)
 const float& Vector::operator[](uint32_t uIndex) const
 {
 	return v.m128_f32[uIndex];
+}
+
+Matrix::Matrix()
+	:
+	m(DirectX::XMMatrixIdentity())
+{}
+
+Matrix::Matrix(const DirectX::XMMATRIX& matrix)
+	:
+	m(matrix)
+{}
+
+void Matrix::Transpose()
+{
+	m = DirectX::XMMatrixTranspose(m);
+}
+
+Matrix Matrix::GetTransposed() const
+{
+	return DirectX::XMMatrixTranspose(m);
+}
+
+void Matrix::Inverse()
+{
+	m = DirectX::XMMatrixInverse(nullptr, m);
+}
+
+Matrix Matrix::GetInversed() const
+{
+	return DirectX::XMMatrixInverse(nullptr, m);
+}
+
+void Matrix::Normalize()
+{
+	m.r[0] = DirectX::XMVector3Normalize(m.r[0]);
+	m.r[1] = DirectX::XMVector3Normalize(m.r[1]);
+	m.r[2] = DirectX::XMVector3Normalize(m.r[2]);
+}
+
+Matrix Matrix::GetNormalized() const
+{
+	Matrix res = m;
+
+	res.m.r[0] = DirectX::XMVector3Normalize(res.m.r[0]);
+	res.m.r[1] = DirectX::XMVector3Normalize(res.m.r[1]);
+	res.m.r[2] = DirectX::XMVector3Normalize(res.m.r[2]);
+
+	return res;
+}
+
+Matrix Matrix::Identity()
+{
+	return DirectX::XMMatrixIdentity();
+}
+
+Matrix Matrix::Scaling(const Vector& scale)
+{
+	return DirectX::XMMatrixScalingFromVector(scale.v);
+}
+
+Matrix Matrix::Rotation(const Vector& angle)
+{
+	return DirectX::XMMatrixRotationRollPitchYawFromVector(angle.v);
+}
+
+Matrix Matrix::RotationAxis(const Vector& vAxis, float fAngle)
+{
+	return DirectX::XMMatrixRotationAxis(vAxis.v, fAngle);
+}
+
+Matrix Matrix::RotationQuaternion(const Vector& q)
+{
+	return DirectX::XMMatrixRotationQuaternion(q.v);
+}
+
+Matrix Matrix::Translation(const Vector& position)
+{
+	return DirectX::XMMatrixTranslationFromVector(position.v);
+}
+
+Matrix Matrix::LookTo(const Vector& vPos, const Vector& vDir, const Vector& vUp)
+{
+	return DirectX::XMMatrixLookToLH(vPos.v, vDir.v, vUp.v);
+}
+
+Matrix Matrix::Perspective(float width, float height, float fNear, float fFar)
+{
+	return DirectX::XMMatrixPerspectiveLH(width, height, fNear, fFar);
+}
+
+Matrix Matrix::PerspectiveFov(float fHFov, float fAR, float fNear, float fFar)
+{
+	return DirectX::XMMatrixPerspectiveFovLH(fHFov / fAR, fAR, fNear, fFar);
+}
+
+Matrix Matrix::operator*(const Matrix& other) const
+{
+	return DirectX::XMMatrixMultiply(m, other.m);
+}
+
+Matrix& Matrix::operator*=(const Matrix& other)
+{
+	return *this = DirectX::XMMatrixMultiply(m, other.m);
+}
+
+Vector& Matrix::operator[](size_t uIndex)
+{
+	return r[uIndex];
+}
+
+const Vector& Matrix::operator[](size_t uIndex) const
+{
+	return r[uIndex];
+}
+
+BoundingBox BoundingBox::operator+(const BoundingBox& other) const
+{
+	BoundingBox boundingBox;
+
+	boundingBox.minExtent.x = minExtent.x < other.minExtent.x ? minExtent.x : other.minExtent.x;
+	boundingBox.minExtent.y = minExtent.y < other.minExtent.y ? minExtent.y : other.minExtent.y;
+	boundingBox.minExtent.z = minExtent.z < other.minExtent.z ? minExtent.z : other.minExtent.z;
+
+	boundingBox.maxExtent.x = maxExtent.x > other.maxExtent.x ? maxExtent.x : other.maxExtent.x;
+	boundingBox.maxExtent.y = maxExtent.y > other.maxExtent.y ? maxExtent.y : other.maxExtent.y;
+	boundingBox.maxExtent.z = maxExtent.z > other.maxExtent.z ? maxExtent.z : other.maxExtent.z;
+
+	return boundingBox;
+}
+
+BoundingBox& BoundingBox::operator+=(const BoundingBox& other)
+{
+	return *this = *this + other;
 }

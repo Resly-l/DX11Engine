@@ -10,21 +10,22 @@ class ComponentBase
 	template<typename T>
 	friend class Component;
 
-protected:
-	class Entity* pOwner = nullptr;
-
 private:
 	inline static ComponentID GID = 0;
+
+	class Entity* pOwner = nullptr;
 
 public:
 	virtual ~ComponentBase() = default;
 
 public:
-	virtual ComponentID GetID() const abstract;
-	virtual std::string GetStringID() const abstract;
+	Entity* GetOwner() const { return pOwner; }
 
-	virtual JSON ToJson() const abstract;
-	virtual void FromJson(const JSON& json) abstract;
+	virtual ComponentID GetID() const = 0;
+	virtual std::string GetStringID() const = 0;
+
+	virtual JSON ToJson() const = 0;
+	virtual void FromJson(const JSON& json) = 0;
 
 	virtual void DrawWidget() {};
 };

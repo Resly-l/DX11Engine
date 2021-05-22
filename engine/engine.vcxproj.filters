@@ -27,12 +27,6 @@
     <ClCompile Include="thirdparty\imnodes\imnodes.cpp">
       <Filter>thirdparty\imnodes</Filter>
     </ClCompile>
-    <ClCompile Include="common\matrix.cpp">
-      <Filter>common</Filter>
-    </ClCompile>
-    <ClCompile Include="common\vector.cpp">
-      <Filter>common</Filter>
-    </ClCompile>
     <ClCompile Include="core\rendering\texture.cpp">
       <Filter>core\rendering</Filter>
     </ClCompile>
@@ -123,9 +117,6 @@
     <ClCompile Include="core\rendering\render_passes\gbuffer_pass.cpp">
       <Filter>core\rendering\render_passes</Filter>
     </ClCompile>
-    <ClCompile Include="common\bounding_box.cpp">
-      <Filter>common</Filter>
-    </ClCompile>
     <ClCompile Include="core\rendering\render_passes\lighting_pass.cpp">
       <Filter>core\rendering\render_passes</Filter>
     </ClCompile>
@@ -171,6 +162,24 @@
     <ClCompile Include="framework\nodes\event_listener_node.cpp">
       <Filter>framework\nodes</Filter>
     </ClCompile>
+    <ClCompile Include="framework\nodes\event_emitter_node.cpp">
+      <Filter>framework\nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="framework\systems\physics_system.cpp">
+      <Filter>framework\systems</Filter>
+    </ClCompile>
+    <ClCompile Include="framework\components\physics_component.cpp">
+      <Filter>framework\components</Filter>
+    </ClCompile>
+    <ClCompile Include="common\maths.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="gui\main_menu.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="core\rendering\render_passes\debug_line_pass.cpp">
+      <Filter>core\rendering\render_passes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine_application.h" />
@@ -214,12 +223,6 @@
       <Filter>thirdparty\imnodes</Filter>
     </ClInclude>
     <ClInclude Include="common\functions.h">
-      <Filter>common</Filter>
-    </ClInclude>
-    <ClInclude Include="common\vector.h">
-      <Filter>common</Filter>
-    </ClInclude>
-    <ClInclude Include="common\matrix.h">
       <Filter>common</Filter>
     </ClInclude>
     <ClInclude Include="core\rendering\texture.h">
@@ -327,9 +330,6 @@
     <ClInclude Include="core\rendering\render_passes\gbuffer_pass.h">
       <Filter>core\rendering\render_passes</Filter>
     </ClInclude>
-    <ClInclude Include="common\bounding_box.h">
-      <Filter>common</Filter>
-    </ClInclude>
     <ClInclude Include="core\rendering\drawable.h">
       <Filter>core\rendering</Filter>
     </ClInclude>
@@ -383,6 +383,24 @@
     </ClInclude>
     <ClInclude Include="framework\nodes\event_listener_node.h">
       <Filter>framework\nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="framework\nodes\event_emitter_node.h">
+      <Filter>framework\nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="framework\systems\physics_system.h">
+      <Filter>framework\systems</Filter>
+    </ClInclude>
+    <ClInclude Include="framework\components\physics_component.h">
+      <Filter>framework\components</Filter>
+    </ClInclude>
+    <ClInclude Include="common\maths.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="gui\main_menu.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="core\rendering\render_passes\debug_line_pass.h">
+      <Filter>core\rendering\render_passes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -455,6 +473,12 @@
       <Filter>core\rendering\shaders</Filter>
     </FxCompile>
     <FxCompile Include="core\rendering\shaders\ShadowVS.hlsl">
+      <Filter>core\rendering\shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="core\rendering\shaders\SolidVS.hlsl">
+      <Filter>core\rendering\shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="core\rendering\shaders\SolidPS.hlsl">
       <Filter>core\rendering\shaders</Filter>
     </FxCompile>
   </ItemGroup>
