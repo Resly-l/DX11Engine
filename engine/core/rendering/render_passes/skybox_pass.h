@@ -3,9 +3,6 @@
 
 class SkyboxPass : public RenderPass
 {
-private:
-	std::unique_ptr<Mesh> pSkyCube;
-
 public:
 	SkyboxPass();
 
@@ -16,4 +13,7 @@ private:
 	void InitializeShaders();
 	void InitializeRenderState();
 	void InitializeCube();
+
+private:
+	std::unique_ptr<Mesh> pSkyCube;
 };

@@ -42,14 +42,14 @@ void MainMenu::CreateNewScene()
 
 void MainMenu::OpenSceneFromFile()
 {
-	SceneManager::ClearScenes();
-
 	const auto filePath = FileManager::SelectFileToLoad("../asset/scenes/", "scene(*.scene)\0*.scene\0");
 
 	if (filePath.empty())
 	{
 		return;
 	}
+
+	SceneManager::ClearScenes();
 
 	const auto sceneJson = FileManager::ReadFile(filePath);
 	auto pScene = SceneManager::AddScene(std::make_unique<Scene>());

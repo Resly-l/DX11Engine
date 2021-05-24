@@ -134,6 +134,7 @@ bool SceneManager::RemoveScene(Scene* pTarget)
 void SceneManager::ClearScenes()
 {
 	instance.scenePtrs.clear();
+	instance.pActiveScene = nullptr;
 }
 
 bool SceneManager::SaveSceneToFile(const std::string& sceneName, const std::string& filePath)

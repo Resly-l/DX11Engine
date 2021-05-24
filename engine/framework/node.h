@@ -12,12 +12,23 @@ class NodeBase
 	template<typename T>
 	friend class Node;
 
-private:
-	inline static NodeID GID = 0;
+public:
+	virtual ~NodeBase() = default;
 
-	// unique id used by imnodes
-	// set by node graph
-	int uid;
+public:
+	virtual NodeID GetID() const = 0;
+	virtual std::string GetStringID() const = 0;
+
+	int GetUID() const { return uid; }
+
+	virtual void InitializeSlots() = 0;
+	virtual void Update(double deltaSeconds) = 0;
+	void SupplyDependents();
+
+	virtual JSON ToJson() const = 0;
+	virtual void FromJson(const JSON& json) = 0;
+
+	virtual void DrawWidget() = 0;
 
 protected:
 	// node graph that manages this node
@@ -29,23 +40,12 @@ protected:
 	std::vector<Slot> inputs;
 	std::vector<Slot> outputs;
 
-public:
-	virtual ~NodeBase() = default;
+private:
+	inline static NodeID GID = 0;
 
-	virtual NodeID GetID() const = 0;
-	virtual std::string GetStringID() const = 0;
-
-public:
-	int GetUID() const { return uid; }
-
-	virtual void InitializeSlots() = 0;
-	virtual void Update(double deltaSeconds) = 0;
-	void SupplyDependents();
-
-	virtual JSON ToJson() const = 0;
-	virtual void FromJson(const JSON& json) = 0;
-
-	virtual void DrawWidget() = 0;
+	// unique id used by imnodes
+	// set by node graph
+	int uid;
 };
 
 DECLARE_CRTP(Node, NodeID)

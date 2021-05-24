@@ -16,18 +16,6 @@ class Material;
 
 class Mesh : public Resource
 {
-private:
-	ComPtr<ID3D11Buffer> pVertexBuffer;
-	static constexpr uint32_t vertexStride = sizeof(Vertex);
-	static constexpr uint32_t vertexOffset = 0;
-
-	ComPtr<ID3D11Buffer> pIndexBuffer;
-	uint32_t numIndices;
-	
-	BoundingBox boundingBox;
-
-	std::shared_ptr<Material> pMaterial;
-
 public:
 	Mesh(const aiMesh& mesh);
 	Mesh(std::vector<Vertex> vertices, std::vector<uint32_t> indices);
@@ -48,4 +36,16 @@ private:
 
 	void CreateVertexBuffer(const std::vector<Vertex>& vertices);
 	void CreateIndexBuffer(const std::vector<uint32_t>& indices);
+
+private:
+	ComPtr<ID3D11Buffer> pVertexBuffer;
+	static constexpr uint32_t vertexStride = sizeof(Vertex);
+	static constexpr uint32_t vertexOffset = 0;
+
+	ComPtr<ID3D11Buffer> pIndexBuffer;
+	uint32_t numIndices;
+
+	BoundingBox boundingBox;
+
+	std::shared_ptr<Material> pMaterial;
 };

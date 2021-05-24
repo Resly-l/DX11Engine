@@ -1,0 +1,103 @@
+{
+    "links": [
+        [
+            0,
+            1
+        ],
+        [
+            5,
+            3
+        ],
+        [
+            15,
+            7
+        ],
+        [
+            11,
+            16
+        ],
+        [
+            19,
+            2
+        ],
+        [
+            25,
+            22
+        ],
+        [
+            24,
+            17
+        ]
+    ],
+    "node_positions": [
+        {
+            "x": 691.0,
+            "y": 153.0
+        },
+        {
+            "x": 951.0,
+            "y": 297.0
+        },
+        {
+            "x": 711.0,
+            "y": 440.0
+        },
+        {
+            "x": 424.0,
+            "y": 213.0
+        },
+        {
+            "x": 168.0,
+            "y": 191.0
+        },
+        {
+            "x": 698.0,
+            "y": 278.0
+        },
+        {
+            "x": 421.0,
+            "y": 427.0
+        },
+        {
+            "x": 167.0,
+            "y": 429.0
+        }
+    ],
+    "nodes": [
+        {
+            "entityName": "Root_Entity",
+            "string_id": "EntityFinderNode"
+        },
+        {
+            "string_id": "EntityMoverNode"
+        },
+        {
+            "key": 87,
+            "string_id": "KeyboardNode"
+        },
+        {
+            "string_id": "TransformModifierNode"
+        },
+        {
+            "entityName": "Root_Entity",
+            "string_id": "EntityFinderNode"
+        },
+        {
+            "operationIndex": 4,
+            "string_id": "VectorOperatorNode"
+        },
+        {
+            "string_id": "VectorNode",
+            "vector": {
+                "w": 0.0,
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "scalar": 1.0,
+            "string_id": "ScalarNode"
+        }
+    ]
+}

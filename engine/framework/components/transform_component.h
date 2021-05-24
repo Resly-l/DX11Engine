@@ -3,27 +3,43 @@
 
 class TransformComponent :public Component<TransformComponent>
 {
-private:
-	Vector position;
-	Vector angle;
-	Vector scale = { 1.0f, 1.0f, 1.0f, 0.0f };
-
-	// hierarchy concatenation
-	bool passTranslation = true;
-	bool passRotation = true;
-	bool passScale = true;
-
 public:
-	void SetPosition(const Vector& position) { this->position = position; }
-	void SetAngle(const Vector& angle) { this->angle = angle; }
+	static Vector RotationMatrixToEuler(const Matrix& rotation);
 
-	Vector GetPosition() const { return position; }
-	Vector GetAngle() const { return angle; }
+	void SetRelativePosition(const Vector& position) { relativePosition = position; }
+	void SetRelativeAngle(const Vector& angle) { relativeAngle = angle; }
+	void SetRelativeScale(const Vector& scale) { relativeScale = scale; }
 
-	Matrix GetTransformMatrix() const;
+	void SetAbsolutePosition(const Vector& position);
+	void SetAbsoluteAngle(const Vector& angle);
+	void SetAbsoluteScale(const Vector& scale);
+
+	void LookAt(const Vector& position);
+
+	Vector GetRelativePosition() const { return relativePosition; }
+	Vector GetRelativeAngle() const { return relativeAngle; }
+	Vector GetRelativeScale() const { return relativeScale; }
+
+	Vector GetAbsolutePosition() const;
+	Vector GetAbsoluteAngle() const;
+	Vector GetAbsoluteScale() const;
+
+	Matrix GetParentAbsoluteTransform() const;
+	Matrix GetRelativeTransform() const;
+	Matrix GetAbsoluteTransform() const;
 
 	JSON ToJson() const override;
 	void FromJson(const JSON& json) override;
 
 	void DrawWidget() override;
+
+private:
+	Vector relativePosition;
+	Vector relativeAngle;
+	Vector relativeScale = { 1.0f, 1.0f, 1.0f, 0.0f };
+
+	// hierarchy concatenation
+	bool passTranslation = true;
+	bool passRotation = true;
+	bool passScale = true;
 };

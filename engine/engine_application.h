@@ -5,10 +5,6 @@
 
 class EngineApplication : public Window
 {
-private:
-	std::vector<std::unique_ptr<EngineGUI>> engineGUIs;
-	Timer frameTimer;
-
 public:
 	EngineApplication();
 
@@ -18,4 +14,8 @@ public:
 private:
 	void DrawGUI();
 	void BindBackbuffer();
+
+private:
+	std::vector<std::unique_ptr<EngineGUI>> engineGUIs;
+	Timer frameTimer;
 };

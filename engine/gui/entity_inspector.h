@@ -6,9 +6,6 @@ class Scene;
 
 class EntityInspector : public EngineGUI
 {
-private:
-	uint32_t uComponentIndex = 0;
-
 public:
 	void Draw() override;
 
@@ -18,4 +15,7 @@ private:
 	void EditEntityPedigree(Scene* pScene, Entity*& pEntity);
 	void EditEntityComponents(Entity* pEntity);
 	void DrawEntityComponentWidgets(Entity* pEntity);
+
+private:
+	uint32_t componentIndex = 0;
 };

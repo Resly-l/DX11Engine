@@ -16,9 +16,9 @@ Matrix CameraComponent::GetViewMatrix() const
 
 	if (auto pTransformComponent = GetOwner()->GetComponent<TransformComponent>())
 	{
-		position = pTransformComponent->GetPosition();
+		position = pTransformComponent->GetAbsolutePosition();
 
-		const auto transform = Matrix::Rotation(pTransformComponent->GetAngle());
+		const auto transform = Matrix::Rotation(pTransformComponent->GetAbsoluteAngle());
 
 		vDirection *= transform;
 		vUpside *= transform;

@@ -4,20 +4,6 @@
 class Renderer
 {
 private:
-	static Renderer instance;
-
-	ComPtr<ID3D11Device> pDevice;
-	ComPtr<ID3D11DeviceContext> pContext;
-	ComPtr<IDXGISwapChain> pSwapChain;
-	ComPtr<ID3D11RenderTargetView> pBackbuffer;
-
-	uint32_t swapChainWidth;
-	uint32_t swapChainHeight;
-
-	bool useVSync = true;
-	float imGuiFontSize = 15.0f;
-
-private:
 	Renderer() = default;
 
 public:
@@ -50,4 +36,18 @@ private:
 
 	static void InitializeImGui(HWND hwnd);
 	static void ReleaseImGui();
+
+private:
+	static Renderer instance;
+
+	ComPtr<ID3D11Device> pDevice;
+	ComPtr<ID3D11DeviceContext> pContext;
+	ComPtr<IDXGISwapChain> pSwapChain;
+	ComPtr<ID3D11RenderTargetView> pBackbuffer;
+
+	uint32_t swapChainWidth;
+	uint32_t swapChainHeight;
+
+	bool useVSync = true;
+	float imGuiFontSize = 15.0f;
 };

@@ -1,28 +1,52 @@
 {
     "links": [
         [
-            0,
+            4,
+            2
+        ],
+        [
+            5,
             1
+        ],
+        [
+            0,
+            3
         ]
     ],
     "node_positions": [
         {
-            "x": 315.0,
-            "y": 97.0
+            "x": 55.0,
+            "y": 146.0
         },
         {
-            "x": 349.0,
-            "y": 338.0
+            "x": 675.0,
+            "y": 290.0
+        },
+        {
+            "x": 670.0,
+            "y": 98.0
+        },
+        {
+            "x": 339.0,
+            "y": 145.0
         }
     ],
     "nodes": [
         {
-            "event_name": "YEEE",
+            "event_name": "A",
+			"subscription_key": "A",
             "string_id": "EventListenerNode"
         },
         {
-            "event_name": "EEET",
+            "event_name": "f",
             "string_id": "EventEmitterNode"
+        },
+        {
+            "event_name": "t",
+            "string_id": "EventEmitterNode"
+        },
+        {
+            "string_id": "BranchNode"
         }
     ]
 }

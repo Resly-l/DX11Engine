@@ -18,9 +18,6 @@ public:
 		alignas (16) BOOL castShadow = true;
 	};
 
-private:
-	Property property;
-
 public:
 	const Property& GetProperty();
 
@@ -28,6 +25,9 @@ public:
 	void FromJson(const JSON& json) override;
 
 	void DrawWidget() override;
+
+private:
+	Property property;
 };
 
 struct LightResource : public Resource

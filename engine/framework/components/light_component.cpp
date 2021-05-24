@@ -6,7 +6,7 @@ const LightComponent::Property& LightComponent::GetProperty()
 {
 	if (auto pTransformComponent = GetOwner()->GetComponent<TransformComponent>())
 	{
-		Matrix transform = pTransformComponent->GetTransformMatrix();
+		Matrix transform = pTransformComponent->GetAbsoluteTransform();
 
 		property.position = transform.m.r[3];
 		property.direction = (Vector(0.0f, 0.0f, 1.0f, 0.0f) * transform).GetNormalized3();

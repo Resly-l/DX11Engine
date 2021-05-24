@@ -23,14 +23,14 @@ namespace Internal
 {
 	class ConstantBufferBase
 	{
+	public:
+		void Bind() const;
+
 	protected:
 		uint32_t slot;
 		ShaderBindFlag bindFlag;
 
 		ComPtr<ID3D11Buffer> pConstantBuffer;
-
-	public:
-		void Bind() const;
 	};
 }
 
@@ -47,9 +47,6 @@ public:
 
 class ArrayConstantBuffer : public Internal::ConstantBufferBase
 {
-private:
-	size_t maxArraySize;
-
 public:
 	template<typename T>
 	ArrayConstantBuffer(ConstantType type, ShaderBindFlag bindFlag, const T& constant, size_t maxArraySize);
@@ -57,6 +54,9 @@ public:
 public:
 	template<typename T>
 	void Update(const std::vector<T>& constantArray);
+
+private:
+	size_t maxArraySize;
 };
 
 

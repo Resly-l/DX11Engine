@@ -158,11 +158,11 @@ void RenderSystem::SubmitColliderOutlines()
 			{
 				if (auto pBox = dynamic_cast<BoundingBox*>(pCollider))
 				{
-					debugLinePtrs.push_back(std::make_unique<DebugLine>(MakeBoxMesh(pBox->minExtent, pBox->maxExtent), pTransformComponent->GetTransformMatrix()));
+					debugLinePtrs.push_back(std::make_unique<DebugLine>(MakeBoxMesh(pBox->minExtent, pBox->maxExtent), pTransformComponent->GetAbsoluteTransform()));
 				}
 				else if (auto pSphere = dynamic_cast<BoundingSphere*>(pCollider))
 				{
-					debugLinePtrs.push_back(std::make_unique<DebugLine>(MakeSphereMesh(pSphere->center, pSphere->radius), pTransformComponent->GetTransformMatrix()));
+					debugLinePtrs.push_back(std::make_unique<DebugLine>(MakeSphereMesh(pSphere->center, pSphere->radius), pTransformComponent->GetAbsoluteTransform()));
 				}
 
 				renderQueue.QueueDrawable(RenderPass::Tag::ptDEBUG_LINE, debugLinePtrs.back().get());
@@ -194,21 +194,21 @@ void RenderSystem::UpdateEditorCamera(double deltaSeconds)
 		float fPitchDelta = (float)pt.y * fRotationFactor;
 		float fYawDelta = (float)pt.x * fRotationFactor;
 
-		float fPitch = std::clamp(fPitchDelta + pTransform->GetAngle().x, -fPole, fPole);
-		float fYaw = fYawDelta + pTransform->GetAngle().y;
-		pTransform->SetAngle({ fPitch, fYaw, 0.0f, 0.0f });
+		float fPitch = std::clamp(fPitchDelta + pTransform->GetRelativeAngle().x, -fPole, fPole);
+		float fYaw = fYawDelta + pTransform->GetRelativeAngle().y;
+		pTransform->SetRelativeAngle({ fPitch, fYaw, 0.0f, 0.0f });
 	}
 
 	// translation
 	{
-		const Matrix mRotation = Matrix::Rotation(pTransform->GetAngle());
+		const Matrix mRotation = Matrix::Rotation(pTransform->GetRelativeAngle());
 		const Vector vDirection = Vector(0.0f, 0.0f, 1.0f, 0.0f) * mRotation;
 		const Vector vRightside = Vector(1.0f, 0.0f, 0.0f, 0.0f) * mRotation;
 
-		if (Keyboard::IsKeyHold('W')) pTransform->SetPosition(pTransform->GetPosition() + vDirection * (float)deltaSeconds);
-		if (Keyboard::IsKeyHold('A')) pTransform->SetPosition(pTransform->GetPosition() - vRightside * (float)deltaSeconds);
-		if (Keyboard::IsKeyHold('S')) pTransform->SetPosition(pTransform->GetPosition() - vDirection * (float)deltaSeconds);
-		if (Keyboard::IsKeyHold('D')) pTransform->SetPosition(pTransform->GetPosition() + vRightside * (float)deltaSeconds);
+		if (Keyboard::IsKeyHold('W')) pTransform->SetRelativePosition(pTransform->GetRelativePosition() + vDirection * (float)deltaSeconds);
+		if (Keyboard::IsKeyHold('A')) pTransform->SetRelativePosition(pTransform->GetRelativePosition() - vRightside * (float)deltaSeconds);
+		if (Keyboard::IsKeyHold('S')) pTransform->SetRelativePosition(pTransform->GetRelativePosition() - vDirection * (float)deltaSeconds);
+		if (Keyboard::IsKeyHold('D')) pTransform->SetRelativePosition(pTransform->GetRelativePosition() + vRightside * (float)deltaSeconds);
 	}
 }
 

@@ -14,18 +14,6 @@ public:
 		ssPAUSED,
 	};
 
-private:
-	// names are used as key value in scene manager
-	// thus scene names must not be duplicated
-	std::string name;
-
-	// entity that has this name will become camera of the scene
-	// if entity doens't have a camera component, scene assigns one
-	std::string cameraName = "camera";
-
-	std::unique_ptr<Entity> pRootEntity;
-	Entity* pSelectedEntity = nullptr;
-
 public:
 	Scene();
 	Scene(const std::string& name);
@@ -48,4 +36,16 @@ public:
 
 private:
 	Entity* FindEntity(const std::unique_ptr<Entity>& pEntity, const std::string& entityName) const;
+
+private:
+	// names are used as key value in scene manager
+	// thus scene names must not be duplicated
+	std::string name;
+
+	// entity that has this name will become camera of the scene
+	// if entity doens't have a camera component, scene assigns one
+	std::string cameraName = "camera";
+
+	std::unique_ptr<Entity> pRootEntity;
+	Entity* pSelectedEntity = nullptr;
 };

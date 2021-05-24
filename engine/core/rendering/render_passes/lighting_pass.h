@@ -7,12 +7,6 @@ class LightingPass : public RenderPass
 public:
 	static constexpr size_t uMaxLights = 50;
 
-private:
-	ArrayConstantBuffer lightCB;
-	ConstantBuffer lightCountCB;
-
-	std::unique_ptr<Mesh> pScreenPlane;
-
 public:
 	LightingPass();
 
@@ -23,4 +17,10 @@ private:
 	void InitializeShaders();
 	void InitializeRenderState();
 	void InitializeScreenPlane();
+
+private:
+	ArrayConstantBuffer lightCB;
+	ConstantBuffer lightCountCB;
+
+	std::unique_ptr<Mesh> pScreenPlane;
 };

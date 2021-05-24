@@ -3,19 +3,6 @@
 
 class RenderState
 {
-private:
-	D3D11_PRIMITIVE_TOPOLOGY topology;
-
-	D3D11_VIEWPORT viewport;
-
-	ComPtr<ID3D11DepthStencilState> pDepthStencilState;
-	ComPtr<ID3D11RasterizerState> pRasterizerState;
-	// rhs = bind slot
-	std::vector<std::pair<ComPtr<ID3D11SamplerState>, uint32_t>> samplerStatePtrs;
-	ComPtr<ID3D11BlendState> pBlendState;
-
-	std::optional<Vector> blendFactor;
-
 public:
 	RenderState();
 
@@ -30,4 +17,17 @@ public:
 	void InitializeBlendState(const D3D11_BLEND_DESC& blendDesc, const std::optional<Vector>& blendFactor = {});
 
 	void Bind() const;
+
+private:
+	D3D11_PRIMITIVE_TOPOLOGY topology;
+
+	D3D11_VIEWPORT viewport;
+
+	ComPtr<ID3D11DepthStencilState> pDepthStencilState;
+	ComPtr<ID3D11RasterizerState> pRasterizerState;
+	// rhs = bind slot
+	std::vector<std::pair<ComPtr<ID3D11SamplerState>, uint32_t>> samplerStatePtrs;
+	ComPtr<ID3D11BlendState> pBlendState;
+
+	std::optional<Vector> blendFactor;
 };

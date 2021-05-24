@@ -1,8 +1,8 @@
 #include "slot.h"
 
-Slot::Slot(const std::string& valueKey, Type type, ValueType valueType)
+Slot::Slot(std::string valueKey, Type type, ValueType valueType)
 	:
-	valueKey(valueKey),
+	valueKey(std::move(valueKey)),
 	type(type),
 	valueType(valueType)
 {}
@@ -19,4 +19,13 @@ bool Slot::ConnectTo(Slot* pOther)
 	}
 
 	return false;
+}
+
+void Slot::RemoveConnection()
+{
+	if (pCorrespond)
+	{
+		pCorrespond->pCorrespond = nullptr;
+		pCorrespond = nullptr;
+	}
 }

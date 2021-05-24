@@ -50,6 +50,16 @@ void NodeGraph::AddSlot(NodeBase* pNode, Slot slot)
 	}
 }
 
+void NodeGraph::Reset()
+{
+	nodeGUID = 0;
+	slotGUID = 0;
+
+	nodePtrs.clear();
+	nodeStates.clear();
+	links.clear();
+}
+
 void NodeGraph::SyncNodes(double deltaSeconds)
 {
 	for (auto pNode : nodePtrs)
@@ -68,7 +78,7 @@ JSON NodeGraph::ToJson() const
 {
 	JSON json;
 
-	for (auto& [pNode, tuple] : nodeStates)
+	for (auto& pNode : nodePtrs)
 	{
 		auto nodeJson = pNode->ToJson();
 		nodeJson["string_id"] = pNode->GetStringID();
@@ -77,8 +87,8 @@ JSON NodeGraph::ToJson() const
 
 		JSON positionJson;
 
-		positionJson["x"] = std::get<ImVec2>(tuple).x;
-		positionJson["y"] = std::get<ImVec2>(tuple).y;
+		positionJson["x"] = std::get<ImVec2>(nodeStates.at(pNode)).x;
+		positionJson["y"] = std::get<ImVec2>(nodeStates.at(pNode)).y;
 
 		json["node_positions"].push_back(positionJson);
 	}
@@ -93,18 +103,20 @@ JSON NodeGraph::ToJson() const
 
 void NodeGraph::FromJson(const JSON& json)
 {
+	Reset();
+
 	if (json.contains("nodes"))
 	{
 		for (auto& nodeJson : json["nodes"])
 		{
 			std::string stringID = nodeJson["string_id"];
 			auto pNode = NodeFactory::Create(stringID);
-			pNode->FromJson(nodeJson);
 
 			pNode->pNodeGraph = this;
 			pNode->uid = nodeGUID++;
 
 			pNode->InitializeSlots();
+			pNode->FromJson(nodeJson);
 
 			nodePtrs.push_back(pNode);
 		}
@@ -112,10 +124,10 @@ void NodeGraph::FromJson(const JSON& json)
 
 	if (json.contains("node_positions"))
 	{
-		uint32_t uNode = 0;
+		uint32_t i = 0;
 		for (auto& positionJson : json["node_positions"])
 		{
-			auto& position = std::get<ImVec2>(nodeStates[nodePtrs[uNode++]]);
+			auto& position = std::get<ImVec2>(nodeStates[nodePtrs[i++]]);
 
 			position.x = positionJson["x"];
 			position.y = positionJson["y"];
@@ -127,6 +139,8 @@ void NodeGraph::FromJson(const JSON& json)
 		for (auto& linkJson : json["links"])
 		{
 			links.push_back(linkJson);
+
+			FindSlot(links.back().first)->ConnectTo(FindSlot(links.back().second));
 		}
 	}
 }
@@ -149,6 +163,7 @@ void NodeGraph::SyncNode(NodeBase* pNode, double deltaSeconds)
 	}
 
 	pNode->Update(deltaSeconds);
+	pNode->SupplyDependents();
 
 	// setting sync flag to true
 	std::get<bool>(nodeStates[pNode]) = true;
@@ -180,12 +195,12 @@ void NodeGraph::DrawEditor()
 		{
 			for (int iNode = 0; iNode < nodePtrs.size(); iNode++)
 			{
-				const ImVec2& preposition = imnodes::GetNodeEditorSpacePos(iNode);
+				const ImVec2& prevPosition = imnodes::GetNodeEditorSpacePos(iNode);
 				ImVec2& nodePosition = std::get<ImVec2>(nodeStates[nodePtrs[iNode]]);
 
 				if (!ImGui::IsMouseDragging(ImGuiMouseButton_Left))
 				{
-					if (preposition.x != nodePosition.x || preposition.y != nodePosition.y)
+					if (prevPosition.x != nodePosition.x || prevPosition.y != nodePosition.y)
 					{
 						imnodes::SetNodeGridSpacePos(iNode, nodePosition);
 					}
@@ -203,10 +218,12 @@ void NodeGraph::DrawEditor()
 			imnodes::Link(iLink, links[iLink].first, links[iLink].second);
 		}
 
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(8.0f, 8.0f));
 		if (imnodes::IsEditorHovered() && ImGui::IsMouseDown(ImGuiMouseButton_Right))
 		{
 			ImGui::OpenPopup("node_addition");
 		}
+
 
 		if (ImGui::BeginPopup("node_addition"))
 		{
@@ -214,17 +231,25 @@ void NodeGraph::DrawEditor()
 			ImGui::Text("Nodes");
 			ImGui::Separator();
 
+			static std::string stringBuffer;
+			ImGui::SetNextItemWidth(200.0f);
+			ImGui::InputText("search", &stringBuffer);
+			ImGui::Separator();
+
 			for (auto& stringID : NodeFactory::GetRegisteredStringIDs())
 			{
-				if (ImGui::Button(stringID.c_str()))
+				if (stringID.find(stringBuffer) != std::string::npos && ImGui::MenuItem(stringID.c_str()))
 				{
 					auto pNode = AddNode(stringID);
-					std::get<ImVec2>(nodeStates[pNode]) = ImGui::GetCursorPos();
+					std::get<ImVec2>(nodeStates[pNode]) = { 500, 200 };
+
+					break;
 				}
 			}
 
 			ImGui::EndPopup();
 		}
+		ImGui::PopStyleVar();
 	}
 	imnodes::EndNodeEditor();
 	ImGui::EndChildFrame();
@@ -240,9 +265,8 @@ void NodeGraph::LinkNodes()
 		auto pStartSlot = FindSlot(iStartID);
 		auto pEndSlot = FindSlot(iEndID);
 
-		if (pStartSlot && pEndSlot)
+		if (pStartSlot && pEndSlot && pStartSlot->ConnectTo(pEndSlot))
 		{
-			pStartSlot->ConnectTo(pEndSlot);
 			links.push_back({ iStartID, iEndID });
 		}
 	}

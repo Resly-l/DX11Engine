@@ -2472,10 +2472,10 @@ namespace imnodes
 
 	void EndOutputAttribute() { end_pin_attribute(); }
 
-	void OutputAttribute(int id, const char* str, float fWindowWidth)
+	void OutputAttribute(int id, const char* str, float windowWidth)
 	{
 		BeginOutputAttribute(id);
-		ImGui::Indent(fWindowWidth - ImGui::CalcTextSize(str).x);
+		ImGui::Indent(windowWidth - ImGui::CalcTextSize(str).x);
 		ImGui::Text(str);
 		EndOutputAttribute();
 	}

@@ -14,16 +14,6 @@ private:
 	};
 
 private:
-	static Keyboard instance;
-
-	static constexpr int numKeys = 256;
-
-	KeyState previousKeyStates[numKeys] = {};
-	KeyState currentKeyStates[numKeys] = {};
-
-	bool enableAutoRepeat = false;
-
-private:
 	Keyboard() = default;
 
 public:
@@ -38,4 +28,14 @@ public:
 private:
 	static bool HandleWM(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 	static void Update();
+
+private:
+	static Keyboard instance;
+
+	static constexpr int numKeys = 256;
+
+	KeyState previousKeyStates[numKeys] = {};
+	KeyState currentKeyStates[numKeys] = {};
+
+	bool enableAutoRepeat = false;
 };

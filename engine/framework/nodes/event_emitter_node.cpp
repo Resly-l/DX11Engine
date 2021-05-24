@@ -9,7 +9,7 @@ void EventEmitterNode::InitializeSlots()
 
 void EventEmitterNode::Update(double deltaSeconds)
 {
-	if (data["condition"])
+	if (data[inputs[0].valueKey])
 	{
 		EventManager::Emit({ eventName });
 	}
@@ -19,21 +19,21 @@ JSON EventEmitterNode::ToJson() const
 {
 	JSON json;
 
-	json["event_name"] = eventName;
+	json["eventName"] = eventName;
 
 	return json;
 }
 
 void EventEmitterNode::FromJson(const JSON& json)
 {
-	eventName = json["event_name"];
+	eventName = json["eventName"];
 }
 
 void EventEmitterNode::DrawWidget()
 {
-	imnodes::BeginNode(GetUID(), "Event Listener", { 200.0f, 100.0f, 255.0f, 255.0f });
+	imnodes::BeginNode(GetUID(), "Event Emitter", { 200.0f, 100.0f, 100.0f, 255.0f });
 	{
-		ImGui::SetNextItemWidth(imnodes::fDefaultNodeWidth - ImGui::CalcTextSize("event name").x);
+		ImGui::SetNextItemWidth(imnodes::defaultNodeWidth - ImGui::CalcTextSize("event name").x);
 		ImGui::InputText("event name", &eventName);
 
 		imnodes::InputAttribute(inputs[0].GetUID(), "condition");

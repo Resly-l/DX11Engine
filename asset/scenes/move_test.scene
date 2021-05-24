@@ -1,0 +1,244 @@
+{
+    "Root_Entity": {
+        "children": [
+            {
+                "components": [
+                    {
+                        "passRotation": true,
+                        "passScale": true,
+                        "passTranslation": true,
+                        "relativeAngle": {
+                            "w": 0.0,
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "relativePosition": {
+                            "w": 0.0,
+                            "x": 0.0,
+                            "y": -4.099999904632568,
+                            "z": 0.0
+                        },
+                        "relativeScale": {
+                            "w": 0.0,
+                            "x": 10.0,
+                            "y": 1.0,
+                            "z": 10.0
+                        },
+                        "string_id": "TransformComponent"
+                    },
+                    {
+                        "cast_shadow": true,
+                        "file_path": "..\\asset\\models\\cube.fbx",
+                        "string_id": "ModelComponent",
+                        "transparent": false
+                    },
+                    {
+                        "collider_index": 0,
+                        "collider_max_extent": {
+                            "w": 0.0,
+                            "x": 1.0,
+                            "y": 1.0,
+                            "z": 1.0
+                        },
+                        "collider_min_extent": {
+                            "w": 0.0,
+                            "x": -1.0,
+                            "y": -1.0,
+                            "z": -1.0
+                        },
+                        "friction": 0.20000000298023224,
+                        "mass": 0.0,
+                        "restitution": 0.10000000149011612,
+                        "string_id": "PhysicsComponent"
+                    }
+                ],
+                "name": "ground"
+            },
+            {
+                "children": [
+                    {
+                        "components": [
+                            {
+                                "aspectRatio": 1.7777769565582275,
+                                "farPlaneDistance": 100.0,
+                                "horizontalFOV": 1.5707963705062866,
+                                "nearPlaneDistance": 0.0010000000474974513,
+                                "string_id": "CameraComponent"
+                            },
+                            {
+                                "passRotation": true,
+                                "passScale": true,
+                                "passTranslation": true,
+                                "relativeAngle": {
+                                    "w": 0.0,
+                                    "x": 0.0,
+                                    "y": 0.0,
+                                    "z": 0.0
+                                },
+                                "relativePosition": {
+                                    "w": 0.0,
+                                    "x": -0.33000001311302185,
+                                    "y": 0.0,
+                                    "z": -0.7200000286102295
+                                },
+                                "relativeScale": {
+                                    "w": 0.0,
+                                    "x": 0.009999999776482582,
+                                    "y": 0.009999999776482582,
+                                    "z": 0.009999999776482582
+                                },
+                                "string_id": "TransformComponent"
+                            },
+                            {
+                                "cast_shadow": true,
+                                "file_path": "..\\asset\\models\\sphere.fbx",
+                                "string_id": "ModelComponent",
+                                "transparent": false
+                            },
+                            {
+                                "node_graph": {
+                                    "links": [
+                                        [
+                                            2,
+                                            1
+                                        ],
+                                        [
+                                            3,
+                                            0
+                                        ]
+                                    ],
+                                    "node_positions": [
+                                        {
+                                            "x": 499.0,
+                                            "y": 287.0
+                                        },
+                                        {
+                                            "x": 256.0,
+                                            "y": 376.0
+                                        },
+                                        {
+                                            "x": 256.0,
+                                            "y": 258.0
+                                        }
+                                    ],
+                                    "nodes": [
+                                        {
+                                            "radius": 2.0,
+                                            "string_id": "SphereConfinerNode"
+                                        },
+                                        {
+                                            "entityName": "player",
+                                            "string_id": "EntityFinderNode"
+                                        },
+                                        {
+                                            "entityName": "camera",
+                                            "string_id": "EntityFinderNode"
+                                        }
+                                    ]
+                                },
+                                "string_id": "ScriptComponent"
+                            }
+                        ],
+                        "name": "camera"
+                    }
+                ],
+                "components": [
+                    {
+                        "passRotation": false,
+                        "passScale": false,
+                        "passTranslation": true,
+                        "relativeAngle": {
+                            "w": 0.0,
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "relativePosition": {
+                            "w": 0.0,
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "relativeScale": {
+                            "w": 0.0,
+                            "x": 0.10000000149011612,
+                            "y": 0.10000000149011612,
+                            "z": 0.10000000149011612
+                        },
+                        "string_id": "TransformComponent"
+                    },
+                    {
+                        "cast_shadow": true,
+                        "file_path": "..\\asset\\models\\cube.fbx",
+                        "string_id": "ModelComponent",
+                        "transparent": false
+                    },
+                    {
+                        "collider_index": 0,
+                        "collider_max_extent": {
+                            "w": 0.0,
+                            "x": 1.0,
+                            "y": 1.0,
+                            "z": 1.0
+                        },
+                        "collider_min_extent": {
+                            "w": 0.0,
+                            "x": -1.0,
+                            "y": -1.0,
+                            "z": -1.0
+                        },
+                        "friction": 0.20000000298023224,
+                        "mass": 1.0,
+                        "restitution": 0.10000000149011612,
+                        "string_id": "PhysicsComponent"
+                    }
+                ],
+                "name": "player"
+            },
+            {
+                "components": [
+                    {
+                        "passRotation": true,
+                        "passScale": true,
+                        "passTranslation": true,
+                        "relativeAngle": {
+                            "w": 0.0,
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "relativePosition": {
+                            "w": 0.0,
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "relativeScale": {
+                            "w": 0.0,
+                            "x": 1.0,
+                            "y": 1.0,
+                            "z": 1.0
+                        },
+                        "string_id": "TransformComponent"
+                    },
+                    {
+                        "castShadow": 1,
+                        "color_x": 1.0,
+                        "color_y": 1.0,
+                        "color_z": 1.0,
+                        "constantAttenuation": 1.0,
+                        "intensity": 1.0,
+                        "linearAttenuation": 0.02500000037252903,
+                        "quadraticAttenuation": 0.003000000026077032,
+                        "string_id": "LightComponent"
+                    }
+                ],
+                "name": "light"
+            }
+        ],
+        "name": "Root_Entity"
+    },
+    "cameraName": "camera",
+    "name": "unnamed_scene"
+}

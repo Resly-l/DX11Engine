@@ -77,14 +77,14 @@ void PhysicsSystem::HandleCollision(PhysicsComponent* pLhs, PhysicsComponent* pR
 		pLhs->velocity -= vImpulse * pLhs->inverseMass;
 
 		auto pTransformComponent = pLhs->GetOwner()->GetComponent<TransformComponent>();
-		pTransformComponent->SetPosition(pTransformComponent->GetPosition() - positionCorrection * pLhs->inverseMass);
+		pTransformComponent->SetAbsolutePosition(pTransformComponent->GetAbsolutePosition() - positionCorrection * pLhs->inverseMass);
 	}
 	if (pRhs->mass != 0.0f)
 	{
 		pRhs->velocity += vImpulse * pRhs->inverseMass;
 
 		auto pTransformComponent = pRhs->GetOwner()->GetComponent<TransformComponent>();
-		pTransformComponent->SetPosition(pTransformComponent->GetPosition() + positionCorrection * pRhs->inverseMass);
+		pTransformComponent->SetAbsolutePosition(pTransformComponent->GetAbsolutePosition() + positionCorrection * pRhs->inverseMass);
 	}
 
 	vRelativeVelocity = pRhs->velocity - pLhs->velocity;
@@ -144,8 +144,8 @@ std::optional<PhysicsSystem::Contact> PhysicsSystem::CollideBoxToBox(PhysicsComp
 	BoundingBox lhsBox = *static_cast<BoundingBox*>(pLhs->GetCollider());
 	BoundingBox rhsBox = *static_cast<BoundingBox*>(pRhs->GetCollider());
 
-	const Matrix lhsTransform = pLhs->GetOwner()->GetComponent<TransformComponent>()->GetTransformMatrix();
-	const Matrix rhsTransform = pRhs->GetOwner()->GetComponent<TransformComponent>()->GetTransformMatrix();
+	const Matrix lhsTransform = pLhs->GetOwner()->GetComponent<TransformComponent>()->GetAbsoluteTransform();
+	const Matrix rhsTransform = pRhs->GetOwner()->GetComponent<TransformComponent>()->GetAbsoluteTransform();
 
 	lhsBox.minExtent *= lhsTransform;
 	lhsBox.maxExtent *= lhsTransform;
@@ -200,8 +200,8 @@ std::optional<PhysicsSystem::Contact> PhysicsSystem::CollideBoxToSphere(PhysicsC
 
 std::optional<PhysicsSystem::Contact> PhysicsSystem::CollideSphereToSphere(PhysicsComponent* pLhs, PhysicsComponent* pRhs)
 {
-	const Vector vLhsPosition = pLhs->GetOwner()->GetComponent<TransformComponent>()->GetTransformMatrix().m.r[3];
-	const Vector vRhsPosition = pRhs->GetOwner()->GetComponent<TransformComponent>()->GetTransformMatrix().m.r[3];
+	const Vector vLhsPosition = pLhs->GetOwner()->GetComponent<TransformComponent>()->GetAbsoluteTransform()[3];
+	const Vector vRhsPosition = pRhs->GetOwner()->GetComponent<TransformComponent>()->GetAbsoluteTransform()[3];
 
 	const float fDistanceSquared = (vRhsPosition - vLhsPosition).Length3Sq();
 

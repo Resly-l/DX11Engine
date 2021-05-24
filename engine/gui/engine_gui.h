@@ -3,9 +3,9 @@
 
 class EngineGUI
 {
-protected:
-	inline static const int windowFlags = ImGuiWindowFlags_NoCollapse;
-
 public:
 	virtual void Draw() = 0;
+
+protected:
+	inline static const int windowFlags = ImGuiWindowFlags_NoCollapse;
 };

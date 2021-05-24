@@ -22,25 +22,6 @@ private:
 	};
 
 private:
-	static Mouse instance;
-
-	static constexpr int numButtons = 7;
-
-	ButtonState previousButtonStates[numButtons] = {};
-	ButtonState currentButtonStates[numButtons] = {};
-
-	WheelState wheelState = WheelState::wsIDLE;
-
-	std::vector<POINT> rawDeltas[2];
-	size_t activeRawDeltaIndex = 0;
-
-	POINT position = {};
-
-	bool wheelMoved = false;
-	bool confined = false;
-	bool frozen = false;
-
-private:
 	Mouse() = default;
 
 public:
@@ -66,4 +47,23 @@ private:
 	static void RegisterRawInputDevice(HWND hwnd);
 	static bool HandleWM(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 	static void Update();
+
+private:
+	static Mouse instance;
+
+	static constexpr int numButtons = 7;
+
+	ButtonState previousButtonStates[numButtons] = {};
+	ButtonState currentButtonStates[numButtons] = {};
+
+	WheelState wheelState = WheelState::wsIDLE;
+
+	std::vector<POINT> rawDeltas[2];
+	size_t activeRawDeltaIndex = 0;
+
+	POINT position = {};
+
+	bool wheelMoved = false;
+	bool confined = false;
+	bool frozen = false;
 };

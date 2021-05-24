@@ -5,12 +5,6 @@ class RenderTarget;
 
 class GBufferPass : public RenderPass
 {
-private:
-	std::shared_ptr<RenderTarget> pPositionGBuffer;
-	std::shared_ptr<RenderTarget> pNormalGBuffer;
-	std::shared_ptr<RenderTarget> pAlbedoGBuffer;
-	std::shared_ptr<RenderTarget> pSpecularGBuffer;
-
 public:
 	GBufferPass();
 
@@ -20,4 +14,10 @@ public:
 private:
 	void InitializeShaders();
 	void InitializeRenderState();
+
+private:
+	std::shared_ptr<RenderTarget> pPositionGBuffer;
+	std::shared_ptr<RenderTarget> pNormalGBuffer;
+	std::shared_ptr<RenderTarget> pAlbedoGBuffer;
+	std::shared_ptr<RenderTarget> pSpecularGBuffer;
 };

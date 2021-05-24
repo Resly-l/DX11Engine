@@ -12,18 +12,6 @@ public:
 		ruGBUFFER
 	};
 
-private:
-	Usage usage;
-
-	ComPtr<ID3D11RenderTargetView> pRenderTargetView;
-	ComPtr<ID3D11ShaderResourceView> pShaderResourceView;
-
-	uint32_t width;
-	uint32_t height;
-
-	// synchronize resolution with backbuffer
-	bool syncResolution;
-
 public:
 	RenderTarget(Usage usage);
 	RenderTarget(Usage usage, uint32_t width, uint32_t height);
@@ -40,4 +28,16 @@ private:
 	void Initialize();
 
 	static DXGI_FORMAT MapFormat(Usage usage);
+
+private:
+	Usage usage;
+
+	ComPtr<ID3D11RenderTargetView> pRenderTargetView;
+	ComPtr<ID3D11ShaderResourceView> pShaderResourceView;
+
+	uint32_t width;
+	uint32_t height;
+
+	// synchronize resolution with backbuffer
+	bool syncResolution;
 };

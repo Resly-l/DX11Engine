@@ -17,6 +17,12 @@ public:
 		float shininess = 20.0f;
 	};
 
+public:
+	Material(const aiMaterial& material, const std::string& filePath);
+
+public:
+	void Bind() const;
+
 private:
 	std::shared_ptr<Texture> pAlbedoMap;
 	std::shared_ptr<Texture> pNormalMap;
@@ -24,10 +30,4 @@ private:
 
 	Property property;
 	std::unique_ptr<ConstantBuffer> pConstantBuffer;
-
-public:
-	Material(const aiMaterial& material, const std::string& filePath);
-
-public:
-	void Bind() const;
 };

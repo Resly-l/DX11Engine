@@ -216,7 +216,7 @@ namespace imnodes
 	//
 	// Each attribute id must be unique.
 
-	static constexpr float fDefaultNodeWidth = 180.0f;
+	static constexpr float defaultNodeWidth = 180.0f;
 
 	// Create an input attribute block. The pin is rendered on left side.
 	void BeginInputAttribute(int id, PinShape shape = PinShape_CircleFilled);
@@ -227,7 +227,7 @@ namespace imnodes
 	void BeginOutputAttribute(int id, PinShape shape = PinShape_CircleFilled);
 	void EndOutputAttribute();
 	// Helper function for BeginOutputAttribute & EndOutputAttribute
-	void OutputAttribute(int id, const char* str, float fWindowWidth = fDefaultNodeWidth);
+	void OutputAttribute(int id, const char* str, float windowWidth = defaultNodeWidth);
 	// Create a static attribute block. A static attribute has no pin, and therefore can't be linked to
 	// anything. However, you can still use IsAttributeActive() and IsAnyAttributeActive() to check for
 	// attribute activity.

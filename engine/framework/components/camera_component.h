@@ -10,16 +10,6 @@ public:
 		Matrix view;
 		Matrix projection;
 	};
-
-private:
-	float horizontalFOV = (float)pi * 0.5f;
-	float nearPlaneDistance = 0.001f;
-	float farPlaneDistance = 100.0f;
-
-	// 0.0f = swap chain aspect ratio
-	float aspectRatio = 1.777777f;
-
-	ConstantBuffer viewProjectionCB;
 	
 public:
 	CameraComponent();
@@ -34,4 +24,14 @@ public:
 	void FromJson(const JSON& json) override;
 
 	void DrawWidget() override;
+
+private:
+	float horizontalFOV = (float)pi * 0.5f;
+	float nearPlaneDistance = 0.001f;
+	float farPlaneDistance = 100.0f;
+
+	// 0.0f = swap chain aspect ratio
+	float aspectRatio = 1.777777f;
+
+	ConstantBuffer viewProjectionCB;
 };

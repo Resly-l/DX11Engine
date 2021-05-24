@@ -2,6 +2,25 @@
 
 Console Console::instance;
 
+Log::Log(Type type, std::string message)
+	:
+	type(type),
+	message(std::move(message))
+{
+	switch (type)
+	{
+	case Log::Type::ltNOTIFICATION:
+		tag = "notification";
+		break;
+	case Log::Type::ltWARNING:
+		tag = "warning";
+		break;
+	case Log::Type::ltERROR:
+		tag = "error";
+		break;
+	}
+}
+
 void Console::AddLog(Log log)
 {
 	instance.logs.push_back(std::move(log));

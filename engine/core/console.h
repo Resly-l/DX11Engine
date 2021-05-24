@@ -1,8 +1,11 @@
 #pragma once
 #include "common.h"
 
-struct Log
+class Log
 {
+	friend class Console;
+
+public:
 	enum class Type
 	{
 		ltNOTIFICATION,
@@ -10,6 +13,10 @@ struct Log
 		ltERROR
 	};
 
+public:
+	Log(Type type, std::string message);
+
+private:
 	const Type type;
 	const std::string message;
 	std::string tag;
@@ -17,14 +24,14 @@ struct Log
 
 class Console
 {
-private:
-	static Console instance;
-
-	std::vector<Log> logs;
-
 public:
 	static void AddLog(Log log);
 	static void Clear();
 
 	static void DrawWidget();
+
+private:
+	static Console instance;
+
+	std::vector<Log> logs;
 };

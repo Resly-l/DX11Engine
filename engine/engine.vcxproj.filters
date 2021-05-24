@@ -180,6 +180,45 @@
     <ClCompile Include="core\rendering\render_passes\debug_line_pass.cpp">
       <Filter>core\rendering\render_passes</Filter>
     </ClCompile>
+    <ClCompile Include="framework\nodes\branch_node.cpp">
+      <Filter>framework\nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="framework\nodes\vector_node.cpp">
+      <Filter>framework\nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="framework\nodes\mouse_node.cpp">
+      <Filter>framework\nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="framework\nodes\keyboard_node.cpp">
+      <Filter>framework\nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="framework\nodes\logical_operator_node.cpp">
+      <Filter>framework\nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="framework\nodes\entity_finder_node.cpp">
+      <Filter>framework\nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="framework\nodes\scalar_node.cpp">
+      <Filter>framework\nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="framework\nodes\scalar_operator_node.cpp">
+      <Filter>framework\nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="framework\nodes\vector_operator_node.cpp">
+      <Filter>framework\nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="framework\nodes\transform_modifier_node.cpp">
+      <Filter>framework\nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="framework\nodes\entity_mover_node.cpp">
+      <Filter>framework\nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="framework\nodes\counter_node.cpp">
+      <Filter>framework\nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="framework\nodes\sphere_confiner_node.cpp">
+      <Filter>framework\nodes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine_application.h" />
@@ -401,6 +440,45 @@
     </ClInclude>
     <ClInclude Include="core\rendering\render_passes\debug_line_pass.h">
       <Filter>core\rendering\render_passes</Filter>
+    </ClInclude>
+    <ClInclude Include="framework\nodes\branch_node.h">
+      <Filter>framework\nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="framework\nodes\vector_node.h">
+      <Filter>framework\nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="framework\nodes\mouse_node.h">
+      <Filter>framework\nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="framework\nodes\keyboard_node.h">
+      <Filter>framework\nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="framework\nodes\logical_operator_node.h">
+      <Filter>framework\nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="framework\nodes\entity_finder_node.h">
+      <Filter>framework\nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="framework\nodes\scalar_node.h">
+      <Filter>framework\nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="framework\nodes\scalar_operator_node.h">
+      <Filter>framework\nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="framework\nodes\vector_operator_node.h">
+      <Filter>framework\nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="framework\nodes\transform_modifier_node.h">
+      <Filter>framework\nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="framework\nodes\entity_mover_node.h">
+      <Filter>framework\nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="framework\nodes\counter_node.h">
+      <Filter>framework\nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="framework\nodes\sphere_confiner_node.h">
+      <Filter>framework\nodes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

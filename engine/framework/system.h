@@ -8,9 +8,6 @@ class SystemBase
 	template<typename T>
 	friend class System;
 
-private:
-	inline static SystemID GID = 0;
-
 public:
 	virtual ~SystemBase() = default;
 
@@ -20,6 +17,9 @@ public:
 
 	virtual void Update(double deltaSeconds, bool simulate) = 0;
 	virtual void DrawWidget() {}
+
+private:
+	inline static SystemID GID = 0;
 };
 
 DECLARE_CRTP(System, SystemID)

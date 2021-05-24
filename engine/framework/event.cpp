@@ -8,31 +8,24 @@ void EventManager::Emit(const Event& event)
 	}
 }
 
-void EventManager::Subscribe(const std::string& eventName, std::function<void(const Event&)> function, void* pSubscriber)
+void EventManager::Subscribe(const std::string& eventName, std::function<void(const Event&)> function, const std::string& subscriptionKey)
 {
-	subscribers[eventName].push_back({ function, pSubscriber });
+	subscribers[eventName].push_back({ function, subscriptionKey });
 }
 
-void EventManager::Unsubscribe(void* pSubscriber)
+void EventManager::Unsubscribe(const std::string& subscriptionKey)
 {
 	for (auto& [eventName, subscribers] : subscribers)
 	{
 		std::erase_if(subscribers,
-			[pSubscriber](const std::pair<std::function<void(const Event&)>, void*>& pair)
+			[&subscriptionKey](const std::pair<std::function<void(const Event&)>, std::string>& pair)
 			{
-				return pair.second == pSubscriber;
+				return pair.second == subscriptionKey;
 			});
 	}
 }
 
-void EventManager::ClearSubscribers(const std::string& eventName)
+void EventManager::Clear()
 {
-	if (eventName.empty())
-	{
-		subscribers.clear();
-	}
-	else
-	{
-		subscribers[eventName].clear();
-	}
+	subscribers.clear();
 }

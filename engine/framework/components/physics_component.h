@@ -5,6 +5,21 @@ class PhysicsComponent : public Component<PhysicsComponent>
 {
 	friend class PhysicsSystem;
 
+public:
+	BoundingVolume* GetCollider() const { return pCollider.get(); }
+
+	void Integrate(double deltaSeconds);
+
+	JSON ToJson() const override;
+	void FromJson(const JSON& json) override;
+
+	void DrawWidget() override;
+
+private:
+	void DrawColliderCombo();
+	void DrawColliderButton();
+	void DrawColliderWidget();
+
 private:
 	// imgui variables
 	static std::vector<std::string> boundingVolumeNames;
@@ -21,19 +36,4 @@ private:
 
 	Vector velocity;
 	Vector force;
-
-public:
-	BoundingVolume* GetCollider() const { return pCollider.get(); }
-
-	void Integrate(double deltaSeconds);
-
-	JSON ToJson() const override;
-	void FromJson(const JSON& json) override;
-
-	void DrawWidget() override;
-
-private:
-	void DrawColliderCombo();
-	void DrawColliderButton();
-	void DrawColliderWidget();
 };

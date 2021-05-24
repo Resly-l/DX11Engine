@@ -81,13 +81,13 @@ void EntityInspector::EditEntityComponents(Entity* pEntity)
 	ImGui::Text("[Component Configuration]");
 
 	ImGui::NewLine();
-	if (ImGui::BeginCombo("components", ComponentFactory::GetRegisteredStringIDs()[uComponentIndex].c_str()))
+	if (ImGui::BeginCombo("components", ComponentFactory::GetRegisteredStringIDs()[componentIndex].c_str()))
 	{
 		for (uint32_t uID = 0; uID < ComponentFactory::GetRegisteredStringIDs().size(); uID++)
 		{
 			if (ImGui::Selectable(ComponentFactory::GetRegisteredStringIDs()[uID].c_str()))
 			{
-				uComponentIndex = uID;
+				componentIndex = uID;
 			}
 		}
 
@@ -97,7 +97,7 @@ void EntityInspector::EditEntityComponents(Entity* pEntity)
 	ImGui::NewLine();
 	if (ImGui::Button("Assign Component"))
 	{
-		pEntity->AssignComponent(ComponentFactory::GetRegisteredStringIDs()[uComponentIndex]);
+		pEntity->AssignComponent(ComponentFactory::GetRegisteredStringIDs()[componentIndex]);
 	}
 }
 

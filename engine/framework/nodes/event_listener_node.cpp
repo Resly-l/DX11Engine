@@ -14,14 +14,14 @@ void EventListenerNode::Update(double deltaSeconds)
 		prevEventName = eventName;
 
 		// unsubscribe previously subscribed event name
-		EventManager::Unsubscribe(this);
+		EventManager::Unsubscribe(subscriptionKey);
 
 		EventManager::Subscribe(eventName,
 			[this](const Event& event)
 			{
 				result = true;
 			},
-			this);
+			subscriptionKey);
 	}
 
 	data[outputs[0].valueKey] = result;
@@ -33,22 +33,27 @@ JSON EventListenerNode::ToJson() const
 {
 	JSON json;
 
-	json["event_name"] = eventName;
+	json["eventName"] = eventName;
+	json["subscriptionKey"] = subscriptionKey;
 
 	return json;
 }
 
 void EventListenerNode::FromJson(const JSON& json)
 {
-	eventName = json["event_name"];
+	eventName = json["eventName"];
+	subscriptionKey = json["subscriptionKey"];
 }
 
 void EventListenerNode::DrawWidget()
 {
 	imnodes::BeginNode(GetUID(), "Event Listener", { 100.0f, 200.0f, 255.0f, 255.0f });
 	{
-		ImGui::SetNextItemWidth(imnodes::fDefaultNodeWidth - ImGui::CalcTextSize("event name").x);
+		ImGui::SetNextItemWidth(imnodes::defaultNodeWidth - ImGui::CalcTextSize("event name").x);
 		ImGui::InputText("event name", &eventName);
+
+		ImGui::SetNextItemWidth(imnodes::defaultNodeWidth - ImGui::CalcTextSize("subscription key").x);
+		ImGui::InputText("subscription key", &subscriptionKey);
 
 		imnodes::OutputAttribute(outputs[0].GetUID(), "result");
 	}

@@ -80,7 +80,7 @@ void ModelComponent::Draw()
 	
 	if (auto pTransformComponent = GetOwner()->GetComponent<TransformComponent>())
 	{
-		transform = pTransformComponent->GetTransformMatrix();
+		transform = pTransformComponent->GetAbsoluteTransform();
 	}
 
 	pTransformCB->Update(transform);

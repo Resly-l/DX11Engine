@@ -4,9 +4,6 @@
 
 class ScriptComponent : public Component<ScriptComponent>
 {
-private:
-	NodeGraph nodeGraph;
-
 public:
 	void Execute(double deltaSeconds);
 
@@ -18,4 +15,7 @@ public:
 
 	void DrawWidget() override;
 	void DrawEditor();
+
+private:
+	NodeGraph nodeGraph;
 };

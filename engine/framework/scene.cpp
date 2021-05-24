@@ -59,7 +59,7 @@ Entity* Scene::FindEntity(const std::unique_ptr<Entity>& pEntity, const std::str
 		return pEntity.get();
 	}
 
-	for (auto& pChild : pEntity->childPtrs)
+	for (auto& pChild : pEntity->GetChildren())
 	{
 		if (auto pFound = FindEntity(pChild, entityName))
 		{

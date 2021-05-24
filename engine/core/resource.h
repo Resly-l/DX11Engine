@@ -9,9 +9,6 @@ public:
 
 class ResourceCodex
 {
-private:
-	inline static std::unordered_map<std::string, std::shared_ptr<Resource>> resourcePtrs;
-
 public:
 	template<typename ResourceType>
 	static std::shared_ptr<ResourceType> Find(const std::string& key);
@@ -30,6 +27,9 @@ public:
 				return pair.second.use_count() == 1;
 			});
 	}
+
+private:
+	inline static std::unordered_map<std::string, std::shared_ptr<Resource>> resourcePtrs;
 };
 
 
