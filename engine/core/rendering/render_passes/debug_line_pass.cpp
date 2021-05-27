@@ -26,7 +26,7 @@ void DebugLinePass::Render(std::unordered_map<std::string, std::shared_ptr<Resou
 void DebugLinePass::InitializeShaders()
 {
 	shader.InitializeVertexShader("../asset/shaders/SolidVS.cso");
-	shader.initializePixelShader("../asset/shaders/SolidPS.cso");
+	shader.InitializePixelShader("../asset/shaders/SolidPS.cso");
 }
 
 void DebugLinePass::InitializeRenderState()

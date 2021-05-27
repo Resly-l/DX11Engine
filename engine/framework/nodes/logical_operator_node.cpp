@@ -20,13 +20,13 @@ void LogicalOperatorNode::Update(double deltaSeconds)
 	switch (operationIndex)
 	{
 	case 0:
-		data[outputs[0].valueKey] = data.value(inputs[0].valueKey, false) & data.value(inputs[1].valueKey, false);
+		data[outputs[0].valueKey] = data.value(inputs[0].valueKey, false) && data.value(inputs[1].valueKey, false);
 		break;
 	case 1:
-		data[outputs[0].valueKey] = data.value(inputs[0].valueKey, false) | data.value(inputs[1].valueKey, false);
+		data[outputs[0].valueKey] = data.value(inputs[0].valueKey, false) || data.value(inputs[1].valueKey, false);
 		break;
 	case 2:
-		data[outputs[0].valueKey] = data.value(inputs[0].valueKey, false) ^ data.value(inputs[1].valueKey, false);
+		data[outputs[0].valueKey] = data.value(inputs[0].valueKey, false) != data.value(inputs[1].valueKey, false);
 		break;
 	}
 }

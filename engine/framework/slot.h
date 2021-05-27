@@ -13,6 +13,7 @@ public:
 	{
 		svBOOL,
 		svFLOAT,
+		svSTRING,
 		svVECTOR,
 		svMATRIX,
 		svADDRESS
@@ -23,15 +24,6 @@ public:
 		stINPUT,
 		stOUTPUT
 	};
-
-public:
-	Slot(std::string valueKey, Type type, ValueType valueType);
-
-public:
-	int GetUID() const { return uid; }
-
-	bool ConnectTo(Slot* pOther);
-	void RemoveConnection();
 
 public:
 	// key used when hashing node data
@@ -47,4 +39,13 @@ private:
 	// unique id used by imnodes
 	// set by node graph
 	int uid;
+
+public:
+	Slot(std::string valueKey, Type type, ValueType valueType);
+
+public:
+	int GetUID() const { return uid; }
+
+	bool ConnectTo(Slot* pOther);
+	void RemoveConnection();
 };

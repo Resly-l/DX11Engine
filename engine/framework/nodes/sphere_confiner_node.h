@@ -3,6 +3,9 @@
 
 class SphereConfinerNode : public Node<SphereConfinerNode>
 {
+private:
+	float radius = 2.0f;
+
 public:
 	void InitializeSlots() override;
 	void Update(double deltaSeconds) override;
@@ -11,7 +14,4 @@ public:
 	void FromJson(const JSON& json) override;
 
 	void DrawWidget() override;
-
-private:
-	float radius = 2.0f;
 };

@@ -1,11 +1,26 @@
 #pragma once
 #include "component.h"
 
+class ConstantBuffer;
+
 class TransformComponent :public Component<TransformComponent>
 {
-public:
-	static Vector RotationMatrixToEuler(const Matrix& rotation);
+private:
+	static std::unique_ptr<ConstantBuffer> pConstantBuffer;
 
+	Vector relativePosition;
+	Vector relativeAngle;
+	Vector relativeScale = { 1.0f, 1.0f, 1.0f, 0.0f };
+
+	// hierarchy concatenation
+	bool passTranslation = true;
+	bool passRotation = true;
+	bool passScale = true;
+
+public:
+	TransformComponent();
+
+public:
 	void SetRelativePosition(const Vector& position) { relativePosition = position; }
 	void SetRelativeAngle(const Vector& angle) { relativeAngle = angle; }
 	void SetRelativeScale(const Vector& scale) { relativeScale = scale; }
@@ -20,26 +35,14 @@ public:
 	Vector GetRelativeAngle() const { return relativeAngle; }
 	Vector GetRelativeScale() const { return relativeScale; }
 
-	Vector GetAbsolutePosition() const;
-	Vector GetAbsoluteAngle() const;
-	Vector GetAbsoluteScale() const;
-
 	Matrix GetParentAbsoluteTransform() const;
 	Matrix GetRelativeTransform() const;
 	Matrix GetAbsoluteTransform() const;
+
+	void Bind();
 
 	JSON ToJson() const override;
 	void FromJson(const JSON& json) override;
 
 	void DrawWidget() override;
-
-private:
-	Vector relativePosition;
-	Vector relativeAngle;
-	Vector relativeScale = { 1.0f, 1.0f, 1.0f, 0.0f };
-
-	// hierarchy concatenation
-	bool passTranslation = true;
-	bool passRotation = true;
-	bool passScale = true;
 };

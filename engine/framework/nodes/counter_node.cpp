@@ -11,7 +11,7 @@ void CounterNode::Update(double deltaSeconds)
 {
 	data[outputs[0].valueKey] = deltaSeconds;
 
-	bool counted = (elapsed += deltaSeconds) > pulse;
+	bool counted = (elapsed += (float)deltaSeconds) > pulse;
 
 	if (counted)
 	{

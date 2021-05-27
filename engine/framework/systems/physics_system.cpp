@@ -22,8 +22,11 @@ void PhysicsSystem::Update(double deltaSeconds, bool simulate)
 			continue;
 		}
 
-		ApplyNaturalForces(pLhs);
-		pLhs->Integrate(deltaSeconds);
+		if (pLhs->mass != 0.0f)
+		{
+			ApplyNaturalForces(pLhs);
+			pLhs->Integrate(deltaSeconds);
+		}
 
 		for (size_t j = i + 1; j < componentPtrs.size(); j++)
 		{
@@ -51,7 +54,7 @@ void PhysicsSystem::DrawWidget()
 
 void PhysicsSystem::ApplyNaturalForces(PhysicsComponent* pPhysicsComponent)
 {
-	pPhysicsComponent->force += Vector(0.0f, -gravity, 0.0f, 0.0f) - pPhysicsComponent->velocity * linearDampling;
+	pPhysicsComponent->force += Vector(0.0f, -gravity * pPhysicsComponent->gravityFactor, 0.0f, 0.0f) - pPhysicsComponent->velocity * linearDampling;
 }
 
 void PhysicsSystem::HandleCollision(PhysicsComponent* pLhs, PhysicsComponent* pRhs, const Contact& contact)
@@ -77,14 +80,14 @@ void PhysicsSystem::HandleCollision(PhysicsComponent* pLhs, PhysicsComponent* pR
 		pLhs->velocity -= vImpulse * pLhs->inverseMass;
 
 		auto pTransformComponent = pLhs->GetOwner()->GetComponent<TransformComponent>();
-		pTransformComponent->SetAbsolutePosition(pTransformComponent->GetAbsolutePosition() - positionCorrection * pLhs->inverseMass);
+		pTransformComponent->SetAbsolutePosition(pTransformComponent->GetAbsoluteTransform().Decompose().position - positionCorrection * pLhs->inverseMass);
 	}
 	if (pRhs->mass != 0.0f)
 	{
 		pRhs->velocity += vImpulse * pRhs->inverseMass;
 
 		auto pTransformComponent = pRhs->GetOwner()->GetComponent<TransformComponent>();
-		pTransformComponent->SetAbsolutePosition(pTransformComponent->GetAbsolutePosition() + positionCorrection * pRhs->inverseMass);
+		pTransformComponent->SetAbsolutePosition(pTransformComponent->GetAbsoluteTransform().Decompose().position + positionCorrection * pRhs->inverseMass);
 	}
 
 	vRelativeVelocity = pRhs->velocity - pLhs->velocity;

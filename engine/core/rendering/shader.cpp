@@ -39,7 +39,7 @@ bool Shader::InitializeVertexShader(const std::string& shaderPath)
 	return false;
 }
 
-bool Shader::initializePixelShader(const std::string& shaderPath)
+bool Shader::InitializePixelShader(const std::string& shaderPath)
 {
 	ComPtr<ID3DBlob> pBlob;
 	if (SUCCEEDED(D3DReadFileToBlob(ToWideString(shaderPath).c_str(), &pBlob)))

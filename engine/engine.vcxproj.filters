@@ -219,6 +219,39 @@
     <ClCompile Include="framework\nodes\sphere_confiner_node.cpp">
       <Filter>framework\nodes</Filter>
     </ClCompile>
+    <ClCompile Include="core\rendering\animation.cpp">
+      <Filter>core\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="core\rendering\animator.cpp">
+      <Filter>core\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="framework\nodes\animation_changer_node.cpp">
+      <Filter>framework\nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="framework\nodes\string_operator_node.cpp">
+      <Filter>framework\nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="framework\nodes\observer_node.cpp">
+      <Filter>framework\nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="framework\nodes\vector_decomposer_node.cpp">
+      <Filter>framework\nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="framework\nodes\boolean_node.cpp">
+      <Filter>framework\nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="framework\nodes\vector_copier_node.cpp">
+      <Filter>framework\nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="framework\nodes\animation_info_node.cpp">
+      <Filter>framework\nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="framework\nodes\string_node.cpp">
+      <Filter>framework\nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="framework\nodes\gravity_modifier_node.cpp">
+      <Filter>framework\nodes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine_application.h" />
@@ -478,6 +511,39 @@
       <Filter>framework\nodes</Filter>
     </ClInclude>
     <ClInclude Include="framework\nodes\sphere_confiner_node.h">
+      <Filter>framework\nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="core\rendering\animation.h">
+      <Filter>core\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="core\rendering\animator.h">
+      <Filter>core\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="framework\nodes\animation_changer_node.h">
+      <Filter>framework\nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="framework\nodes\string_operator_node.h">
+      <Filter>framework\nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="framework\nodes\observer_node.h">
+      <Filter>framework\nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="framework\nodes\vector_decomposer_node.h">
+      <Filter>framework\nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="framework\nodes\boolean_node.h">
+      <Filter>framework\nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="framework\nodes\vector_copier_node.h">
+      <Filter>framework\nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="framework\nodes\animation_info_node.h">
+      <Filter>framework\nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="framework\nodes\string_node.h">
+      <Filter>framework\nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="framework\nodes\gravity_modifier_node.h">
       <Filter>framework\nodes</Filter>
     </ClInclude>
   </ItemGroup>

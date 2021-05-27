@@ -1,18 +1,19 @@
 #include "mesh.h"
-#include "material.h"
 #include "renderer.h"
+#include "material.h"
+#include "animator.h"
 #include "console.h"
 
-Mesh::Mesh(const aiMesh& mesh)
+Mesh::Mesh(const aiMesh& ai_mesh, Animator* pAnimator)
 	:
-	numIndices(mesh.mNumFaces * 3)
+	numIndices(ai_mesh.mNumFaces * 3)
 {
-	const auto vertices = ExtractVertices(mesh);
+	const auto vertices = ExtractVertices(ai_mesh, pAnimator);
 
 	boundingBox = CalculateBoundingBox(vertices);
 
 	CreateVertexBuffer(vertices);
-	CreateIndexBuffer(ExtractIndices(mesh));
+	CreateIndexBuffer(ExtractIndices(ai_mesh));
 }
 
 Mesh::Mesh(std::vector<Vertex> vertices, std::vector<uint32_t> indices)
@@ -45,34 +46,59 @@ void Mesh::Draw() const
 	Renderer::GetContext()->DrawIndexed(numIndices, 0, 0);
 }
 
-std::vector<Vertex> Mesh::ExtractVertices(const aiMesh& mesh)
+std::vector<Vertex> Mesh::ExtractVertices(const aiMesh& ai_mesh, Animator* pAnimator)
 {
-	std::vector<Vertex> vertices(mesh.mNumVertices);
+	std::vector<Vertex> vertices(ai_mesh.mNumVertices);
 
-	for (uint32_t uVertex = 0; uVertex < mesh.mNumVertices; uVertex++)
+	for (uint32_t uVertex = 0; uVertex < ai_mesh.mNumVertices; uVertex++)
 	{
-		vertices[uVertex].position = *reinterpret_cast<float3*>(&mesh.mVertices[uVertex]);
-		vertices[uVertex].normal = *reinterpret_cast<float3*>(&mesh.mNormals[uVertex]);
-		vertices[uVertex].tangent = *reinterpret_cast<float3*>(&mesh.mTangents[uVertex]);
-		vertices[uVertex].bitangent = *reinterpret_cast<float3*>(&mesh.mBitangents[uVertex]);
-		vertices[uVertex].texcoord = *reinterpret_cast<float2*>(&mesh.mTextureCoords[0][uVertex]);
-		//vertices[uVertex].boneID;
-		//vertices[uVertex].boneWeight;
+		vertices[uVertex].position = *reinterpret_cast<float3*>(&ai_mesh.mVertices[uVertex]);
+		vertices[uVertex].normal = *reinterpret_cast<float3*>(&ai_mesh.mNormals[uVertex]);
+		vertices[uVertex].tangent = *reinterpret_cast<float3*>(&ai_mesh.mTangents[uVertex]);
+		vertices[uVertex].bitangent = *reinterpret_cast<float3*>(&ai_mesh.mBitangents[uVertex]);
+		vertices[uVertex].texcoord = *reinterpret_cast<float2*>(&ai_mesh.mTextureCoords[0][uVertex]);
+	}
+
+	if (pAnimator == nullptr)
+	{
+		return vertices;
+	}
+
+	for (uint32_t i = 0; i < ai_mesh.mNumBones; i++)
+	{
+		auto& ai_bone = *ai_mesh.mBones[i];
+
+		for (uint32_t j = 0; j < ai_bone.mNumWeights; j++)
+		{
+			// same vertex is modified only 4 times which is max weight limitation
+			auto& affectedVertex = vertices[ai_bone.mWeights[j].mVertexId];
+
+			for (uint32_t k = 0; k < 4; k++)
+			{
+				if (reinterpret_cast<float*>(&affectedVertex.boneWeight)[k] == 0.0f)
+				{
+					reinterpret_cast<uint32_t*>(&affectedVertex.boneID.x)[k] = pAnimator->GetBones().at(ai_bone.mName.C_Str()).index;
+					reinterpret_cast<float*>(&affectedVertex.boneWeight)[k] = ai_bone.mWeights[j].mWeight;
+
+					break;
+				}
+			}
+		}
 	}
 
 	return vertices;
 }
 
-std::vector<uint32_t> Mesh::ExtractIndices(const aiMesh& mesh)
+std::vector<uint32_t> Mesh::ExtractIndices(const aiMesh& ai_mesh)
 {
 	std::vector<uint32_t> indices;
-	indices.reserve(mesh.mNumFaces * 3);
+	indices.reserve(ai_mesh.mNumFaces * 3);
 
-	for (uint32_t uFace = 0; uFace < mesh.mNumFaces; uFace++)
+	for (uint32_t uFace = 0; uFace < ai_mesh.mNumFaces; uFace++)
 	{
-		indices.push_back(mesh.mFaces[uFace].mIndices[0]);
-		indices.push_back(mesh.mFaces[uFace].mIndices[1]);
-		indices.push_back(mesh.mFaces[uFace].mIndices[2]);
+		indices.push_back(ai_mesh.mFaces[uFace].mIndices[0]);
+		indices.push_back(ai_mesh.mFaces[uFace].mIndices[1]);
+		indices.push_back(ai_mesh.mFaces[uFace].mIndices[2]);
 	}
 
 	return indices;

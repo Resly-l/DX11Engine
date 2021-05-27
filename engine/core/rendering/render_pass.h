@@ -18,9 +18,18 @@ public:
 		ptSKY,
 		ptALPHA,
 		ptDEBUG_LINE,
+		ptUI,
 
 		NUM_TAGS
 	};
+
+protected:
+	const Tag tag;
+
+	Shader shader;
+	RenderState renderState;
+
+	std::vector<Drawable*> drawablePtrs;
 
 public:
 	RenderPass(Tag tag) : tag(tag) {}
@@ -37,12 +46,4 @@ public:
 	const RenderState& GetRenderState() const { return renderState; }
 
 	virtual void Render(std::unordered_map<std::string, std::shared_ptr<Resource>>& passResources) = 0;
-
-protected:
-	const Tag tag;
-
-	Shader shader;
-	RenderState renderState;
-
-	std::vector<Drawable*> drawablePtrs;
 };

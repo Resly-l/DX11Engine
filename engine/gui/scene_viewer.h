@@ -6,6 +6,9 @@ class Entity;
 
 class SceneViewer : public EngineGUI
 {
+private:
+	int treeFlags;
+
 public:
 	SceneViewer();
 
@@ -16,7 +19,4 @@ private:
 	void DrawEntityHierarchy(Scene* pScene, Entity* pEntity, bool& bSelected);
 	void EditSceneName(Scene* pScene);
 	void EditCameraName(Scene* pScene);
-
-private:
-	int treeFlags;
 };

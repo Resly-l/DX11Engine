@@ -3,6 +3,14 @@
 
 class Entity
 {
+private:
+	std::string name;
+
+	std::unordered_map<ComponentID, ComponentBase*> componentPtrs;
+
+	Entity* pParent = nullptr;
+	std::vector<std::unique_ptr<Entity>> childPtrs;
+
 public:
 	Entity();
 	Entity(const std::string& name);
@@ -37,14 +45,6 @@ public:
 
 	JSON ToJson() const;
 	void FromJson(const JSON& json);
-
-private:
-	std::string name;
-
-	std::unordered_map<ComponentID, ComponentBase*> componentPtrs;
-
-	Entity* pParent = nullptr;
-	std::vector<std::unique_ptr<Entity>> childPtrs;
 };
 
 

@@ -1,10 +1,10 @@
-#define uMaxLights 50
+#define maxLights 50
 
 cbuffer ViewProjection : register(b0)
 {
 	matrix view;
-	matrix projection;
-};
+	matrix perspective;
+}
 
 struct LightProperty
 {
@@ -21,8 +21,8 @@ struct LightProperty
 
 cbuffer Light : register(b3)
 {
-	LightProperty lights[uMaxLights];
-};
+	LightProperty lights[maxLights];
+}
 cbuffer LightCount : register(b4)
 {
 	uint uNumLights;
@@ -34,7 +34,7 @@ Texture2D albedoMap : register(t2);
 Texture2D specularMap : register(t3);
 SamplerState textureSampler : register(s0);
 
-TextureCube shadowMap[uMaxLights]: register(t5);
+TextureCube shadowMap[maxLights]: register(t5);
 SamplerComparisonState shadowSampler : register(s1);
 
 float4 main(float2 texcoord : TEXCOORD) : SV_TARGET

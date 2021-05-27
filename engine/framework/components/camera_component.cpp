@@ -1,12 +1,18 @@
 #include "camera_component.h"
 #include "entity.h"
 #include "transform_component.h"
-#include "rendering/renderer.h"
+#include "rendering/constant_buffer.h"
+
+std::unique_ptr<ConstantBuffer> CameraComponent::pViewProjectionCB;
 
 CameraComponent::CameraComponent()
-	:
-	viewProjectionCB(ConstantType::ctCAMERA_TRANSFORM, ShaderBindFlag::btBIND_ALL, ViewProjection{})
-{}
+{
+	// delaying initialization to be initialized after renderer
+	if (pViewProjectionCB == nullptr)
+	{
+		pViewProjectionCB = std::make_unique<ConstantBuffer>(ConstantType::ctCAMERA_TRANSFORM, ShaderBindFlag::btBIND_ALL, ViewProjection{});
+	}
+}
 
 Matrix CameraComponent::GetViewMatrix() const
 {
@@ -16,12 +22,13 @@ Matrix CameraComponent::GetViewMatrix() const
 
 	if (auto pTransformComponent = GetOwner()->GetComponent<TransformComponent>())
 	{
-		position = pTransformComponent->GetAbsolutePosition();
+		const auto absoluteTransform = pTransformComponent->GetAbsoluteTransform();
+		const auto decomposed = absoluteTransform.Decompose();
+		const auto rotation = Matrix::Rotation(decomposed.angle);
 
-		const auto transform = Matrix::Rotation(pTransformComponent->GetAbsoluteAngle());
-
-		vDirection *= transform;
-		vUpside *= transform;
+		position = decomposed.position;
+		vDirection *= rotation;
+		vUpside *= rotation;
 	}
 
 	return Matrix::LookTo(position, vDirection, vUpside);
@@ -29,19 +36,21 @@ Matrix CameraComponent::GetViewMatrix() const
 
 Matrix CameraComponent::GetProjectionMatrix() const
 {
+	float finalAspectRatio = aspectRatio;
+
+	// 0.0f = use swap chain aspect ratio
 	if (aspectRatio == 0.0f)
 	{
-		const float fSwapChainAspectRatio = (float)Renderer::GetSwapChainWidth() / (float)Renderer::GetSwapChainHeight();
-
-		return Matrix::PerspectiveFov(horizontalFOV, fSwapChainAspectRatio, nearPlaneDistance, farPlaneDistance);
+		finalAspectRatio = (float)Renderer::GetSwapChainWidth() / (float)Renderer::GetSwapChainHeight();
 	}
-	return Matrix::PerspectiveFov(horizontalFOV, aspectRatio, nearPlaneDistance, farPlaneDistance);
+
+	return Matrix::PerspectiveFov(horizontalFOV, finalAspectRatio, nearPlaneDistance, farPlaneDistance);
 }
 
 void CameraComponent::Bind()
 {
-	viewProjectionCB.Update(ViewProjection{ GetViewMatrix(), GetProjectionMatrix() });
-	viewProjectionCB.Bind();
+	pViewProjectionCB->Update(ViewProjection{ GetViewMatrix(), GetProjectionMatrix() });
+	pViewProjectionCB->Bind();
 }
 
 JSON CameraComponent::ToJson() const

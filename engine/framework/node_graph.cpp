@@ -36,13 +36,19 @@ void NodeGraph::AddSlot(NodeBase* pNode, Slot slot)
 	switch (slot.valueType)
 	{
 	case Slot::ValueType::svBOOL:
-		pNode->data[slot.valueKey] = false;
+		pNode->data[slot.valueKey] = (bool)false;
 		break;
 	case Slot::ValueType::svFLOAT:
 		pNode->data[slot.valueKey] = 0.0f;
 		break;
+	case Slot::ValueType::svSTRING:
+		pNode->data[slot.valueKey] = std::string{};
+		break;
 	case Slot::ValueType::svVECTOR:
 		pNode->data[slot.valueKey] = Vector();
+		break;
+	case Slot::ValueType::svMATRIX:
+		pNode->data[slot.valueKey] = Matrix::Identity();
 		break;
 	case Slot::ValueType::svADDRESS:
 		pNode->data[slot.valueKey] = (void*)nullptr;

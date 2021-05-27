@@ -1,15 +1,15 @@
 cbuffer ViewProjection : register(b0)
 {
 	matrix view;
-	matrix projection;
+	matrix perspective;
 };
 
 cbuffer Transform : register(b1)
 {
-	matrix mWorld;
+	matrix world;
 }
 
 float4 main(float3 position : POSITION) : SV_POSITION
 {
-	return mul(mul(projection, mul(view, mWorld)), float4(position, 1.0f));
+	return mul(mul(perspective, mul(view, world)), float4(position, 1.0f));
 }

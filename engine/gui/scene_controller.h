@@ -4,14 +4,14 @@
 
 class SceneController : public EngineGUI
 {
+private:
+	Texture playIcon;
+	Texture pauseIcon;
+	Texture stopIcon;
+
 public:
 	SceneController();
 
 public:
 	void Draw() override;
-
-private:
-	Texture playIcon;
-	Texture pauseIcon;
-	Texture stopIcon;
 };

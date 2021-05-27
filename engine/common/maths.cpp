@@ -182,6 +182,16 @@ Vector& Vector::operator/=(float fScalar)
 	return *this = DirectX::operator/(v, fScalar);
 }
 
+Vector Vector::operator*(const Vector& v) const
+{
+	return Vector(x * v.x, y * v.y, z * v.z, w * v.w);
+}
+
+Vector& Vector::operator*=(const Vector& v)
+{
+	return *this = *this * v;
+}
+
 Vector Vector::operator*(const Matrix& m) const
 {
 	return DirectX::XMVector3Transform(v, m.m);
@@ -250,9 +260,71 @@ Matrix Matrix::GetNormalized() const
 	return res;
 }
 
+Decomposed Matrix::Decompose() const
+{
+	Decomposed result;
+
+	result.scale.x = Vector(r[0][0], r[0][1], r[0][2], 0.0f).Length3();
+	result.scale.y = Vector(r[1][0], r[1][1], r[1][2], 0.0f).Length3();
+	result.scale.z = Vector(r[2][0], r[2][1], r[2][2], 0.0f).Length3();
+
+	Matrix rotation = m;
+
+	rotation[0][0] /= result.scale.x;
+	rotation[1][0] /= result.scale.x;
+	rotation[2][0] /= result.scale.x;
+
+	rotation[0][1] /= result.scale.y;
+	rotation[1][1] /= result.scale.y;
+	rotation[2][1] /= result.scale.y;
+
+	rotation[0][2] /= result.scale.z;
+	rotation[1][2] /= result.scale.z;
+	rotation[2][2] /= result.scale.z;
+
+	if (rotation[2][1] < 1.0f)
+	{
+		if (rotation[2][1] > -1.0f)
+		{
+			result.angle.x = -asinf(rotation[2][1]);
+			result.angle.z = -atan2f(-rotation[0][1], rotation[1][1]);
+			result.angle.y = -atan2f(-rotation[2][0], rotation[2][2]);
+		}
+		else
+		{
+			result.angle.x = 3.1415926535f * 0.5f;
+			result.angle.z = atan2f(rotation[0][2], rotation[0][0]);
+			result.angle.y = 0;
+		}
+	}
+	else
+	{
+		result.angle.x = -3.1415926535f * 0.5f;
+		result.angle.z = -atan2f(rotation[0][2], rotation[0][0]);
+		result.angle.y = 0.0f;
+	}
+
+	result.position = r[3];
+
+	return result;
+}
+
 Matrix Matrix::Identity()
 {
 	return DirectX::XMMatrixIdentity();
+}
+
+Matrix Matrix::Interpolate(const Matrix& other, float alpha)
+{
+	const auto lhsDecomposed = this->Decompose();
+	const auto rhsDecomposed = other.Decompose();
+
+	const Vector lhsQuaternion = DirectX::XMQuaternionRotationRollPitchYawFromVector(lhsDecomposed.angle.v);
+	const Vector rhsQuaternion = DirectX::XMQuaternionRotationRollPitchYawFromVector(rhsDecomposed.angle.v);
+
+	return Matrix::Scaling(lhsDecomposed.scale.Lerp(rhsDecomposed.scale, alpha))
+		* Matrix::RotationQuaternion(lhsQuaternion.Slerp(rhsQuaternion, alpha))
+		* Matrix::Translation(lhsDecomposed.position.Lerp(rhsDecomposed.position, alpha));
 }
 
 Matrix Matrix::Scaling(const Vector& scale)
@@ -265,14 +337,14 @@ Matrix Matrix::Rotation(const Vector& angle)
 	return DirectX::XMMatrixRotationRollPitchYawFromVector(angle.v);
 }
 
-Matrix Matrix::RotationAxis(const Vector& vAxis, float fAngle)
+Matrix Matrix::RotationAxis(const Vector& axis, float angle)
 {
-	return DirectX::XMMatrixRotationAxis(vAxis.v, fAngle);
+	return DirectX::XMMatrixRotationAxis(axis.v, angle);
 }
 
-Matrix Matrix::RotationQuaternion(const Vector& q)
+Matrix Matrix::RotationQuaternion(const Vector& quaternion)
 {
-	return DirectX::XMMatrixRotationQuaternion(q.v);
+	return DirectX::XMMatrixRotationQuaternion(quaternion.v);
 }
 
 Matrix Matrix::Translation(const Vector& position)
@@ -280,19 +352,24 @@ Matrix Matrix::Translation(const Vector& position)
 	return DirectX::XMMatrixTranslationFromVector(position.v);
 }
 
-Matrix Matrix::LookTo(const Vector& vPos, const Vector& vDir, const Vector& vUp)
+Matrix Matrix::LookTo(const Vector& position, const Vector& direction, const Vector& upside)
 {
-	return DirectX::XMMatrixLookToLH(vPos.v, vDir.v, vUp.v);
+	return DirectX::XMMatrixLookToLH(position.v, direction.v, upside.v);
 }
 
-Matrix Matrix::Perspective(float width, float height, float fNear, float fFar)
+Matrix Matrix::Perspective(float width, float height, float near, float far)
 {
-	return DirectX::XMMatrixPerspectiveLH(width, height, fNear, fFar);
+	return DirectX::XMMatrixPerspectiveLH(width, height, near, far);
 }
 
-Matrix Matrix::PerspectiveFov(float fHFov, float fAR, float fNear, float fFar)
+Matrix Matrix::PerspectiveFov(float horizontalFov, float aspectRatio, float near, float far)
 {
-	return DirectX::XMMatrixPerspectiveFovLH(fHFov / fAR, fAR, fNear, fFar);
+	return DirectX::XMMatrixPerspectiveFovLH(horizontalFov / aspectRatio, aspectRatio, near, far);
+}
+
+Matrix Matrix::Orthogonal(float width, float height, float near, float far)
+{
+	return DirectX::XMMatrixOrthographicLH(width, height, near, far);
 }
 
 Matrix Matrix::operator*(const Matrix& other) const

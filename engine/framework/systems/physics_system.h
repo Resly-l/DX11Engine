@@ -13,7 +13,7 @@ private:
 	};
 
 private:
-	float gravity = 15.0f;
+	float gravity = 9.0f;
 
 	// simulate air resistance
 	float linearDampling = 0.0015f;

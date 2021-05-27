@@ -1,7 +1,7 @@
 cbuffer ViewProjection : register(b0)
 {
 	matrix view;
-	matrix projection;
+	matrix perspective;
 };
 
 struct VSOut
@@ -15,7 +15,7 @@ VSOut main(float3 pos : POSITION)
 	VSOut output;
 
 	output.pos = pos;
-	output.sv_pos = mul(mul(projection, view), float4(pos, 0.0f));
+	output.sv_pos = mul(mul(perspective, view), float4(pos, 0.0f));
 	output.sv_pos.z = output.sv_pos.w;
 
 	return output;

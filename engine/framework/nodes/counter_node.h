@@ -3,6 +3,10 @@
 
 class CounterNode : public Node<CounterNode>
 {
+private:
+	float elapsed = 0.0f;
+	float pulse = 1.0f;
+
 public:
 	void InitializeSlots() override;
 	void Update(double deltaSeconds) override;
@@ -11,8 +15,4 @@ public:
 	void FromJson(const JSON& json) override;
 
 	void DrawWidget() override;
-
-private:
-	float elapsed = 0.0f;
-	float pulse = 1.0f;
 };

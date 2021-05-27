@@ -6,6 +6,13 @@ class Matrix;
 class Vector
 {
 public:
+	union
+	{
+		struct { float x, y, z, w; };
+		DirectX::XMVECTOR v;
+	};
+
+public:
 	Vector();
 	Vector(float x, float y, float z, float w);
 	Vector(const DirectX::XMVECTOR& vector);
@@ -51,55 +58,25 @@ public:
 	Vector operator/(float fScalar) const;
 	Vector& operator/=(float fScalar);
 
+	Vector operator*(const Vector& v) const;
+	Vector& operator*=(const Vector& v);
+
 	Vector operator*(const Matrix& m) const;
 	Vector& operator*=(const Matrix& m);
 
 	float& operator[](uint32_t uIndex);
 	const float& operator[](uint32_t uIndex) const;
+};
 
-public:
-	union
-	{
-		struct { float x, y, z, w; };
-		DirectX::XMVECTOR v;
-	};
+struct Decomposed
+{
+	Vector scale;
+	Vector angle;
+	Vector position;
 };
 
 class Matrix
 {
-public:
-	Matrix();
-	Matrix(const DirectX::XMMATRIX& matrix);
-
-public:
-	void Transpose();
-	Matrix GetTransposed() const;
-
-	void Inverse();
-	Matrix GetInversed() const;
-
-	void Normalize();
-	Matrix GetNormalized() const;
-
-	static Matrix Identity();
-
-	static Matrix Scaling(const Vector& scale);
-	static Matrix Rotation(const Vector& angle);
-	static Matrix RotationAxis(const Vector& vAxis, float fAngle);
-	static Matrix RotationQuaternion(const Vector& q);
-	static Matrix Translation(const Vector& position);
-
-	static Matrix LookTo(const Vector& vPos, const Vector& vDir, const Vector& vUp);
-	static Matrix Perspective(float width, float height, float fNear, float fFar);
-	static Matrix PerspectiveFov(float fHFov, float fAR, float fNear, float fFar);
-
-public:
-	Matrix operator*(const Matrix& other) const;
-	Matrix& operator*=(const Matrix& other);
-
-	Vector& operator[](size_t uIndex);
-	const Vector& operator[](size_t uIndex) const;
-
 public:
 	union
 	{
@@ -109,7 +86,50 @@ public:
 		};
 		DirectX::XMMATRIX m;
 	};
+
+public:
+	Matrix();
+	Matrix(const DirectX::XMMATRIX& matrix);
+
+public:
+	static Matrix Identity();
+
+	void Transpose();
+	Matrix GetTransposed() const;
+
+	void Inverse();
+	Matrix GetInversed() const;
+
+	void Normalize();
+	Matrix GetNormalized() const;
+
+	Decomposed Decompose() const;
+
+	// assumes rotation is quaternion
+	Matrix Interpolate(const Matrix& other, float alpha);
+
+	static Matrix Scaling(const Vector& scale);
+	static Matrix Rotation(const Vector& angle);
+	static Matrix RotationAxis(const Vector& axis, float angle);
+	static Matrix RotationQuaternion(const Vector& quaternion);
+	static Matrix Translation(const Vector& position);
+
+	static Matrix LookTo(const Vector& position, const Vector& direction, const Vector& upside);
+	static Matrix Perspective(float width, float height, float near, float far);
+	static Matrix PerspectiveFov(float horizontalFov, float aspectRatio, float near, float far);
+	static Matrix Orthogonal(float width, float height, float near, float far);
+
+public:
+	Matrix operator*(const Matrix& other) const;
+	Matrix& operator*=(const Matrix& other);
+
+	Vector& operator[](size_t uIndex);
+	const Vector& operator[](size_t uIndex) const;
 };
+
+
+
+
 
 struct BoundingVolume
 {

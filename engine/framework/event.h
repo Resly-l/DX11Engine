@@ -9,6 +9,10 @@ struct Event
 
 class EventManager
 {
+private:
+	// unordered_map<eventName, vector<callback, subscriptionKey>>
+	inline static std::unordered_map<std::string, std::vector<std::pair<std::function<void(const Event&)>, std::string>>> subscribers;
+
 public:
 	static void Emit(const Event& event);
 
@@ -16,8 +20,4 @@ public:
 	static void Unsubscribe(const std::string& subscriptionKey);
 
 	static void Clear();
-
-private:
-	// unordered_map<eventName, vector<callback, subscriptionKey>>
-	inline static std::unordered_map<std::string, std::vector<std::pair<std::function<void(const Event&)>, std::string>>> subscribers;
 };

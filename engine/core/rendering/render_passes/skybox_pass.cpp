@@ -31,7 +31,7 @@ void SkyboxPass::Render(std::unordered_map<std::string, std::shared_ptr<Resource
 void SkyboxPass::InitializeShaders()
 {
 	shader.InitializeVertexShader("../asset/shaders/SkyboxVS.cso");
-	shader.initializePixelShader("../asset/shaders/SkyboxPS.cso");
+	shader.InitializePixelShader("../asset/shaders/SkyboxPS.cso");
 }
 
 void SkyboxPass::InitializeRenderState()

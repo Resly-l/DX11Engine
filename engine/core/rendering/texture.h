@@ -5,16 +5,17 @@ namespace Internal
 {
 	class TextureBase : public Resource
 	{
-	public:
-		void Bind() const;
-
-		ID3D11ShaderResourceView* GetShaderResourceView() const { return pShaderResourceView.Get(); };
-
 	protected:
 		std::string filePath;
 
 		ComPtr<ID3D11ShaderResourceView> pShaderResourceView;
 		uint32_t slot;
+
+	public:
+		void Bind() const;
+
+		std::string GetFilePath() const { return filePath; }
+		ID3D11ShaderResourceView* GetShaderResourceView() const { return pShaderResourceView.Get(); };
 	};
 }
 

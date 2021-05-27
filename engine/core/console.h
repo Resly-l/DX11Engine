@@ -13,25 +13,25 @@ public:
 		ltERROR
 	};
 
-public:
-	Log(Type type, std::string message);
-
 private:
 	const Type type;
 	const std::string message;
 	std::string tag;
+
+public:
+	Log(Type type, std::string message);
 };
 
 class Console
 {
+private:
+	static Console instance;
+
+	std::vector<Log> logs;
+
 public:
 	static void AddLog(Log log);
 	static void Clear();
 
 	static void DrawWidget();
-
-private:
-	static Console instance;
-
-	std::vector<Log> logs;
 };

@@ -3,6 +3,9 @@
 
 class KeyboardNode : public Node<KeyboardNode>
 {
+private:
+	unsigned char key;
+
 public:
 	void InitializeSlots() override;
 	void Update(double deltaSeconds) override;
@@ -11,7 +14,4 @@ public:
 	void FromJson(const JSON& json) override;
 
 	void DrawWidget() override;
-
-private:
-	unsigned char key;
 };

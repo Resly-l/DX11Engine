@@ -4,6 +4,7 @@
 class Keyboard
 {
 	friend class Window;
+
 private:
 	enum class KeyState
 	{
@@ -12,6 +13,16 @@ private:
 		ksHOLD,
 		ksUP
 	};
+
+private:
+	static Keyboard instance;
+
+	static constexpr int numKeys = 256;
+
+	KeyState previousKeyStates[numKeys] = {};
+	KeyState currentKeyStates[numKeys] = {};
+
+	bool enableAutoRepeat = false;
 
 private:
 	Keyboard() = default;
@@ -28,14 +39,4 @@ public:
 private:
 	static bool HandleWM(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 	static void Update();
-
-private:
-	static Keyboard instance;
-
-	static constexpr int numKeys = 256;
-
-	KeyState previousKeyStates[numKeys] = {};
-	KeyState currentKeyStates[numKeys] = {};
-
-	bool enableAutoRepeat = false;
 };

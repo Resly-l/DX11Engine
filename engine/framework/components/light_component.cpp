@@ -6,10 +6,11 @@ const LightComponent::Property& LightComponent::GetProperty()
 {
 	if (auto pTransformComponent = GetOwner()->GetComponent<TransformComponent>())
 	{
-		Matrix transform = pTransformComponent->GetAbsoluteTransform();
+		const auto transform = pTransformComponent->GetAbsoluteTransform();
+		const auto decomposed = transform.Decompose();
 
-		property.position = transform.m.r[3];
-		property.direction = (Vector(0.0f, 0.0f, 1.0f, 0.0f) * transform).GetNormalized3();
+		property.position = decomposed.position;
+		property.direction = (Vector(0.0f, 0.0f, 1.0f, 0.0f) * Matrix::Rotation(decomposed.angle)).GetNormalized3();
 	}
 	else
 	{
@@ -53,15 +54,15 @@ void LightComponent::FromJson(const JSON& json)
 void LightComponent::DrawWidget()
 {
 	ImGui::ColorEdit3("color", &property.color.x);
-	ImGui::DragFloat("intensity", &property.intensity, 0.01f);
+	ImGui::DragFloat("intensity", &property.intensity, 0.01f, 0.0f);
 
 	ImGui::NewLine();
-	ImGui::DragFloat("linear attenuation", &property.linearAttenuation, 0.01f);
-	ImGui::DragFloat("quadratic attenuation", &property.quadraticAttenuation, 0.01f);
-	ImGui::DragFloat("constant attenuation", &property.constantAttenuation, 0.01f);
+	ImGui::DragFloat("linear attenuation", &property.linearAttenuation, 0.01f, 0.0f);
+	ImGui::DragFloat("quadratic attenuation", &property.quadraticAttenuation, 0.01f, 0.0f);
+	ImGui::DragFloat("constant attenuation", &property.constantAttenuation, 0.01f, 0.0f);
 
 	ImGui::NewLine();
-	ImGui::DragFloat("ambient strength", &property.ambientStrength, 0.01f);
+	ImGui::DragFloat("ambient strength", &property.ambientStrength, 0.01f, 0.0f);
 
 	ImGui::NewLine();
 	ImGui::Checkbox("cast shadow", reinterpret_cast<bool*>(&property.castShadow));

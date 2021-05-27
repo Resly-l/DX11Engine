@@ -7,10 +7,16 @@ void SphereConfinerNode::InitializeSlots()
 {
 	pNodeGraph->AddSlot(this, { "entity", Slot::Type::stINPUT, Slot::ValueType::svADDRESS });
 	pNodeGraph->AddSlot(this, { "target", Slot::Type::stINPUT, Slot::ValueType::svADDRESS });
+	pNodeGraph->AddSlot(this, { "condition", Slot::Type::stINPUT, Slot::ValueType::svBOOL });
 }
 
 void SphereConfinerNode::Update(double deltaSeconds)
 {
+	if (data.value(inputs[2].valueKey, false) == false)
+	{
+		return;
+	}
+
 	auto pEntity = reinterpret_cast<Entity*>(data.value(inputs[0].valueKey, (void*)nullptr));
 	auto pTarget = reinterpret_cast<Entity*>(data.value(inputs[1].valueKey, (void*)nullptr));
 
@@ -21,12 +27,12 @@ void SphereConfinerNode::Update(double deltaSeconds)
 
 		if (pEntityTransform && pTargetTransform)
 		{
-			const Vector entityAbsolutePosition = pEntityTransform->GetAbsolutePosition();
-			const Vector targetAbsolutePosition = pTargetTransform->GetAbsolutePosition();
+			const Vector entityAbsolutePosition = pEntityTransform->GetAbsoluteTransform().Decompose().position;
+			const Vector targetAbsolutePosition = pTargetTransform->GetAbsoluteTransform().Decompose().position;
+
 			const Vector offsetFromTarget = (entityAbsolutePosition - targetAbsolutePosition).GetNormalized3() * radius;
 
-			pEntityTransform->SetAbsolutePosition(offsetFromTarget + targetAbsolutePosition);
-			pEntityTransform->LookAt(targetAbsolutePosition);
+			pEntityTransform->SetAbsolutePosition(targetAbsolutePosition + offsetFromTarget);
 		}
 	}
 }
@@ -54,6 +60,7 @@ void SphereConfinerNode::DrawWidget()
 
 		imnodes::InputAttribute(inputs[0].GetUID(), inputs[0].valueKey.c_str());
 		imnodes::InputAttribute(inputs[1].GetUID(), inputs[1].valueKey.c_str());
+		imnodes::InputAttribute(inputs[2].GetUID(), inputs[2].valueKey.c_str());
 	}
 	imnodes::EndNode();
 }

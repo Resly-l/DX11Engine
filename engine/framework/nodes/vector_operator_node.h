@@ -3,6 +3,10 @@
 
 class VectorOperatorNode : public Node<VectorOperatorNode>
 {
+private:
+	static const std::vector<std::string> operationNames;
+	uint32_t operationIndex;
+
 public:
 	void InitializeSlots() override;
 	void Update(double deltaSeconds) override;
@@ -11,8 +15,4 @@ public:
 	void FromJson(const JSON& json) override;
 
 	void DrawWidget() override;
-
-private:
-	static const std::vector<std::string> operationNames;
-	uint32_t operationIndex;
 };

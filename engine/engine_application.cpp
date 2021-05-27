@@ -6,9 +6,9 @@
 #include "scene_manager.h"
 #include "system_container.h"
 
-#include "systems/render_system.h"
-#include "systems/script_system.h"
 #include "systems/physics_system.h"
+#include "systems/script_system.h"
+#include "systems/render_system.h"
 
 #include "rendering/texture.h"
 
@@ -27,9 +27,9 @@ EngineApplication::EngineApplication()
 	ComponentFactory::Initialize();
 	NodeFactory::Initialize();
 
-	auto pRenderSystem = SystemContainer::AddSystem<RenderSystem>();
-	auto pScriptSystem = SystemContainer::AddSystem<ScriptSystem>();
 	auto pPhysicsSystem = SystemContainer::AddSystem<PhysicsSystem>();
+	auto pScriptSystem = SystemContainer::AddSystem<ScriptSystem>();
+	auto pRenderSystem = SystemContainer::AddSystem<RenderSystem>();
 
 	pRenderSystem->SetEditorCameraUsage(true);
 	pRenderSystem->SetSkyboxTexture(std::make_shared<TextureCube>("../asset/images/ocean/"));

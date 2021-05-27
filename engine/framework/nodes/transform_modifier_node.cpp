@@ -10,6 +10,7 @@ void TransformModifierNode::InitializeSlots()
 	pNodeGraph->AddSlot(this, { "position", Slot::Type::stINPUT, Slot::ValueType::svVECTOR });
 	pNodeGraph->AddSlot(this, { "angle", Slot::Type::stINPUT, Slot::ValueType::svVECTOR });
 	pNodeGraph->AddSlot(this, { "scale", Slot::Type::stINPUT, Slot::ValueType::svVECTOR });
+	pNodeGraph->AddSlot(this, { "condition", Slot::Type::stINPUT, Slot::ValueType::svBOOL });
 
 	pNodeGraph->AddSlot(this, { "position_out", Slot::Type::stOUTPUT, Slot::ValueType::svVECTOR });
 	pNodeGraph->AddSlot(this, { "angle_out", Slot::Type::stOUTPUT, Slot::ValueType::svVECTOR });
@@ -19,31 +20,32 @@ void TransformModifierNode::InitializeSlots()
 
 void TransformModifierNode::Update(double deltaSeconds)
 {
-	// entity found
 	if (auto pEntity = reinterpret_cast<Entity*>(data.value(inputs[0].valueKey, (void*)nullptr)))
 	{
-		// entity has transform
 		if (auto pTransform = pEntity->GetComponent<TransformComponent>())
 		{
-			// inputs are connected
-			if (inputs[1].pCorrespond)
+			if (data.value(inputs[4].valueKey, false))
 			{
-				pTransform->SetAbsolutePosition(data[inputs[1].valueKey]);
-			}
-			if (inputs[2].pCorrespond)
-			{
-				//pTransform->SetAbsoluteAngle(data[inputs[2].valueKey]);
-			}
-			if (inputs[3].pCorrespond)
-			{
-				pTransform->SetAbsoluteScale(data[inputs[3].valueKey]);
+				if (inputs[1].pCorrespond)
+				{
+					pTransform->SetAbsolutePosition(data[inputs[1].valueKey]);
+				}
+				if (inputs[2].pCorrespond)
+				{
+					pTransform->SetAbsoluteAngle(data[inputs[2].valueKey]);
+				}
+				if (inputs[3].pCorrespond)
+				{
+					pTransform->SetAbsoluteScale(data[inputs[3].valueKey]);
+				}
 			}
 
-			auto transform = pTransform->GetAbsoluteTransform();
+			const auto transform = pTransform->GetAbsoluteTransform();
+			const auto decomposed = transform.Decompose();
 
-			data[outputs[0].valueKey] = Vector(transform[3]);
-			data[outputs[1].valueKey] = pTransform->GetAbsoluteAngle();
-			data[outputs[2].valueKey] = pTransform->GetAbsoluteScale();
+			data[outputs[0].valueKey] = decomposed.position;
+			data[outputs[1].valueKey] = decomposed.angle;
+			data[outputs[2].valueKey] = decomposed.angle;
 			data[outputs[3].valueKey] = transform;
 		}
 	}

@@ -4,6 +4,10 @@
 
 class DebugLinePass : public RenderPass
 {
+private:
+	D3D11_DEPTH_STENCIL_DESC dsDesc;
+	ConstantBuffer colorCB;
+
 public:
 	DebugLinePass();
 
@@ -16,8 +20,4 @@ private:
 
 	void RenderVisibleLines();
 	void RenderInvisibleLines();
-
-private:
-	D3D11_DEPTH_STENCIL_DESC dsDesc;
-	ConstantBuffer colorCB;
 };

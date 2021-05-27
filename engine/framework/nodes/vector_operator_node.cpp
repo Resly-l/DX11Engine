@@ -10,8 +10,10 @@ const std::vector<std::string> VectorOperatorNode::operationNames = {
 	"subtract",
 	"dot",
 	"cross",
+	"rotate_axis",
 	"rotate",
-	"lerp"
+	"lerp",
+	"transform"
 };
 
 void VectorOperatorNode::InitializeSlots()
@@ -19,6 +21,7 @@ void VectorOperatorNode::InitializeSlots()
 	pNodeGraph->AddSlot(this, { "lhs", Slot::Type::stINPUT, Slot::ValueType::svVECTOR });
 	pNodeGraph->AddSlot(this, { "rhs", Slot::Type::stINPUT, Slot::ValueType::svVECTOR });
 	pNodeGraph->AddSlot(this, { "scalar", Slot::Type::stINPUT, Slot::ValueType::svFLOAT });
+	pNodeGraph->AddSlot(this, { "matrix", Slot::Type::stINPUT, Slot::ValueType::svMATRIX });
 
 	pNodeGraph->AddSlot(this, { "result", Slot::Type::stOUTPUT, Slot::ValueType::svVECTOR });
 }
@@ -34,10 +37,10 @@ void VectorOperatorNode::Update(double deltaSeconds)
 		data[outputs[0].valueKey] = -data.value(inputs[0].valueKey, Vector());
 		break;
 	case 2:
-		data[outputs[0].valueKey] = data.value(inputs[0].valueKey, Vector()) * data.value(inputs[1].valueKey, 0.0f);
+		data[outputs[0].valueKey] = data.value(inputs[0].valueKey, Vector()) * data.value(inputs[2].valueKey, 0.0f);
 		break;
 	case 3:
-		data[outputs[0].valueKey] = data.value(inputs[0].valueKey, Vector()) / data.value(inputs[1].valueKey, 0.0f);
+		data[outputs[0].valueKey] = data.value(inputs[0].valueKey, Vector()) / data.value(inputs[2].valueKey, 0.0f);
 		break;
 	case 4:
 		data[outputs[0].valueKey] = data.value(inputs[0].valueKey, Vector()) + data.value(inputs[1].valueKey, Vector());
@@ -52,10 +55,16 @@ void VectorOperatorNode::Update(double deltaSeconds)
 		data[outputs[0].valueKey] = data.value(inputs[0].valueKey, Vector()).Cross3(data[inputs[1].valueKey]);
 		break;
 	case 8:
-		data[outputs[0].valueKey] = data.value(inputs[0].valueKey, Vector()) * Matrix::Rotation(data[inputs[1].valueKey]);
+		data[outputs[0].valueKey] = data.value(inputs[0].valueKey, Vector()) * Matrix::RotationAxis(data[inputs[1].valueKey], data[inputs[2].valueKey]);
 		break;
 	case 9:
+		data[outputs[0].valueKey] = data.value(inputs[0].valueKey, Vector()) * Matrix::Rotation(data[inputs[1].valueKey]);
+		break;
+	case 10:
 		data[outputs[0].valueKey] = data.value(inputs[0].valueKey, Vector()).Lerp(data[inputs[1].valueKey], data[inputs[2].valueKey]);
+		break;
+	case 11:
+		data[outputs[0].valueKey] = data.value(inputs[0].valueKey, Vector()) * data.value(inputs[3].valueKey, Matrix::Identity());
 		break;
 	}
 }
@@ -98,13 +107,17 @@ void VectorOperatorNode::DrawWidget()
 		}
 
 		imnodes::InputAttribute(inputs[0].GetUID(), inputs[0].valueKey.c_str());
-		if (operationIndex >= 4)
+		if (operationIndex >= 4 && operationIndex != 11)
 		{
 			imnodes::InputAttribute(inputs[1].GetUID(), inputs[1].valueKey.c_str());
 		}
-		if (operationIndex == 2 || operationIndex == 3 || operationIndex == 9)
+		if (operationIndex == 2 || operationIndex == 3 || operationIndex == 8 || operationIndex == 10)
 		{
 			imnodes::InputAttribute(inputs[2].GetUID(), inputs[2].valueKey.c_str());
+		}
+		if (operationIndex == 11)
+		{
+			imnodes::InputAttribute(inputs[3].GetUID(), inputs[3].valueKey.c_str());
 		}
 
 		imnodes::OutputAttribute(outputs[0].GetUID(), outputs[0].valueKey.c_str());

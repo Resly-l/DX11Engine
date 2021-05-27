@@ -16,7 +16,7 @@ void PhysicsComponent::Integrate(double deltaSeconds)
 		velocity += (force * inverseMass) * (float)deltaSeconds;
 		memset(&force, 0, sizeof(force));
 
-		pTransformComponent->SetAbsolutePosition(pTransformComponent->GetAbsolutePosition() + velocity * (float)deltaSeconds);
+		pTransformComponent->SetAbsolutePosition(pTransformComponent->GetAbsoluteTransform().Decompose().position + velocity * (float)deltaSeconds);
 	}
 }
 

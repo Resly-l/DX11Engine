@@ -22,7 +22,7 @@ ShadowPass::ShadowPass()
 	faceDirections[4] = { { 0.0f, 0.0f, 1.0f, 0.0f }, { 0.0f, 1.0f, 0.0f, 0.0f } };
 	faceDirections[5] = { { 0.0f, 0.0f, -1.0f, 0.0f }, { 0.0f, 1.0f, 0.0f, 0.0f } };
 
-	projection = Matrix::Perspective(1.0f, 1.0f, 0.5f, 100.0f);
+	perspective = Matrix::Perspective(1.0f, 1.0f, 0.5f, 100.0f);
 }
 
 void ShadowPass::Render(std::unordered_map<std::string, std::shared_ptr<Resource>>& passResources)
@@ -44,7 +44,7 @@ void ShadowPass::Render(std::unordered_map<std::string, std::shared_ptr<Resource
 
 				CameraComponent::ViewProjection viewProjection;
 				viewProjection.view = Matrix::LookTo(pLightResource->lightProperties[i].position, faceDirections[uFace].first, faceDirections[uFace].second);
-				viewProjection.projection = projection;
+				viewProjection.perspective = perspective;
 
 				lightTransformCB.Update(viewProjection);
 				lightTransformCB.Bind();
@@ -66,7 +66,7 @@ void ShadowPass::Render(std::unordered_map<std::string, std::shared_ptr<Resource
 void ShadowPass::InitializeShaders()
 {
 	shader.InitializeVertexShader("../asset/shaders/ShadowVS.cso");
-	shader.initializePixelShader("");
+	shader.InitializePixelShader("");
 }
 
 void ShadowPass::InitializeRenderStates()

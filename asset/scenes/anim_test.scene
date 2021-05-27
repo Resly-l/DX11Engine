@@ -1,0 +1,218 @@
+{
+    "Root_Entity": {
+        "children": [
+            {
+                "components": [
+                    {
+                        "passRotation": true,
+                        "passScale": true,
+                        "passTranslation": true,
+                        "relativeAngle": {
+                            "w": 0.0,
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "relativePosition": {
+                            "w": 0.0,
+                            "x": 0.000731573672965169,
+                            "y": -0.01715697906911373,
+                            "z": 9.600485801696777
+                        },
+                        "relativeScale": {
+                            "w": 0.0,
+                            "x": 0.009999999776482582,
+                            "y": 0.009999999776482582,
+                            "z": 0.009999999776482582
+                        },
+                        "string_id": "TransformComponent"
+                    },
+                    {
+                        "cast_shadow": true,
+                        "file_path": "..\\asset\\models\\Alien Solider\\alien_soldier.fbx",
+                        "string_id": "ModelComponent",
+                        "transparent": false
+                    },
+                    {
+                        "collider_index": 0,
+                        "collider_max_extent": {
+                            "w": 0.0,
+                            "x": 60.0,
+                            "y": 95.0,
+                            "z": 30.0
+                        },
+                        "collider_min_extent": {
+                            "w": 0.0,
+                            "x": -60.0,
+                            "y": -99.30999755859375,
+                            "z": -30.0
+                        },
+                        "friction": 0.20000000298023224,
+                        "mass": 1.0,
+                        "restitution": 0.10000000149011612,
+                        "string_id": "PhysicsComponent"
+                    }
+                ],
+                "name": "player"
+            },
+            {
+                "components": [
+                    {
+                        "passRotation": true,
+                        "passScale": true,
+                        "passTranslation": true,
+                        "relativeAngle": {
+                            "w": 0.0,
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "relativePosition": {
+                            "w": 0.0,
+                            "x": 0.0,
+                            "y": 13.15999984741211,
+                            "z": -6.21999979019165
+                        },
+                        "relativeScale": {
+                            "w": 0.0,
+                            "x": 1.0,
+                            "y": 1.0,
+                            "z": 1.0
+                        },
+                        "string_id": "TransformComponent"
+                    },
+                    {
+                        "castShadow": 1,
+                        "color_x": 1.0,
+                        "color_y": 0.9794421792030334,
+                        "color_z": 0.9336283206939697,
+                        "constantAttenuation": 1.0,
+                        "intensity": 1.850000023841858,
+                        "linearAttenuation": 0.02500000037252903,
+                        "quadraticAttenuation": 0.003000000026077032,
+                        "string_id": "LightComponent"
+                    }
+                ],
+                "name": "light"
+            },
+            {
+                "components": [
+                    {
+                        "passRotation": true,
+                        "passScale": true,
+                        "passTranslation": true,
+                        "relativeAngle": {
+                            "w": 0.0,
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "relativePosition": {
+                            "w": 0.0,
+                            "x": 0.0,
+                            "y": -2.0,
+                            "z": 0.0
+                        },
+                        "relativeScale": {
+                            "w": 0.0,
+                            "x": 10.0,
+                            "y": 1.0,
+                            "z": 100.0
+                        },
+                        "string_id": "TransformComponent"
+                    },
+                    {
+                        "cast_shadow": true,
+                        "file_path": "..\\asset\\models\\cube.fbx",
+                        "string_id": "ModelComponent",
+                        "transparent": false
+                    },
+                    {
+                        "collider_index": 0,
+                        "collider_max_extent": {
+                            "w": 0.0,
+                            "x": 1.0,
+                            "y": 1.0,
+                            "z": 1.0
+                        },
+                        "collider_min_extent": {
+                            "w": 0.0,
+                            "x": -1.0,
+                            "y": -1.0,
+                            "z": -1.0
+                        },
+                        "friction": 0.20000000298023224,
+                        "mass": 0.0,
+                        "restitution": 0.10000000149011612,
+                        "string_id": "PhysicsComponent"
+                    }
+                ],
+                "name": "ground"
+            },
+            {
+                "components": [
+                    {
+                        "passRotation": true,
+                        "passScale": true,
+                        "passTranslation": true,
+                        "relativeAngle": {
+                            "w": 0.0,
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "relativePosition": {
+                            "w": 0.0,
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "relativeScale": {
+                            "w": 0.0,
+                            "x": 0.10000000149011612,
+                            "y": 0.10000000149011612,
+                            "z": 0.10000000149011612
+                        },
+                        "string_id": "TransformComponent"
+                    },
+                    {
+                        "cast_shadow": true,
+                        "file_path": "..\\asset\\models\\sphere.fbx",
+                        "string_id": "ModelComponent",
+                        "transparent": false
+                    }
+                ],
+                "name": "center"
+            }
+        ],
+        "components": [
+            {
+                "passRotation": false,
+                "passScale": false,
+                "passTranslation": false,
+                "relativeAngle": {
+                    "w": 0.0,
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "relativePosition": {
+                    "w": 0.0,
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "relativeScale": {
+                    "w": 0.0,
+                    "x": 0.5,
+                    "y": 0.5,
+                    "z": 0.5
+                },
+                "string_id": "TransformComponent"
+            }
+        ],
+        "name": "Root_Entity"
+    },
+    "cameraName": "camera",
+    "name": "unnamed_scene"
+}

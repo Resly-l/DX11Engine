@@ -1,0 +1,279 @@
+{
+    "links": [
+        [
+            19,
+            0
+        ],
+        [
+            18,
+            9
+        ],
+        [
+            14,
+            20
+        ],
+        [
+            5,
+            21
+        ],
+        [
+            24,
+            25
+        ],
+        [
+            26,
+            28
+        ],
+        [
+            39,
+            41
+        ],
+        [
+            40,
+            42
+        ],
+        [
+            43,
+            30
+        ],
+        [
+            48,
+            50
+        ],
+        [
+            54,
+            51
+        ],
+        [
+            27,
+            55
+        ],
+        [
+            56,
+            60
+        ],
+        [
+            58,
+            62
+        ],
+        [
+            64,
+            49
+        ],
+        [
+            65,
+            45
+        ],
+        [
+            53,
+            29
+        ],
+        [
+            32,
+            66
+        ],
+        [
+            38,
+            72
+        ],
+        [
+            71,
+            73
+        ],
+        [
+            74,
+            68
+        ],
+        [
+            79,
+            67
+        ],
+        [
+            80,
+            76
+        ]
+    ],
+    "node_positions": [
+        {
+            "x": -318.0,
+            "y": 167.0
+        },
+        {
+            "x": -320.0,
+            "y": -62.0
+        },
+        {
+            "x": -534.0,
+            "y": -64.0
+        },
+        {
+            "x": -535.0,
+            "y": 169.0
+        },
+        {
+            "x": -86.0,
+            "y": 95.0
+        },
+        {
+            "x": 134.0,
+            "y": 154.0
+        },
+        {
+            "x": 1084.0,
+            "y": 150.0
+        },
+        {
+            "x": -39.0,
+            "y": 403.0
+        },
+        {
+            "x": -39.0,
+            "y": 749.0
+        },
+        {
+            "x": 208.0,
+            "y": 608.0
+        },
+        {
+            "x": 567.0,
+            "y": 360.0
+        },
+        {
+            "x": 810.0,
+            "y": 394.0
+        },
+        {
+            "x": 565.0,
+            "y": 511.0
+        },
+        {
+            "x": 351.0,
+            "y": 192.0
+        },
+        {
+            "x": 569.0,
+            "y": 211.0
+        },
+        {
+            "x": 337.0,
+            "y": 360.0
+        },
+        {
+            "x": 1381.0,
+            "y": 350.0
+        },
+        {
+            "x": 206.0,
+            "y": 751.0
+        },
+        {
+            "x": 431.0,
+            "y": 609.0
+        },
+        {
+            "x": 1120.0,
+            "y": 306.0
+        },
+        {
+            "x": 885.0,
+            "y": 304.0
+        }
+    ],
+    "nodes": [
+        {
+            "string_id": "TransformModifierNode"
+        },
+        {
+            "string_id": "TransformModifierNode"
+        },
+        {
+            "entityName": "Camera",
+            "string_id": "EntityFinderNode"
+        },
+        {
+            "entityName": "Player",
+            "string_id": "EntityFinderNode"
+        },
+        {
+            "operationIndex": 5,
+            "string_id": "VectorOperatorNode"
+        },
+        {
+            "string_id": "VectorCopierNode"
+        },
+        {
+            "operationIndex": 8,
+            "string_id": "VectorOperatorNode"
+        },
+        {
+            "button": 1,
+            "string_id": "MouseNode"
+        },
+        {
+            "scalar": 1600.0,
+            "string_id": "ScalarNode"
+        },
+        {
+            "operationIndex": 3,
+            "string_id": "ScalarOperatorNode"
+        },
+        {
+            "string_id": "VectorNode",
+            "vector": {
+                "w": 0.0,
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "operationIndex": 8,
+            "string_id": "VectorOperatorNode"
+        },
+        {
+            "scalar": 1.5709999799728394,
+            "string_id": "ScalarNode"
+        },
+        {
+            "string_id": "VectorDecomposerNode"
+        },
+        {
+            "string_id": "VectorNode",
+            "vector": {
+                "w": 0.0,
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "scalar": 1.0,
+            "string_id": "ScalarNode"
+        },
+        {
+            "operationIndex": 8,
+            "string_id": "VectorOperatorNode"
+        },
+        {
+            "scalar": 1600.0,
+            "string_id": "ScalarNode"
+        },
+        {
+            "operationIndex": 3,
+            "string_id": "ScalarOperatorNode"
+        },
+        {
+            "string_id": "VectorNode",
+            "vector": {
+                "w": 0.0,
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "scalar": 1.0,
+            "string_id": "ScalarNode"
+        }
+    ]
+}

@@ -4,20 +4,16 @@
 
 #include "rendering/mesh.h"
 #include "rendering/material.h"
+#include "rendering/animator.h"
 #include "rendering/constant_buffer.h"
 
 #include "entity.h"
 #include "components/transform_component.h"
 
-std::unique_ptr<ConstantBuffer> ModelComponent::pTransformCB;
-
 ModelComponent::ModelComponent()
-{
-	if (pTransformCB == nullptr)
-	{
-		pTransformCB = std::make_unique<ConstantBuffer>(ConstantType::ctINSTANCE_TRANSFORM, ShaderBindFlag::bfBIND_VS, Matrix{});
-	}
-}
+	:
+	pBoneUsageCB(std::make_unique<ConstantBuffer>(ConstantType::ctBONE_USAGE, ShaderBindFlag::bfBIND_VS, float4{}))
+{}
 
 bool ModelComponent::LoadModel(const std::string& filePath)
 {
@@ -33,6 +29,7 @@ bool ModelComponent::LoadModel(const std::string& filePath)
 		aiProcess_JoinIdenticalVertices |
 		aiProcess_Triangulate |
 		aiProcess_GenNormals |
+		aiProcess_GenUVCoords |
 		aiProcess_CalcTangentSpace |
 		aiProcess_LimitBoneWeights |
 		aiProcess_ValidateDataStructure |
@@ -49,6 +46,14 @@ bool ModelComponent::LoadModel(const std::string& filePath)
 
 	this->filePath = filePath;
 
+	if (pScene->HasAnimations())
+	{
+		pAnimator = std::make_unique<Animator>(*pScene);
+
+		// x component indicates bone usage
+		pBoneUsageCB->Update(float4{ 1.0f, 0.0f, 0.0f, 0.0f });
+	}
+
 	for (uint32_t i = 0; i < pScene->mNumMaterials; i++)
 	{
 		auto& ai_material = *pScene->mMaterials[i];
@@ -60,7 +65,7 @@ bool ModelComponent::LoadModel(const std::string& filePath)
 	{
 		auto& ai_mesh = *pScene->mMeshes[i];
 
-		meshPtrs.push_back(ResourceCodex::Resolve<Mesh>(filePath + "#mesh#" + ai_mesh.mName.C_Str(), ai_mesh));
+		meshPtrs.push_back(std::make_shared<Mesh>(ai_mesh, pAnimator.get()));
 		meshPtrs.back()->SetMaterial(materialPtrs[ai_mesh.mMaterialIndex]);
 
 		boundingBox += meshPtrs.back()->GetBoundingBox();
@@ -76,15 +81,17 @@ void ModelComponent::Draw()
 		return;
 	}
 
-	Matrix transform;
-	
 	if (auto pTransformComponent = GetOwner()->GetComponent<TransformComponent>())
 	{
-		transform = pTransformComponent->GetAbsoluteTransform();
+		pTransformComponent->Bind();
 	}
 
-	pTransformCB->Update(transform);
-	pTransformCB->Bind();
+	pBoneUsageCB->Bind();
+
+	if (pAnimator)
+	{
+		pAnimator->Bind();
+	}
 
 	for (const auto& pMesh : meshPtrs)
 	{

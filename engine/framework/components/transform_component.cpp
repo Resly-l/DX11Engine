@@ -1,33 +1,17 @@
 #include "transform_component.h"
 #include "entity.h"
+#include "model_component.h"
+#include "rendering/constant_buffer.h"
 
-Vector TransformComponent::RotationMatrixToEuler(const Matrix& rotation)
+std::unique_ptr<ConstantBuffer> TransformComponent::pConstantBuffer;
+
+TransformComponent::TransformComponent()
 {
-	Vector angle;
-
-	if (rotation[2][1] < 1.0f)
+	// delaying initialization to be initialized after renderer
+	if (pConstantBuffer == nullptr)
 	{
-		if (rotation[2][1] > -1.0f)
-		{
-			angle.x = asin(rotation[2][1]);
-			angle.z = atan2(-rotation[0][1], rotation[1][1]);
-			angle.y = atan2(-rotation[2][0], rotation[2][2]);
-		}
-		else
-		{
-			angle.x = -(float)pi * 0.5f;
-			angle.z = -atan2(rotation[0][2], rotation[0][0]);
-			angle.y = 0;
-		}
+		pConstantBuffer = std::make_unique<ConstantBuffer>(ConstantType::ctINSTANCE_TRANSFORM, ShaderBindFlag::bfBIND_VS, Matrix::Identity());
 	}
-	else
-	{
-		angle.x = (float)pi * 0.5f;
-		angle.z = atan2(rotation[0][2], rotation[0][0]);
-		angle.y = 0.0f;
-	}
-
-	return -angle;
 }
 
 void TransformComponent::SetAbsolutePosition(const Vector& position)
@@ -37,7 +21,7 @@ void TransformComponent::SetAbsolutePosition(const Vector& position)
 
 void TransformComponent::SetAbsoluteAngle(const Vector& angle)
 {
-	SetRelativeAngle(angle - RotationMatrixToEuler(GetParentAbsoluteTransform()));
+	SetRelativeAngle(angle - GetParentAbsoluteTransform().Decompose().angle);
 }
 
 void TransformComponent::SetAbsoluteScale(const Vector& scale)
@@ -68,68 +52,10 @@ void TransformComponent::LookAt(const Vector& position)
 	rotation[1] = upSide.GetNormalized3();
 	rotation[2] = direction.GetNormalized3();
 
-	SetAbsoluteAngle(RotationMatrixToEuler(rotation));
-}
-
-Vector TransformComponent::GetAbsolutePosition() const
-{
-	return GetAbsoluteTransform()[3];
-}
-
-Vector TransformComponent::GetAbsoluteAngle() const
-{
-	Matrix transform = GetAbsoluteTransform();
-	Vector scale = GetAbsoluteScale();
-
-	transform[0][0] /= scale.x;
-	transform[1][0] /= scale.x;
-	transform[2][0] /= scale.x;
-
-	transform[0][1] /= scale.y;
-	transform[1][1] /= scale.y;
-	transform[2][1] /= scale.y;
-
-	transform[0][2] /= scale.z;
-	transform[1][2] /= scale.z;
-	transform[2][2] /= scale.z;
-
-	return RotationMatrixToEuler(transform);
-}
-
-Vector TransformComponent::GetAbsoluteScale() const
-{
-	const auto transform = GetAbsoluteTransform();
-
-	Vector scale;
-
-	scale.x = Vector(transform[0][0], transform[0][1], transform[0][2], 0.0f).Length3();
-	scale.y = Vector(transform[1][0], transform[1][1], transform[1][2], 0.0f).Length3();
-	scale.z = Vector(transform[2][0], transform[2][1], transform[2][2], 0.0f).Length3();
-
-	return scale;
+	SetAbsoluteAngle(rotation.Decompose().angle);
 }
 
 Matrix TransformComponent::GetParentAbsoluteTransform() const
-{
-	if (auto pParent = GetOwner()->GetParent())
-	{
-		if (auto pParentTransform = pParent->GetComponent<TransformComponent>())
-		{
-			return pParentTransform->GetAbsoluteTransform();
-		}
-	}
-
-	return Matrix::Identity();
-}
-
-Matrix TransformComponent::GetRelativeTransform() const
-{
-	return Matrix::Scaling(relativeScale) *
-		Matrix::Rotation(relativeAngle) *
-		Matrix::Translation(relativePosition);
-}
-
-Matrix TransformComponent::GetAbsoluteTransform() const
 {
 	std::stack<Matrix> parentTransforms;
 	auto pParent = GetOwner()->GetParent();
@@ -157,7 +83,25 @@ Matrix TransformComponent::GetAbsoluteTransform() const
 		parentTransforms.pop();
 	}
 
-	return GetRelativeTransform() * concatenated;
+	return concatenated;
+}
+
+Matrix TransformComponent::GetRelativeTransform() const
+{
+	return Matrix::Scaling(relativeScale) *
+		Matrix::Rotation(relativeAngle) *
+		Matrix::Translation(relativePosition);
+}
+
+Matrix TransformComponent::GetAbsoluteTransform() const
+{
+	return GetRelativeTransform() * GetParentAbsoluteTransform();
+}
+
+void TransformComponent::Bind()
+{
+	pConstantBuffer->Update(GetAbsoluteTransform());
+	pConstantBuffer->Bind();
 }
 
 JSON TransformComponent::ToJson() const
@@ -192,7 +136,7 @@ void TransformComponent::DrawWidget()
 	ImGui::DragFloat3("relative angle", &relativeAngle[0], 0.01f);
 	ImGui::DragFloat3("relative scale", &relativeScale[0], 0.01f);
 
-	const auto absolutePosition = GetAbsolutePosition();
+	const auto absolutePosition = GetAbsoluteTransform().Decompose().position;
 
 	ImGui::NewLine();
 	ImGui::AlignTextToFramePadding();

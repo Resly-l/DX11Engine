@@ -3,6 +3,16 @@
 
 class SceneManager
 {
+private:
+	static SceneManager instance;
+
+	inline static const std::string temporarySavePath = "../asset/scenes/temp.scene";
+
+	std::vector<std::unique_ptr<Scene>> scenePtrs;
+
+	Scene* pActiveScene = nullptr;
+	Scene::State sceneState = Scene::State::ssIDLE;
+
 public:
 	static void Play(double deltaSeconds);
 
@@ -22,14 +32,4 @@ public:
 	static bool LoadSceneFromFile(const std::string& filePath);
 
 	static bool SwapScene(const std::string& sceneName);
-
-private:
-	static SceneManager instance;
-
-	inline static const std::string temporarySavePath = "../asset/scenes/temp.scene";
-
-	std::vector<std::unique_ptr<Scene>> scenePtrs;
-
-	Scene* pActiveScene = nullptr;
-	Scene::State sceneState = Scene::State::ssIDLE;
 };

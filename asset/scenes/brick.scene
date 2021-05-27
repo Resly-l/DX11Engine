@@ -1,0 +1,392 @@
+{
+    "Root_Entity": {
+        "children": [
+            {
+                "children": [
+                    {
+                        "components": [
+                            {
+                                "cast_shadow": true,
+                                "file_path": "..\\asset\\models\\brick\\brick.fbx",
+                                "string_id": "ModelComponent",
+                                "transparent": false
+                            },
+                            {
+                                "passRotation": true,
+                                "passScale": true,
+                                "passTranslation": true,
+                                "relativeAngle": {
+                                    "w": 0.0,
+                                    "x": 0.0,
+                                    "y": 0.0,
+                                    "z": 0.0
+                                },
+                                "relativePosition": {
+                                    "w": 0.0,
+                                    "x": 2.0,
+                                    "y": 0.0,
+                                    "z": 0.0
+                                },
+                                "relativeScale": {
+                                    "w": 0.0,
+                                    "x": 1.0,
+                                    "y": 1.0,
+                                    "z": 1.0
+                                },
+                                "string_id": "TransformComponent"
+                            }
+                        ],
+                        "name": "unnamed_entity_#5"
+                    },
+                    {
+                        "components": [
+                            {
+                                "passRotation": true,
+                                "passScale": true,
+                                "passTranslation": true,
+                                "relativeAngle": {
+                                    "w": 0.0,
+                                    "x": 0.0,
+                                    "y": 0.0,
+                                    "z": 0.0
+                                },
+                                "relativePosition": {
+                                    "w": 0.0,
+                                    "x": -2.0,
+                                    "y": 0.0,
+                                    "z": 0.0
+                                },
+                                "relativeScale": {
+                                    "w": 0.0,
+                                    "x": 1.0,
+                                    "y": 1.0,
+                                    "z": 1.0
+                                },
+                                "string_id": "TransformComponent"
+                            },
+                            {
+                                "cast_shadow": true,
+                                "file_path": "..\\asset\\models\\brick\\brick.fbx",
+                                "string_id": "ModelComponent",
+                                "transparent": false
+                            }
+                        ],
+                        "name": "unnamed_entity_#6"
+                    },
+                    {
+                        "components": [
+                            {
+                                "cast_shadow": true,
+                                "file_path": "..\\asset\\models\\brick\\brick.fbx",
+                                "string_id": "ModelComponent",
+                                "transparent": false
+                            },
+                            {
+                                "passRotation": true,
+                                "passScale": true,
+                                "passTranslation": true,
+                                "relativeAngle": {
+                                    "w": 0.0,
+                                    "x": 0.0,
+                                    "y": 0.0,
+                                    "z": 0.0
+                                },
+                                "relativePosition": {
+                                    "w": 0.0,
+                                    "x": 0.0,
+                                    "y": 2.0,
+                                    "z": 0.0
+                                },
+                                "relativeScale": {
+                                    "w": 0.0,
+                                    "x": 1.0,
+                                    "y": 1.0,
+                                    "z": 1.0
+                                },
+                                "string_id": "TransformComponent"
+                            }
+                        ],
+                        "name": "unnamed_entity_#7"
+                    },
+                    {
+                        "components": [
+                            {
+                                "passRotation": true,
+                                "passScale": true,
+                                "passTranslation": true,
+                                "relativeAngle": {
+                                    "w": 0.0,
+                                    "x": 0.0,
+                                    "y": 0.0,
+                                    "z": 0.0
+                                },
+                                "relativePosition": {
+                                    "w": 0.0,
+                                    "x": 0.0,
+                                    "y": -2.0,
+                                    "z": 0.0
+                                },
+                                "relativeScale": {
+                                    "w": 0.0,
+                                    "x": 1.0,
+                                    "y": 1.0,
+                                    "z": 1.0
+                                },
+                                "string_id": "TransformComponent"
+                            },
+                            {
+                                "cast_shadow": true,
+                                "file_path": "..\\asset\\models\\brick\\brick.fbx",
+                                "string_id": "ModelComponent",
+                                "transparent": false
+                            }
+                        ],
+                        "name": "unnamed_entity_#8"
+                    },
+                    {
+                        "components": [
+                            {
+                                "cast_shadow": true,
+                                "file_path": "..\\asset\\models\\brick\\brick.fbx",
+                                "string_id": "ModelComponent",
+                                "transparent": false
+                            },
+                            {
+                                "passRotation": true,
+                                "passScale": true,
+                                "passTranslation": true,
+                                "relativeAngle": {
+                                    "w": 0.0,
+                                    "x": 0.0,
+                                    "y": 0.0,
+                                    "z": 0.0
+                                },
+                                "relativePosition": {
+                                    "w": 0.0,
+                                    "x": 2.0,
+                                    "y": 2.0,
+                                    "z": 0.0
+                                },
+                                "relativeScale": {
+                                    "w": 0.0,
+                                    "x": 1.0,
+                                    "y": 1.0,
+                                    "z": 1.0
+                                },
+                                "string_id": "TransformComponent"
+                            }
+                        ],
+                        "name": "unnamed_entity_#9"
+                    },
+                    {
+                        "components": [
+                            {
+                                "passRotation": true,
+                                "passScale": true,
+                                "passTranslation": true,
+                                "relativeAngle": {
+                                    "w": 0.0,
+                                    "x": 0.0,
+                                    "y": 0.0,
+                                    "z": 0.0
+                                },
+                                "relativePosition": {
+                                    "w": 0.0,
+                                    "x": 2.0,
+                                    "y": -2.0,
+                                    "z": 0.0
+                                },
+                                "relativeScale": {
+                                    "w": 0.0,
+                                    "x": 1.0,
+                                    "y": 1.0,
+                                    "z": 1.0
+                                },
+                                "string_id": "TransformComponent"
+                            },
+                            {
+                                "cast_shadow": true,
+                                "file_path": "..\\asset\\models\\brick\\brick.fbx",
+                                "string_id": "ModelComponent",
+                                "transparent": false
+                            }
+                        ],
+                        "name": "unnamed_entity_#10"
+                    },
+                    {
+                        "components": [
+                            {
+                                "cast_shadow": true,
+                                "file_path": "..\\asset\\models\\brick\\brick.fbx",
+                                "string_id": "ModelComponent",
+                                "transparent": false
+                            },
+                            {
+                                "passRotation": true,
+                                "passScale": true,
+                                "passTranslation": true,
+                                "relativeAngle": {
+                                    "w": 0.0,
+                                    "x": 0.0,
+                                    "y": 0.0,
+                                    "z": 0.0
+                                },
+                                "relativePosition": {
+                                    "w": 0.0,
+                                    "x": -2.0,
+                                    "y": -2.0,
+                                    "z": 0.0
+                                },
+                                "relativeScale": {
+                                    "w": 0.0,
+                                    "x": 1.0,
+                                    "y": 1.0,
+                                    "z": 1.0
+                                },
+                                "string_id": "TransformComponent"
+                            }
+                        ],
+                        "name": "unnamed_entity_#11"
+                    },
+                    {
+                        "components": [
+                            {
+                                "passRotation": true,
+                                "passScale": true,
+                                "passTranslation": true,
+                                "relativeAngle": {
+                                    "w": 0.0,
+                                    "x": 0.0,
+                                    "y": 0.0,
+                                    "z": 0.0
+                                },
+                                "relativePosition": {
+                                    "w": 0.0,
+                                    "x": -2.0,
+                                    "y": 2.0,
+                                    "z": 0.0
+                                },
+                                "relativeScale": {
+                                    "w": 0.0,
+                                    "x": 1.0,
+                                    "y": 1.0,
+                                    "z": 1.0
+                                },
+                                "string_id": "TransformComponent"
+                            },
+                            {
+                                "cast_shadow": true,
+                                "file_path": "..\\asset\\models\\brick\\brick.fbx",
+                                "string_id": "ModelComponent",
+                                "transparent": false
+                            }
+                        ],
+                        "name": "unnamed_entity_#12"
+                    }
+                ],
+                "components": [
+                    {
+                        "passRotation": true,
+                        "passScale": true,
+                        "passTranslation": true,
+                        "relativeAngle": {
+                            "w": 0.0,
+                            "x": 1.5707000494003296,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "relativePosition": {
+                            "w": 0.0,
+                            "x": 0.0,
+                            "y": -2.0,
+                            "z": -5.0
+                        },
+                        "relativeScale": {
+                            "w": 0.0,
+                            "x": 1.0,
+                            "y": 1.0,
+                            "z": 1.0
+                        },
+                        "string_id": "TransformComponent"
+                    },
+                    {
+                        "cast_shadow": true,
+                        "file_path": "..\\asset\\models\\brick\\brick.fbx",
+                        "string_id": "ModelComponent",
+                        "transparent": false
+                    }
+                ],
+                "name": "floor"
+            },
+            {
+                "components": [
+                    {
+                        "passRotation": true,
+                        "passScale": true,
+                        "passTranslation": true,
+                        "relativeAngle": {
+                            "w": 0.0,
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "relativePosition": {
+                            "w": 0.0,
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": -5.690000057220459
+                        },
+                        "relativeScale": {
+                            "w": 0.0,
+                            "x": 1.0,
+                            "y": 1.0,
+                            "z": 1.0
+                        },
+                        "string_id": "TransformComponent"
+                    },
+                    {
+                        "castShadow": 0,
+                        "color_x": 1.0,
+                        "color_y": 1.0,
+                        "color_z": 1.0,
+                        "constantAttenuation": 1.0,
+                        "intensity": 1.0,
+                        "linearAttenuation": 0.02500000037252903,
+                        "quadraticAttenuation": 0.003000000026077032,
+                        "string_id": "LightComponent"
+                    }
+                ],
+                "name": "light"
+            }
+        ],
+        "components": [
+            {
+                "passRotation": true,
+                "passScale": true,
+                "passTranslation": true,
+                "relativeAngle": {
+                    "w": 0.0,
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "relativePosition": {
+                    "w": 0.0,
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "relativeScale": {
+                    "w": 0.0,
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                },
+                "string_id": "TransformComponent"
+            }
+        ],
+        "name": "Root_Entity"
+    },
+    "cameraName": "camera",
+    "name": "unnamed_scene"
+}

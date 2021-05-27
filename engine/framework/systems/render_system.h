@@ -16,7 +16,7 @@ private:
 	bool editorCameraEngaged = false;
 	
 	std::vector<std::unique_ptr<Drawable>> debugLinePtrs;
-	bool drawDebugLines = true;
+	bool drawDebugLines = false;
 
 	std::unordered_map<std::string, std::shared_ptr<Resource>> passResources;
 	RenderQueue renderQueue;
@@ -39,6 +39,7 @@ public:
 private:
 	void BindCamera();
 	void PassLightResource();
+	void AnimateAnimations(double deltaSeconds);
 	void SubmitRenderComponents();
 	void SubmitColliderOutlines();
 	void UpdateEditorCamera(double deltaSeconds);

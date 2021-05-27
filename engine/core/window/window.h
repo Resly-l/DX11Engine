@@ -3,6 +3,15 @@
 
 class Window
 {
+private:
+	inline static LPCSTR className = "window class";
+
+	HINSTANCE hinstance;
+	HWND hwnd;
+
+	uint32_t width;
+	uint32_t height;
+
 public:
 	Window(LPCSTR title, LPCSTR iconPath, uint32_t width, uint32_t height);
 	Window(const Window&) = delete;
@@ -17,13 +26,4 @@ private:
 	void RegisterWindowClass(HINSTANCE hinstance, LPCSTR iconPath) const;
 	void CreateAndDisplayWindow(HINSTANCE hinstance, LPCSTR title);
 	static LRESULT WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
-
-private:
-	inline static LPCSTR className = "window class";
-
-	HINSTANCE hinstance;
-	HWND hwnd;
-
-	uint32_t width;
-	uint32_t height;
 };

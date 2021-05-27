@@ -5,6 +5,14 @@
 
 class ShadowPass : public RenderPass
 {
+private:
+	std::vector<ShadowCubemap> shadowMaps;
+	ConstantBuffer lightTransformCB;
+
+	// lhs = direction, rhs = upside
+	std::pair<Vector, Vector> faceDirections[6];
+	Matrix perspective;
+
 public:
 	ShadowPass();
 
@@ -14,12 +22,4 @@ public:
 private:
 	void InitializeShaders();
 	void InitializeRenderStates();
-
-private:
-	std::vector<ShadowCubemap> shadowMaps;
-	ConstantBuffer lightTransformCB;
-
-	// lhs = direction, rhs = upside
-	std::pair<Vector, Vector> faceDirections[6];
-	Matrix projection;
 };

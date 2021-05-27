@@ -4,6 +4,12 @@
 template<typename IDType, typename BaseType>
 class Factory
 {
+private:
+	inline static std::unordered_map<IDType, std::vector<std::unique_ptr<BaseType>>> instancePtrs;
+	inline static std::unordered_map<IDType, std::pair<std::string, std::function<std::unique_ptr<BaseType>()>>> creators;
+
+	inline static std::vector<std::string> registeredStringIDs;
+
 public:
 	template<typename T>
 	static void Register();
@@ -16,12 +22,6 @@ public:
 	static bool Remove(BaseType* pTarget);
 
 	static std::vector<std::unique_ptr<BaseType>>& GetInstances(const IDType& typeID);
-
-private:
-	inline static std::unordered_map<IDType, std::vector<std::unique_ptr<BaseType>>> instancePtrs;
-	inline static std::unordered_map<IDType, std::pair<std::string, std::function<std::unique_ptr<BaseType>()>>> creators;
-
-	inline static std::vector<std::string> registeredStringIDs;
 };
 
 

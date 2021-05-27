@@ -5,11 +5,6 @@
 
 #include "components/light_component.h"
 
-struct uint4
-{
-	uint32_t x, y, z, w;
-};
-
 LightingPass::LightingPass()
 	:
 	RenderPass(RenderPass::Tag::ptLIGHTING),
@@ -27,7 +22,7 @@ void LightingPass::Render(std::unordered_map<std::string, std::shared_ptr<Resour
 
 	lightCB.Update(pLightResource->lightProperties);
 	lightCB.Bind();
-	lightCountCB.Update(uint4{ (uint32_t)pLightResource->lightProperties.size() });
+	lightCountCB.Update(uint4{ (uint32_t)pLightResource->lightProperties.size(), 0, 0, 0 });
 	lightCountCB.Bind();
 
 	auto pFrameBufferRT = static_cast<RenderTarget*>(passResources["framebuffer_rt"].get());
@@ -46,7 +41,7 @@ void LightingPass::Render(std::unordered_map<std::string, std::shared_ptr<Resour
 void LightingPass::InitializeShaders()
 {
 	shader.InitializeVertexShader("../asset/shaders/FullscreenVS.cso");
-	shader.initializePixelShader("../asset/shaders/LightingPS.cso");
+	shader.InitializePixelShader("../asset/shaders/LightingPS.cso");
 }
 
 void LightingPass::InitializeRenderState()
@@ -58,13 +53,9 @@ void LightingPass::InitializeRenderState()
 	dsDesc.StencilEnable = FALSE;
 	renderState.InitializeDepthStencilState(dsDesc);
 
-	D3D11_BLEND_DESC blendDesc = CD3D11_BLEND_DESC{ CD3D11_DEFAULT{} };
-	blendDesc.RenderTarget->BlendEnable = FALSE;
-	renderState.InitializeBlendState(blendDesc);
+	renderState.InitializeBlendState(CD3D11_BLEND_DESC{ CD3D11_DEFAULT{} });
 
-	D3D11_RASTERIZER_DESC rasterizerDesc = CD3D11_RASTERIZER_DESC(CD3D11_DEFAULT{});
-	rasterizerDesc.CullMode = D3D11_CULL_BACK;
-	renderState.InitializeRasterizerState(rasterizerDesc);
+	renderState.InitializeRasterizerState(CD3D11_RASTERIZER_DESC(CD3D11_DEFAULT{}));
 
 	D3D11_SAMPLER_DESC samplerDesc = {};
 	samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;

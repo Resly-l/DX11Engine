@@ -72,11 +72,6 @@ bool Mouse::IsWheelBackward()
 	return instance.wheelState == WheelState::wsBACKWARD;
 }
 
-POINT Mouse::GetPosition()
-{
-	return instance.position;
-}
-
 std::vector<POINT>& Mouse::GetRawDeltas()
 {
 	return instance.rawDeltas[instance.activeRawDeltaIndex == 1 ? 0 : 1];

@@ -1,5 +1,6 @@
 #include "scene_manager.h"
 #include "file_manager.h"
+#include "console.h"
 
 #include "system_container.h"
 #include "systems/render_system.h"

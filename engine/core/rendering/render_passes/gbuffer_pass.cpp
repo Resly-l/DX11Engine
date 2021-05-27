@@ -30,7 +30,7 @@ void GBufferPass::Render(std::unordered_map<std::string, std::shared_ptr<Resourc
 	pSpecularGBuffer->Clear();
 
 	ID3D11ShaderResourceView* pNullSRV = nullptr;
-	for (uint32_t slot = 0u; slot <= 3; slot++)
+	for (uint32_t slot = 0; slot <= 3; slot++)
 	{
 		Renderer::GetContext()->PSSetShaderResources(slot, 1, &pNullSRV);
 	}
@@ -58,7 +58,7 @@ void GBufferPass::Render(std::unordered_map<std::string, std::shared_ptr<Resourc
 void GBufferPass::InitializeShaders()
 {
 	shader.InitializeVertexShader("../asset/shaders/GBufferVS.cso");
-	shader.initializePixelShader("../asset/shaders/GBufferPS.cso");
+	shader.InitializePixelShader("../asset/shaders/GBufferPS.cso");
 }
 
 void GBufferPass::InitializeRenderState()

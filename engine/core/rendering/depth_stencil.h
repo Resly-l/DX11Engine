@@ -10,6 +10,18 @@ public:
 		duSHADOW_DEPTH
 	};
 
+private:
+	Usage usage;
+
+	ComPtr<ID3D11DepthStencilView> pDepthStencilView;
+	ComPtr<ID3D11ShaderResourceView> pShaderResourceView;
+
+	uint32_t width;
+	uint32_t height;
+
+	// synchronize resolution with backbuffer
+	bool syncResolution;
+
 public:
 	DepthStencil(Usage usage);
 	DepthStencil(Usage usage, uint32_t width, uint32_t height);
@@ -27,16 +39,4 @@ private:
 	static DXGI_FORMAT MapTextureFormat(Usage usage);
 	static DXGI_FORMAT MapDepthStencilFormat(Usage usage);
 	static DXGI_FORMAT MapShaderResourceFormat(Usage usage);
-
-private:
-	Usage usage;
-
-	ComPtr<ID3D11DepthStencilView> pDepthStencilView;
-	ComPtr<ID3D11ShaderResourceView> pShaderResourceView;
-
-	uint32_t width;
-	uint32_t height;
-
-	// synchronize resolution with backbuffer
-	bool syncResolution;
 };

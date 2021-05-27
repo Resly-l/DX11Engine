@@ -3,6 +3,7 @@
 #include "rendering/depth_stencil.h"
 #include "rendering/texture.h"
 #include "rendering/mesh.h"
+#include "rendering/animator.h"
 
 #include "component_factory.h"
 #include "components/transform_component.h"
@@ -31,6 +32,12 @@ void RenderSystem::Update(double deltaSeconds, bool simulate)
 	UpdateEditorCamera(deltaSeconds);
 	BindCamera();
 	PassLightResource();
+
+	if (simulate)
+	{
+		AnimateAnimations(deltaSeconds);
+	}
+
 	SubmitRenderComponents();
 
 	if (drawDebugLines)
@@ -109,20 +116,41 @@ void RenderSystem::PassLightResource()
 	}
 }
 
-void RenderSystem::SubmitRenderComponents()
+void RenderSystem::AnimateAnimations(double deltaSeconds)
 {
 	for (auto& pComponent : ComponentFactory::GetInstances(ModelComponent::ID))
 	{
 		auto pModelComponent = static_cast<ModelComponent*>(pComponent.get());
 
-		if (pModelComponent->visible)
+		if (pModelComponent->pAnimator)
 		{
-			renderQueue.QueueDrawable(pModelComponent->transparent ? RenderPass::Tag::ptALPHA : RenderPass::Tag::ptGBUFFER, pModelComponent);
+			pModelComponent->pAnimator->Animate(deltaSeconds);
+
+			if (auto pTransformComponent = pComponent->GetOwner()->GetComponent<TransformComponent>())
+			{
+				const auto decomposed = pModelComponent->pAnimator->GetRootMotion();
+
+				// for now, only translation is affected
+				pTransformComponent->SetRelativePosition(decomposed.position * pTransformComponent->GetAbsoluteTransform());
+			}
+		}
+	}
+}
+
+void RenderSystem::SubmitRenderComponents()
+{
+	for (auto& pModelComponent : ComponentFactory::GetInstances(ModelComponent::ID))
+	{
+		auto pCastedModelComponent = static_cast<ModelComponent*>(pModelComponent.get());
+
+		if (pCastedModelComponent->visible)
+		{
+			renderQueue.QueueDrawable(pCastedModelComponent->transparent ? RenderPass::Tag::ptALPHA : RenderPass::Tag::ptGBUFFER, pCastedModelComponent);
 		}
 
-		if (pModelComponent->castShadow)
+		if (pCastedModelComponent->castShadow)
 		{
-			renderQueue.QueueDrawable(RenderPass::Tag::ptSHADOW, pModelComponent);
+			renderQueue.QueueDrawable(RenderPass::Tag::ptSHADOW, pCastedModelComponent);
 		}
 	}
 }

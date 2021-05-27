@@ -13,6 +13,11 @@ class ComponentBase
 	template<typename T>
 	friend class Component;
 
+private:
+	inline static ComponentID GID = 0;
+
+	class Entity* pOwner = nullptr;
+
 public:
 	virtual ~ComponentBase() = default;
 
@@ -26,11 +31,6 @@ public:
 	virtual void FromJson(const JSON& json) = 0;
 
 	virtual void DrawWidget() {};
-
-private:
-	inline static ComponentID GID = 0;
-
-	class Entity* pOwner = nullptr;
 };
 
 DECLARE_CRTP(Component, ComponentID)
