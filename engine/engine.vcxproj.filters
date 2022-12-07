@@ -252,6 +252,9 @@
     <ClCompile Include="framework\nodes\gravity_modifier_node.cpp">
       <Filter>framework\nodes</Filter>
     </ClCompile>
+    <ClCompile Include="common\functions.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine_application.h" />

@@ -1,18 +1,8 @@
 #pragma once
+#include <string>
 
-auto ToWideString = [](const std::string& string)
-{
-	wchar_t wide[512] = {};
-	mbstowcs_s(nullptr, wide, string.c_str(), _TRUNCATE);
-	return std::wstring(wide);
-};
-
-auto ToNarrowString = [](const std::wstring& wstring)
-{
-	char narrow[512] = {};
-	wcstombs_s(nullptr, narrow, wstring.c_str(), _TRUNCATE);
-	return std::string(narrow);
-};
+std::wstring ToWideString (const std::string& string);
+std::string ToNarrowString (const std::wstring& wstring);
 
 template<typename T>
 T Squared(const T& val)
