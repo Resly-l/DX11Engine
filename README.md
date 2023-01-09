@@ -29,8 +29,7 @@ Demo : https://youtu.be/diQm5AByzn4
   * Deferred Rendering
   * Cubemap shadow
   * Skybox
-  * Outline using Stencil buffer
-  
+ 
   
 * Physics
   * SAT collision detection
