@@ -50,24 +50,7 @@ Demo : https://youtu.be/diQm5AByzn4
 ## <a name=diagram>Overview
 
 <img src="ecs_diagram.png"/>
-  
-## <a name=problems>Problems
 
-* Node script recursion
-  * currently not checking if nodes are recurring
-  
-  
-* Multiple input management
-  * when multiple keys are pressed, there's no way of knowing the order
-  
-  
-* No CPU caching
-  * ECS is not using data-aligned structure
-  
-  
-* String based entity id
-  * Can't search when there are duplicates
-  * Searching is slow
 	
 ## <a name=license>License
 
